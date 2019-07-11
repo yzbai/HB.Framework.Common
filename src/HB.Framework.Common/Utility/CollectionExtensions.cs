@@ -84,7 +84,7 @@ namespace System.Collections.Generic
                 {
                     ret.Add(entry.Key, entry.Value);
                 }
-                catch (Exception)
+                catch
                 {
                     throw;
                 }
