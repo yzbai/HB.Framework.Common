@@ -65,7 +65,10 @@ namespace HB.Framework.Common.Utility
                     {
                         using (var fs = File.OpenRead(filePath))
                         {
-                            return System.Security.Cryptography.SHA256.Create().ComputeHash(fs);
+                            using (System.Security.Cryptography.SHA256 sha256Obj = System.Security.Cryptography.SHA256.Create())
+                            { 
+                                return sha256Obj.ComputeHash(fs);
+                            }
                         }
                     }
                     else

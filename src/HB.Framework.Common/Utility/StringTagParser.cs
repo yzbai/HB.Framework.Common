@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -24,7 +25,7 @@ namespace HB.Framework.Common
 
         public void AddTags(IList<KeyValuePair<string, string>> tags)
         {
-            foreach (KeyValuePair<string, string> tag in tags)
+            foreach (KeyValuePair<string, string> tag in ThrowIf.Null(tags, nameof(tags)))
             {
                 tagCache.Add(tag.Key, tag.Value);
             }

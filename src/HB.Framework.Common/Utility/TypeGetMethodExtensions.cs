@@ -9,6 +9,8 @@ namespace System
     {
         public static IEnumerable<MethodInfo> GetMethodWithAttribute<T>(this Type type) where T : Attribute
         {
+            ThrowIf.Null(type, nameof(type));
+
             List<MethodInfo> lst = new List<MethodInfo>();
 
             foreach (MethodInfo info in type.GetMethods())

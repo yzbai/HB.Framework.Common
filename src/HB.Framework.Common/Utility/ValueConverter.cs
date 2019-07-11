@@ -64,6 +64,9 @@ namespace HB.Framework.Common.Entity
         /// <param name="dbValue">Db value.</param>
         public static object DbValueToTypeValue(Type type, object dbValue)
         {
+            ThrowIf.Null(type, nameof(type));
+            ThrowIf.Null(dbValue, nameof(dbValue));
+
             if (dbValue.GetType() == typeof(DBNull))
             {
                 return type.IsValueType ? Activator.CreateInstance(type) : null;

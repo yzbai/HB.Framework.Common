@@ -358,6 +358,8 @@ namespace System
 
         public static string GetFileTypeByMediaType(string mediaType)
         {
+            ThrowIf.NullOrEmpty(mediaType, nameof(mediaType));
+
             string mType = mediaType.ToLower(GlobalSettings.Culture);
 
             if (mediaType2FileTypeDict.ContainsKey(mType))

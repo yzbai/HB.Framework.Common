@@ -11,6 +11,11 @@ namespace System.Collections.Generic
 
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
+            if (enumerable == null)
+            {
+                throw new ArgumentNullException(nameof(enumerable));
+            }
+
             foreach (T t in enumerable)
             {
                 action(t);
@@ -19,10 +24,25 @@ namespace System.Collections.Generic
 
         public static async Task ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> action)
         {
+            if (enumerable == null)
+            {
+                throw new ArgumentNullException(nameof(enumerable));
+            }
+
+
             foreach (T t in enumerable)
             {
-                await action(t);
+                await action(t).ConfigureAwait(false);
             }
+        }
+
+        public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> original, IDictionary<TKey, TValue> toAdds)
+        {
+            ThrowIf.Null(original, nameof(original));
+            ThrowIf.Null(toAdds, nameof(toAdds));
+
+            toAdds.ForEach(kv => original.Add(kv.Key, kv.Value));
+
         }
 
         public static IDictionary<TKey, TValue> CloningWithValues<TKey, TValue> (this IDictionary<TKey, TValue> original) where TValue : ICloneable

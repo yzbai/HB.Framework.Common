@@ -37,18 +37,24 @@ namespace System
                 throw new ArgumentNullException(nameof(item));
             }
 
-            byte[] result = HashAlgorithm.Create().ComputeHash(JsonUtil.Serialize(item));
+            using (HashAlgorithm hashObj = HashAlgorithm.Create())
+            {
+                byte[] result = hashObj.ComputeHash(JsonUtil.Serialize(item));
 
-
-            return Convert.ToBase64String(result);
+                return Convert.ToBase64String(result);
+            }
         }
 
         public static string EncryptPwdWithSalt(string pwd, string salt)
         {
             byte[] pwdAndSaltBytes = Encoding.UTF8.GetBytes(pwd + salt);
-            byte[] hashBytes = SHA256.Create().ComputeHash(pwdAndSaltBytes);
 
-            return Convert.ToBase64String(hashBytes);
+            using (var sha256Obj = SHA256.Create())
+            {
+                byte[] hashBytes = sha256Obj.ComputeHash(pwdAndSaltBytes);
+
+                return Convert.ToBase64String(hashBytes);
+            }
         }
         public static string CreateUniqueToken()
         {
@@ -95,6 +101,8 @@ namespace System
 
         public static byte[] HexToByteArray(string hexString)
         {
+            ThrowIf.Null(hexString, nameof(hexString));
+
             byte[] bytes = new byte[hexString.Length / 2];
 
             for (int i = 0; i < hexString.Length; i += 2)

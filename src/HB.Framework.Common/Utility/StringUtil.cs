@@ -29,6 +29,8 @@ namespace System
 
         public static string ToHexString(byte[] bytes)
         {
+            ThrowIf.Null(bytes, nameof(bytes));
+
             StringBuilder hex = new StringBuilder();
 
             foreach (byte b in bytes)
@@ -50,7 +52,7 @@ namespace System
             StringBuilder builder = new StringBuilder();
             bool added = false;
 
-            foreach (string str in list)
+            foreach (string str in ThrowIf.Null(list, nameof(list)))
             {
                 builder.Append(str);
                 builder.Append(separator[0]);
@@ -215,11 +217,11 @@ namespace System
             return string.IsNullOrEmpty(str);
         }
 
-        public static void RequireNotNullOrEmpty(this string str)
+        public static void RequireNotNullOrEmpty(this string str, string parmName)
         {
             if (string.IsNullOrEmpty(str))
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(parmName);
             }
         }
 

@@ -24,12 +24,12 @@ namespace HB.Framework.Common.Test
         public string Value { get; set; }
         public string ValueDescription { get; set; }
 
-        public Dictionary<string, KeyValuePair<int, string>> MapValue;
+        public Dictionary<string, KeyValuePair<int, string>> MapValue { get; } = new Dictionary<string, KeyValuePair<int, string>>();
     }
 
     public class JsonStringTest
     {
-        private ITestOutputHelper _output;
+        private readonly ITestOutputHelper _output;
 
         public JsonStringTest(ITestOutputHelper output)
         {
@@ -85,11 +85,20 @@ namespace HB.Framework.Common.Test
                 { "mm2", new KeyValuePair<int, string>(2, "mm2__") }
             };
 
-            map.Add("key1", new MapMapValue { Value = "value1", ValueDescription = "value1__", MapValue = mapValue1 });
-            map.Add("key2", new MapMapValue { Value = "value2", ValueDescription = "value2__", MapValue = mapValue1 });
-            map.Add("key3", new MapMapValue { Value = "value3", ValueDescription = "value3__", MapValue = mapValue1 });
-            map.Add("key4", new MapMapValue { Value = "value4", ValueDescription = "value4__", MapValue = mapValue1 });
-            map.Add("key5", new MapMapValue { Value = "value5", ValueDescription = "value5__", MapValue = mapValue1 });
+            map.Add("key1", new MapMapValue { Value = "value1", ValueDescription = "value1__"});
+            map["key1"].MapValue.Add(mapValue1);
+
+            map.Add("key2", new MapMapValue { Value = "value2", ValueDescription = "value2__"});
+            map["key2"].MapValue.Add(mapValue1);
+
+            map.Add("key3", new MapMapValue { Value = "value3", ValueDescription = "value3__"});
+            map["key3"].MapValue.Add(mapValue1);
+
+            map.Add("key4", new MapMapValue { Value = "value4", ValueDescription = "value4__"});
+            map["key4"].MapValue.Add(mapValue1);
+
+            map.Add("key5", new MapMapValue { Value = "value5", ValueDescription = "value5__"});
+            map["key5"].MapValue.Add(mapValue1);
 
             string json = JsonUtil.ToJson(map);
 
@@ -109,21 +118,23 @@ namespace HB.Framework.Common.Test
 
             ApplicationOptions optoins = new ApplicationOptions
             {
-                Database = new ApplicationOptions.DatabaseOptions() { Name = "presentfish.db" }
+                Database = new DatabaseOptions() { Name = "presentfish.db" }
             };
-            optoins.WebApis.Add("Authorization", new ApplicationOptions.WebApiOptions() {
+            optoins.WebApis.Add("Authorization", new WebApiOptions() {
 
-                BaseUrl = "http://192.168.0.112/",
-                EndPoints = dict
-
+                BaseUrl = new Uri("http://192.168.0.112/")
             });
-            optoins.WebApis.Add("Common", new ApplicationOptions.WebApiOptions()
+
+            optoins.WebApis["Authorization"].EndPoints.Add(dict);
+
+            optoins.WebApis.Add("Common", new WebApiOptions()
             {
 
-                BaseUrl = "http://192.168.0.112/",
-                EndPoints = dict
+                BaseUrl = new Uri("http://192.168.0.112/")
 
             });
+
+            optoins.WebApis["Common"].EndPoints.Add(dict);
 
             string jsonString = JsonUtil.ToJson(optoins);
 
@@ -133,23 +144,25 @@ namespace HB.Framework.Common.Test
         }
     }
 
+    public class DatabaseOptions
+    {
+        public string Name { get; set; }
+    }
+
+    public class WebApiOptions
+    {
+        public Uri BaseUrl { get; set; }
+
+        public IDictionary<string, string> EndPoints { get; } = new Dictionary<string, string>();
+    }
+
     public class ApplicationOptions
     {
-        public class DatabaseOptions
-        {
-            public string Name { get; set; }
-        }
-
-        public class WebApiOptions
-        {
-            public string BaseUrl { get; set; }
-
-            public IDictionary<string, string> EndPoints { get; set; } = new Dictionary<string, string>();
-        }
+        
 
         public DatabaseOptions Database { get; set; }
 
-        public IDictionary<string, WebApiOptions> WebApis { get; set; } = new Dictionary<string, WebApiOptions>();
+        public IDictionary<string, WebApiOptions> WebApis { get; } = new Dictionary<string, WebApiOptions>();
     }
 }
 

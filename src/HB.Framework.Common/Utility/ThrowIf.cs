@@ -1,4 +1,4 @@
-﻿using System;
+﻿using HB.Framework.Common;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,8 +6,7 @@ namespace System
 {
     public static class ThrowIf
     {
-
-        public static T ThrowIfNull<T>(this T o, string paramName) where T : class
+        public static T Null<T>(this T o, string paramName) where T : class
         {
             if (o == null)
                 throw new ArgumentNullException(paramName);
@@ -15,7 +14,7 @@ namespace System
             return o;
         }
 
-        public static string ThrowIfNullOrEmpty(this string o, string paramName)
+        public static string NullOrEmpty(this string o, string paramName)
         {
             if(string.IsNullOrEmpty(o))
             {
@@ -25,11 +24,12 @@ namespace System
             return o;
         }
 
-        public static string ThrowIfNotEqual(this string a, string b, string paramName)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
+        public static string NotEqual(this string a, string b, string paramName)
         {
-            if (( a == null && b != null) || !a.Equals(b, GlobalSettings.Comparison))
+            if (a == null && b!=null || a!=null && !a.Equals(b, GlobalSettings.Comparison))
             {
-                throw new ArgumentException("参数值应该一样", paramName);
+                throw new ArgumentException("ThrowIf_NotEqual_Error_Message", paramName);
             }
 
             return a;

@@ -50,7 +50,7 @@ namespace System
             //TODO: add parameter Check
             string today = GetTodayYearMonthDay();
             string[] todayResult = today.Split(new char[] { ',', '-' });
-            string[] inputResult = yearMonthDay.Split(new char[] { ',', '-' });
+            string[] inputResult = ThrowIf.Null(yearMonthDay, nameof(yearMonthDay)).Split(new char[] { ',', '-' });
 
             int result = Convert.ToInt32(inputResult[0], GlobalSettings.Culture)
                 .CompareTo(Convert.ToInt32(todayResult[0], GlobalSettings.Culture));
