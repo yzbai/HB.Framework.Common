@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Text;
 
 namespace System
@@ -8,11 +10,18 @@ namespace System
     public static class JsonUtil
     {
         #region Json
-		
+
+        private static JsonSerializer jsonSerializer = JsonSerializer.CreateDefault();
 
         public static string ToJson(object entity)
         {
-            return JsonConvert.SerializeObject(entity);
+            StringWriter stringWriter = new StringWriter(new StringBuilder(256), CultureInfo.InvariantCulture);
+            using (JsonTextWriter jsonTextWriter = new JsonTextWriter(stringWriter))
+            {
+                jsonTextWriter.Formatting = jsonSerializer.Formatting;
+                jsonSerializer.Serialize(jsonTextWriter, entity);
+            }
+            return stringWriter.ToString();
         }
 
         public static T FromJson<T>(string jsonString)
@@ -22,17 +31,32 @@ namespace System
                 return default;
             }
 
-            return JsonConvert.DeserializeObject<T>(jsonString);
+            using (JsonTextReader reader = new JsonTextReader(new StringReader(jsonString)))
+            {
+                return jsonSerializer.Deserialize<T>(reader);
+            }
         }
 
         public static object FromJson(Type type, string jsonString)
         {
-            if (string.IsNullOrWhiteSpace(jsonString))
+            if (string.IsNullOrWhiteSpace(jsonString) || type == null)
             {
-                return null;
+                return default;
             }
 
-            return JsonConvert.DeserializeObject(jsonString, type);
+            using (JsonTextReader reader = new JsonTextReader(new StringReader(jsonString)))
+            {
+                return jsonSerializer.Deserialize(reader, type);
+            }
+        }
+
+        public static T FromStream<T>(Stream stream)
+        {
+            using (var streamReader = new StreamReader(stream))
+            using (var jsonTextReader = new JsonTextReader(streamReader))
+            {
+                return jsonSerializer.Deserialize<T>(jsonTextReader);
+            }
         }
 
         #endregion
@@ -69,7 +93,6 @@ namespace System
 
             return Encoding.UTF8.GetBytes(ToJson(item));
         }
-
         #endregion
     }
 }
