@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace HB.Framework.Common.Entity
+namespace HB.Framework.Common
 {
     /// <summary>
     /// 内建验证机制接口
@@ -17,5 +17,7 @@ namespace HB.Framework.Common.Entity
         /// 获取验证结果。用foeach
         /// </summary>
         IList<ValidationResult> GetValidateResults();
+
+        string GetValidateErrorMessage();
     }
 }

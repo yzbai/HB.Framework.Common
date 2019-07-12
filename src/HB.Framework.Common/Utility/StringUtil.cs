@@ -225,6 +225,16 @@ namespace System
             }
         }
 
+        public static string RemoveSuffix(this string str, string suffix)
+        {
+            if (str == null || suffix == null)
+            {
+                return str;
+            }
+
+            return str.EndsWith(suffix, GlobalSettings.Comparison) ? str.Substring(0, str.Length - suffix.Length) : str; 
+        }
+
         #endregion
     }
 }

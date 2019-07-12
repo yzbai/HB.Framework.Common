@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace HB.Framework.Common.Entity
+namespace HB.Framework.Common
 {
     /// <summary>
     /// 基础领域模型
     /// 内建验证机制。
     /// </summary>
-    public class CommonEntity : ISupportValidate
+    public class ValidatableObject : ISupportValidate
     {
         #region Validation
 

@@ -19,6 +19,16 @@ namespace System
             return o;
         }
 
+        public static IDictionary<TKey, TValue> NullOrEmpty<TKey, TValue>([ValidatedNotNull]IDictionary<TKey, TValue> dict, string paramName)
+        {
+            if (dict == null || dict.Count == 0)
+            {
+                throw new ArgumentException(paramName);
+            }
+
+            return dict;
+        }
+
         public static string NullOrEmpty([ValidatedNotNull]string o, string paramName)
         {
             if (string.IsNullOrEmpty(o))
@@ -61,6 +71,17 @@ namespace System
 
             return o;
         }
+
+        public static IDictionary<TKey, TValue> ThrowIfNullOrEmpty<TKey, TValue>([ValidatedNotNull]this IDictionary<TKey, TValue> dict, string paramName)
+        {
+            if (dict == null || dict.Count == 0)
+            {
+                throw new ArgumentException(paramName);
+            }
+
+            return dict;
+        }
+
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
         public static string ThrowIfNotEqual(this string a, string b, string paramName)

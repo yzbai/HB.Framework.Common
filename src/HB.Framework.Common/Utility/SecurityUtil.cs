@@ -30,16 +30,31 @@ namespace System
         //    //return Convert.ToBase64String(md5Bytes);
         //}
 
-        public static string GetHashCode<T>(T item)
+        public static string GetHash(string item)
         {
             if (item == null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            using (HashAlgorithm hashObj = HashAlgorithm.Create())
+            using (SHA256 sha256Obj = SHA256.Create())
             {
-                byte[] result = hashObj.ComputeHash(JsonUtil.Serialize(item));
+                byte[] hashBytes = sha256Obj.ComputeHash(Encoding.UTF8.GetBytes(item));
+
+                return Convert.ToBase64String(hashBytes);
+            }
+        }
+
+        public static string GetHash<T>(T item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            using (SHA256 sha256Obj = SHA256.Create())
+            {
+                byte[] result = sha256Obj.ComputeHash(JsonUtil.Serialize(item));
 
                 return Convert.ToBase64String(result);
             }
@@ -47,14 +62,7 @@ namespace System
 
         public static string EncryptPwdWithSalt(string pwd, string salt)
         {
-            byte[] pwdAndSaltBytes = Encoding.UTF8.GetBytes(pwd + salt);
-
-            using (var sha256Obj = SHA256.Create())
-            {
-                byte[] hashBytes = sha256Obj.ComputeHash(pwdAndSaltBytes);
-
-                return Convert.ToBase64String(hashBytes);
-            }
+            return GetHash(pwd + salt);
         }
         public static string CreateUniqueToken()
         {
