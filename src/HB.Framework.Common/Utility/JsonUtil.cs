@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -11,7 +12,7 @@ namespace System
     {
         #region Json
 
-        private static JsonSerializer jsonSerializer = JsonSerializer.CreateDefault();
+        private static readonly JsonSerializer jsonSerializer = JsonSerializer.CreateDefault();
 
         public static string ToJson(object entity)
         {
@@ -35,6 +36,13 @@ namespace System
             {
                 return jsonSerializer.Deserialize<T>(reader);
             }
+        }
+
+        public static string FromJson(string jsonString, string name)
+        {
+            JObject jObject = JObject.Parse(jsonString);
+
+            return jObject[name].ToString();
         }
 
         public static object FromJson(Type type, string jsonString)

@@ -45,6 +45,14 @@ namespace System.Collections.Generic
 
         }
 
+        public static void Add<T>(this IList<T> original, IEnumerable<T> items)
+        {
+            ThrowIf.NullOrEmpty(original, nameof(original));
+            ThrowIf.NullOrEmpty(items, nameof(items));
+
+            items.ForEach(t => original.Add(t));
+        }
+
         public static IDictionary<TKey, TValue> CloningWithValues<TKey, TValue> (this IDictionary<TKey, TValue> original) where TValue : ICloneable
         {
             if (original == null)

@@ -1,5 +1,6 @@
 ﻿using HB.Framework.Common;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace System
@@ -27,6 +28,16 @@ namespace System
             }
 
             return dict;
+        }
+
+        public static IEnumerable<T> NullOrEmpty<T>([ValidatedNotNull]IEnumerable<T> lst, string paramName)
+        {
+            if (lst == null || lst.Count() == 0)
+            {
+                throw new ArgumentException(paramName);
+            }
+
+            return lst;
         }
 
         public static string NullOrEmpty([ValidatedNotNull]string o, string paramName)
@@ -80,6 +91,16 @@ namespace System
             }
 
             return dict;
+        }
+
+        public static IEnumerable<T> ThrowIfNullOrEmpty<T>([ValidatedNotNull]this IEnumerable<T> lst, string paramName)
+        {
+            if (lst == null || lst.Count() == 0)
+            {
+                throw new ArgumentException(paramName);
+            }
+
+            return lst;
         }
 
 

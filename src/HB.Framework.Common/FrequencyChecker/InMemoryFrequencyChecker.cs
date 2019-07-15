@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 
 namespace HB.Framework.Common
 {
-    public class InMemoryFrequencyChecker : IFrequencyChecker
+    public class InMemoryFrequencyChecker
     {
-        private ConcurrentDictionary<string, long> timestamps = new ConcurrentDictionary<string, long>();
-
-        public Task<bool> CheckAsync(string resourceType, string resource, TimeSpan aliveTimeSpan)
-        {
-            return Task.FromResult(Check(resourceType, resource, aliveTimeSpan));
-        }
+        private readonly ConcurrentDictionary<string, long> timestamps = new ConcurrentDictionary<string, long>();
 
         public bool Check(string resourceType, string resource, TimeSpan aliveTimeSpan)
         {
@@ -50,10 +45,6 @@ namespace HB.Framework.Common
             return resourceType + resource;
         }
 
-        public Task ResetAsync(string resourceType, string resource)
-        {
-            Reset(resourceType, resource);
-            return Task.FromResult(0);
-        }
+ 
     }
 }
