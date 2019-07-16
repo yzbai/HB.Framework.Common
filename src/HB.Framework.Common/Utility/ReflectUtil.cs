@@ -28,6 +28,14 @@ namespace HB.Framework.Common.Utility
                 .Where(t => condition(t));
         }
 
+        //TODO: Use metacontext later when update into .net 3.0
+        public static IEnumerable<Type> GetAllTypeByCondition(IList<string> assembliesToCheck, Func<Type, bool> condition)
+        {
+            return assembliesToCheck.ThrowIfNullOrEmpty(nameof(assembliesToCheck))
+                .SelectMany(assemblyName => Assembly.Load(assemblyName).GetTypes())
+                .Where(t => condition(t));
+        }
+
         //public static string GetTypeSimpleName(this Type type)
         //{
         //    type.Name

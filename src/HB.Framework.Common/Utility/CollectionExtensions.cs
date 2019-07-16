@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace System.Collections.Generic
 {
@@ -139,12 +141,15 @@ namespace System.Collections.Generic
             return ts == null || ts.Count() == 0;
         }
 
-        //public static void RequireNotNullOrEmpty<T>(this IEnumerable<T> ts)
-        //{
-        //    if (ts == null || ts.Count() == 0)
-        //    {
-        //        throw new ArgumentNullException();
-        //    }
-        //}
+        public static NameValueCollection ToHttpValueCollection(this IDictionary<string, string> dict)
+        {
+            ThrowIf.Null(dict, nameof(dict));
+
+            NameValueCollection nameValueCollection = HttpUtility.ParseQueryString("");
+
+            dict.ForEach(kv => nameValueCollection.Add(kv.Key, kv.Value));
+
+            return nameValueCollection;
+        }
     }
 }
