@@ -13,5 +13,11 @@ namespace System
         {
             Code = code;
         }
+
+        public ErrorResponse(ErrorCode code, string message)
+        {
+            Code = code;
+            Message = message;
+        }
     }
 }
