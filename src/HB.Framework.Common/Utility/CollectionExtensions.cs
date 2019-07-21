@@ -141,6 +141,11 @@ namespace System.Collections.Generic
             return ts == null || ts.Count() == 0;
         }
 
+        public static bool IsNotNullOrEmpty<T>(this IEnumerable<T> ts)
+        {
+            return ts != null && ts.Count() != 0;
+        }
+
         public static NameValueCollection ToHttpValueCollection(this IDictionary<string, string> dict)
         {
             ThrowIf.Null(dict, nameof(dict));
