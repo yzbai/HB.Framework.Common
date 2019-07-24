@@ -22,6 +22,8 @@
         DATA_NO_SUCH = 25,
         DATA_RELATION_ERROR = 26,
         MODEL_VALIDATION_ERROR = 27,
+        API_NEED_PUBLIC_RESOURCE_TOKEN = 28,
+        API_CAPTHA_ERROR = 29,
     }
 
     public static class ErrorCodeExtensions
