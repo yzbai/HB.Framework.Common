@@ -146,7 +146,7 @@ namespace System.Collections.Generic
             return ts != null && ts.Count() != 0;
         }
 
-        public static NameValueCollection ToHttpValueCollection(this IDictionary<string, string> dict)
+        public static NameValueCollection ToHttpValueCollection(this IEnumerable<KeyValuePair<string, string>> dict)
         {
             ThrowIf.Null(dict, nameof(dict));
 

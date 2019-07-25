@@ -217,10 +217,11 @@ namespace System
             return string.IsNullOrEmpty(str);
         }
 
-        public static bool IsNotNullOrEmpty(this string str)
-        {
-            return !string.IsNullOrEmpty(str);
-        }
+        //太容易产生Bug
+        //public static bool IsNotNullOrEmpty(this string str)
+        //{
+        //    return !string.IsNullOrEmpty(str);
+        //}
 
         public static void RequireNotNullOrEmpty(this string str, string parmName)
         {
