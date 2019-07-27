@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HB.Framework.Common
+namespace HB.Framework.Common.Mobile
 {
     public static class MobileInfoNames
     {
