@@ -24,6 +24,7 @@
         MODEL_VALIDATION_ERROR = 27,
         API_NEED_PUBLIC_RESOURCE_TOKEN = 28,
         API_CAPTHA_ERROR = 29,
+        API_INTERNAL_ERROR = 30,
     }
 
     public static class ErrorCodeExtensions

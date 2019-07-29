@@ -12,17 +12,10 @@ namespace System
     {
         #region Json
 
-        private static readonly JsonSerializer jsonSerializer = JsonSerializer.CreateDefault();
-
         public static string ToJson(object entity)
         {
-            StringWriter stringWriter = new StringWriter(new StringBuilder(256), CultureInfo.InvariantCulture);
-            using (JsonTextWriter jsonTextWriter = new JsonTextWriter(stringWriter))
-            {
-                jsonTextWriter.Formatting = jsonSerializer.Formatting;
-                jsonSerializer.Serialize(jsonTextWriter, entity);
-            }
-            return stringWriter.ToString();
+            return JsonConvert.SerializeObject(entity);
+
         }
 
         public static T FromJson<T>(string jsonString)
@@ -32,10 +25,7 @@ namespace System
                 return default;
             }
 
-            using (JsonTextReader reader = new JsonTextReader(new StringReader(jsonString)))
-            {
-                return jsonSerializer.Deserialize<T>(reader);
-            }
+            return JsonConvert.DeserializeObject<T>(jsonString);
         }
 
         public static string FromJson(string jsonString, string name)
@@ -52,19 +42,8 @@ namespace System
                 return default;
             }
 
-            using (JsonTextReader reader = new JsonTextReader(new StringReader(jsonString)))
-            {
-                return jsonSerializer.Deserialize(reader, type);
-            }
-        }
+            return JsonConvert.DeserializeObject(jsonString, type);
 
-        public static T FromStream<T>(Stream stream)
-        {
-            using (var streamReader = new StreamReader(stream))
-            using (var jsonTextReader = new JsonTextReader(streamReader))
-            {
-                return jsonSerializer.Deserialize<T>(jsonTextReader);
-            }
         }
 
         #endregion
