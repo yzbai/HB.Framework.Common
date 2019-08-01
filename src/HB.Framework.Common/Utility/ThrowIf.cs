@@ -32,7 +32,7 @@ namespace System
 
         public static IEnumerable<T> NullOrEmpty<T>([ValidatedNotNull]IEnumerable<T> lst, string paramName)
         {
-            if (lst == null || lst.Count() == 0)
+            if (lst == null || !lst.Any())
             {
                 throw new ArgumentException(paramName);
             }
@@ -95,7 +95,7 @@ namespace System
 
         public static IEnumerable<T> ThrowIfNullOrEmpty<T>([ValidatedNotNull]this IEnumerable<T> lst, string paramName)
         {
-            if (lst == null || lst.Count() == 0)
+            if (lst == null || !lst.Any())
             {
                 throw new ArgumentException(paramName);
             }

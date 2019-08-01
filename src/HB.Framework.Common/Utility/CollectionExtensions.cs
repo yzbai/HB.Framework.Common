@@ -138,12 +138,12 @@ namespace System.Collections.Generic
 
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> ts)
         {
-            return ts == null || ts.Count() == 0;
+            return ts == null || !ts.Any();
         }
 
         public static bool IsNotNullOrEmpty<T>(this IEnumerable<T> ts)
         {
-            return ts != null && ts.Count() != 0;
+            return ts != null && ts.Any();
         }
 
         public static NameValueCollection ToHttpValueCollection(this IEnumerable<KeyValuePair<string, string>> dict)
