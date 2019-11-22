@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
@@ -13,7 +12,7 @@ namespace HB.Framework.Common
     {
         #region Validation
 
-        private readonly IList<ValidationResult> __validateResults = new List<ValidationResult>();
+        private IList<ValidationResult>? _validateResults;
 
         public bool IsValid()
         {
@@ -22,18 +21,23 @@ namespace HB.Framework.Common
 
         public IList<ValidationResult> GetValidateResults()
         {
-            if (__validateResults == null)
+            if (_validateResults == null)
             {
                 PerformValidate();
             }
-            return __validateResults;
+            return _validateResults!;
         }
 
         public string GetValidateErrorMessage()
         {
+            if (_validateResults == null)
+            {
+                PerformValidate();
+            }
+
             StringBuilder builder = new StringBuilder();
 
-            foreach (ValidationResult result in __validateResults)
+            foreach (ValidationResult result in _validateResults!)
             {
                 builder.AppendLine(result.ErrorMessage);
             }
@@ -43,8 +47,9 @@ namespace HB.Framework.Common
 
         private bool PerformValidate()
         {
+            _validateResults = new List<ValidationResult>();
             ValidationContext vContext = new ValidationContext(this);
-            return Validator.TryValidateObject(this, vContext, __validateResults, true);
+            return Validator.TryValidateObject(this, vContext, _validateResults, true);
         }
 
         #endregion

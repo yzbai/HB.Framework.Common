@@ -30,27 +30,23 @@ namespace HB.Framework.Common.Utility
 
         public static void SaveToFile(byte[] buffer, string path)
         {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            //if (string.IsNullOrWhiteSpace(path))
+            //{
+            //    throw new ArgumentNullException(nameof(path));
+            //}
 
-            if (buffer == null)
-            {
-                throw new ArgumentNullException(nameof(buffer));
-            }
+            //if (buffer == null)
+            //{
+            //    throw new ArgumentNullException(nameof(buffer));
+            //}
 
-            using (FileStream fileStream = new FileStream(path, FileMode.CreateNew))
-            {
-                using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
-                {
-                    binaryWriter.Write(buffer);
+            using FileStream fileStream = new FileStream(path, FileMode.CreateNew);
+            using BinaryWriter binaryWriter = new BinaryWriter(fileStream);
+            binaryWriter.Write(buffer);
 
-                    binaryWriter.Close();
-                }
+            binaryWriter.Close();
 
-                fileStream.Close();
-            }
+            fileStream.Close();
         }
 
         public static byte[] ComputeHash(string filePath)
@@ -63,13 +59,9 @@ namespace HB.Framework.Common.Utility
                 {
                     if (File.Exists(filePath))
                     {
-                        using (var fs = File.OpenRead(filePath))
-                        {
-                            using (System.Security.Cryptography.SHA256 sha256Obj = System.Security.Cryptography.SHA256.Create())
-                            { 
-                                return sha256Obj.ComputeHash(fs);
-                            }
-                        }
+                        using FileStream fs = File.OpenRead(filePath);
+                        using System.Security.Cryptography.SHA256 sha256Obj = System.Security.Cryptography.SHA256.Create();
+                        return sha256Obj.ComputeHash(fs);
                     }
                     else
                     {

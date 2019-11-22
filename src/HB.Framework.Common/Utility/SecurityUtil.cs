@@ -37,27 +37,23 @@ namespace System
                 throw new ArgumentNullException(nameof(item));
             }
 
-            using (SHA256 sha256Obj = SHA256.Create())
-            {
-                byte[] hashBytes = sha256Obj.ComputeHash(Encoding.UTF8.GetBytes(item));
+            using SHA256 sha256Obj = SHA256.Create();
+            byte[] hashBytes = sha256Obj.ComputeHash(Encoding.UTF8.GetBytes(item));
 
-                return Convert.ToBase64String(hashBytes);
-            }
+            return Convert.ToBase64String(hashBytes);
         }
 
-        public static string GetHash<T>(T item)
+        public static string GetHash<T>(T item) where T : class
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            //if (item == null)
+            //{
+            //    throw new ArgumentNullException(nameof(item));
+            //}
 
-            using (SHA256 sha256Obj = SHA256.Create())
-            {
-                byte[] result = sha256Obj.ComputeHash(JsonUtil.Serialize(item));
+            using SHA256 sha256Obj = SHA256.Create();
+            byte[] result = sha256Obj.ComputeHash(item.ToBytes());
 
-                return Convert.ToBase64String(result);
-            }
+            return Convert.ToBase64String(result);
         }
 
         public static string EncryptPwdWithSalt(string pwd, string salt)
@@ -71,18 +67,18 @@ namespace System
 
         #region Random String
 
-        private const string charCollection = "0,1,2,3,4,5,6,7,8,9,a,s,d,f,g,h,z,c,v,b,n,m,k,q,w,e,r,t,y,u,p,A,S,D,F,G,H,Z,C,V,B,N,M,K,Q,W,E,R,T,Y,U,P"; //定义验证码字符及出现频次 ,避免出现0 o j i l 1 x;
-        private static readonly string[] charArray = charCollection.Split(',');
-        private static readonly string[] numbericCharArray = charCollection.Substring(0, 20).Split(',');
+        private const string _charCollection = "0,1,2,3,4,5,6,7,8,9,a,s,d,f,g,h,z,c,v,b,n,m,k,q,w,e,r,t,y,u,p,A,S,D,F,G,H,Z,C,V,B,N,M,K,Q,W,E,R,T,Y,U,P"; //定义验证码字符及出现频次 ,避免出现0 o j i l 1 x;
+        private static readonly string[] _charArray = _charCollection.Split(',');
+        private static readonly string[] _numbericCharArray = _charCollection.Substring(0, 20).Split(',');
 
         public static string CreateRandomString(int length)
         {
-            return CreateRandomString(length, charArray);
+            return CreateRandomString(length, _charArray);
         }
 
         public static string CreateRandomNumbericString(int length)
         {
-            return CreateRandomString(length, numbericCharArray);
+            return CreateRandomString(length, _numbericCharArray);
         }
 
         private static string CreateRandomString(int length, string[] charArray)

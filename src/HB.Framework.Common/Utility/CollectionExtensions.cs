@@ -10,13 +10,12 @@ namespace System.Collections.Generic
 {
     public static class CollectionExtensions
     {
-
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
-            if (enumerable == null)
-            {
-                throw new ArgumentNullException(nameof(enumerable));
-            }
+            //if (enumerable == null)
+            //{
+            //    throw new ArgumentNullException(nameof(enumerable));
+            //}
 
             foreach (T t in enumerable)
             {
@@ -26,11 +25,10 @@ namespace System.Collections.Generic
 
         public static async Task ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> action)
         {
-            if (enumerable == null)
-            {
-                throw new ArgumentNullException(nameof(enumerable));
-            }
-
+            //if (enumerable == null)
+            //{
+            //    throw new ArgumentNullException(nameof(enumerable));
+            //}
 
             foreach (T t in enumerable)
             {
@@ -40,8 +38,8 @@ namespace System.Collections.Generic
 
         public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> original, IDictionary<TKey, TValue> toAdds)
         {
-            ThrowIf.Null(original, nameof(original));
-            ThrowIf.Null(toAdds, nameof(toAdds));
+            //ThrowIf.Null(original, nameof(original));
+            //ThrowIf.Null(toAdds, nameof(toAdds));
 
             toAdds.ForEach(kv => original.Add(kv.Key, kv.Value));
 
@@ -49,18 +47,18 @@ namespace System.Collections.Generic
 
         public static void Add<T>(this IList<T> original, IEnumerable<T> items)
         {
-            ThrowIf.NullOrEmpty(original, nameof(original));
-            ThrowIf.NullOrEmpty(items, nameof(items));
+            //ThrowIf.NullOrEmpty(original, nameof(original));
+            //ThrowIf.NullOrEmpty(items, nameof(items));
 
             items.ForEach(t => original.Add(t));
         }
 
         public static IDictionary<TKey, TValue> CloningWithValues<TKey, TValue> (this IDictionary<TKey, TValue> original) where TValue : ICloneable
         {
-            if (original == null)
-            {
-                return null;
-            }
+            //if (original == null)
+            //{
+            //    return null;
+            //}
 
             IDictionary<TKey, TValue> ret = new Dictionary<TKey, TValue>();
 
@@ -81,10 +79,10 @@ namespace System.Collections.Generic
 
         public static IDictionary<TKey, int> CloningWithValues<TKey>(this IDictionary<TKey, int> original)
         {
-            if (original == null)
-            {
-                return null;
-            }
+            //if (original == null)
+            //{
+            //    return null;
+            //}
 
             IDictionary<TKey, int> ret = new Dictionary<TKey, int>();
 
@@ -104,10 +102,10 @@ namespace System.Collections.Generic
 
         public static IDictionary<TKey, TNewValue> ConvertValue<TKey, TValue, TNewValue>(this IDictionary<TKey, TValue> original, Func<TValue, TNewValue> converter)
         {
-            if (original == null)
-            {
-                return null;
-            }
+            //if (original == null)
+            //{
+            //    return null;
+            //}
 
             IDictionary<TKey, TNewValue> ret = new Dictionary<TKey, TNewValue>();
 
@@ -121,10 +119,10 @@ namespace System.Collections.Generic
 
         public static IList<T> CloneWithValues<T>(this IList<T> lst) where T : ICloneable
         {
-            if (lst == null)
-            {
-                return null;
-            }
+            //if (lst == null)
+            //{
+            //    return null;
+            //}
 
             List<T> retList = new List<T>();
 
@@ -136,19 +134,19 @@ namespace System.Collections.Generic
             return retList;
         }
 
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> ts)
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T>? ts)
         {
             return ts == null || !ts.Any();
         }
 
-        public static bool IsNotNullOrEmpty<T>(this IEnumerable<T> ts)
+        public static bool IsNotNullOrEmpty<T>(this IEnumerable<T>? ts)
         {
             return ts != null && ts.Any();
         }
 
         public static NameValueCollection ToHttpValueCollection(this IEnumerable<KeyValuePair<string, string>> dict)
         {
-            ThrowIf.Null(dict, nameof(dict));
+            //ThrowIf.Null(dict, nameof(dict));
 
             NameValueCollection nameValueCollection = HttpUtility.ParseQueryString("");
 

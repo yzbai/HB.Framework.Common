@@ -8,14 +8,14 @@
                 ErrorMessage = "xxxxxxxxxxxxxxxxxxxx";
         }
 
-        public override bool IsValid(object value)
+        public override bool IsValid(object? value)
         {
             if (value == null)
             {
                 return true;
             }
 
-            string str = value as string;
+            string? str = value as string;
 
             if (string.IsNullOrEmpty(str))
             {

@@ -11,37 +11,28 @@ namespace System.Security.Cryptography.X509Certificates
         /// </summary>
         /// <param name="subjectName"></param>
         /// <returns></returns>
-        public static X509Certificate2 GetBySubject(string subjectName)
+        public static X509Certificate2? GetBySubject(string subjectName)
         {
             return GetBySubject(subjectName, StoreLocation.CurrentUser) ?? GetBySubject(subjectName, StoreLocation.LocalMachine);
-
-            //if (cert == null)
-            //{
-            //    LogHelper.GlobalLogger.LogCritical("证书找不到，SubjectName : {0}", subjectName);
-            //}
-
-            //return cert;
         }
 
 
-        public static X509Certificate2 GetBySubject(string subjectName, StoreLocation storeLocation)
+        public static X509Certificate2? GetBySubject(string subjectName, StoreLocation storeLocation)
         {
-            using (X509Store store = new X509Store(storeLocation))
+            using X509Store store = new X509Store(storeLocation);
+            store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+
+            X509Certificate2Collection collection = store.Certificates.Find(X509FindType.FindBySubjectDistinguishedName, subjectName, true);
+
+            if (collection.Count != 1)
             {
-                store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-
-                X509Certificate2Collection collection = store.Certificates.Find(X509FindType.FindBySubjectDistinguishedName, subjectName, true);
-
-                if (collection.Count != 1)
-                {
-                    return null;
-                }
-
-                return collection[0];
+                return null;
             }
+
+            return collection[0];
         }
 
-        public static X509Certificate2 GetByThumbprint(string thumbprint)
+        public static X509Certificate2? GetByThumbprint(string thumbprint)
         {
             return GetByThumbprint(thumbprint, StoreLocation.CurrentUser) ?? GetByThumbprint(thumbprint, StoreLocation.LocalMachine);
         }
@@ -52,21 +43,20 @@ namespace System.Security.Cryptography.X509Certificates
         /// <param name="thumbprint"></param>
         /// <param name="storeLocation"></param>
         /// <returns></returns>
-        public static X509Certificate2 GetByThumbprint(string thumbprint, StoreLocation storeLocation)
+        public static X509Certificate2? GetByThumbprint(string thumbprint, StoreLocation storeLocation)
         {
-            using (X509Store store = new X509Store(storeLocation))
+            using X509Store store = new X509Store(storeLocation);
+
+            store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+
+            X509Certificate2Collection collection = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, true);
+
+            if (collection.Count != 1)
             {
-                store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-
-                X509Certificate2Collection collection = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, true);
-
-                if (collection.Count != 1)
-                {
-                    return null;
-                }
-
-                return collection[0];
+                return null;
             }
+
+            return collection[0];
         }
     }
 }
