@@ -1,13 +1,17 @@
-﻿namespace System
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace System
 {
     public static class TimeUtil
     {
-        private const string _yearMonthDayFormat = "yyyy-MM-dd";
-        private const string _yearMonthDayHourMinuteSecondFormat = "yyyy-MM-dd HH:mm:ss";
+        private const string YearMonthDayFormat = "yyyy-MM-dd";
+        private const string YearMonthDayHourMinuteSecondFormat = "yyyy-MM-dd HH:mm:ss";
 
         public static string GetYearMonthDay(DateTime dateTime)
         {
-            return dateTime.ToString(_yearMonthDayFormat, GlobalSettings.Culture);
+            return dateTime.ToString(YearMonthDayFormat, GlobalSettings.Culture);
         }
 
         public static string GetTodayYearMonthDay()
@@ -70,7 +74,7 @@
 
         public static string GetDateTimeString(DateTime dateTime)
         {
-            return dateTime.ToString(_yearMonthDayHourMinuteSecondFormat, GlobalSettings.Culture);
+            return dateTime.ToString(YearMonthDayHourMinuteSecondFormat, GlobalSettings.Culture);
         }
         public static string GetNowString()
         {

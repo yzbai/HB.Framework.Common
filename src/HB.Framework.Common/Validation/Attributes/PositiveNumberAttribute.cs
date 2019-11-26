@@ -17,7 +17,7 @@ namespace HB.Framework.Common.Validation.Attributes
             }
         }
 
-        public override bool IsValid(object? value)
+        public override bool IsValid(object value)
         {
             if (value == null) { return true; }
 

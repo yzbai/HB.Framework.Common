@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HB.Framework.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
@@ -8,67 +9,59 @@ namespace HB.Framework.Common.Mobile
     public class ResourceRequest : ValidatableObject
     {
         [Required]
-        public string? DeviceId
-        {
-            get
-            {
+        public string DeviceId {
+            get {
                 return GetParameter(MobileInfoNames.DeviceId);
             }
 
-            set
-            {
-                if (string.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
+            set {
                 SetParameter(MobileInfoNames.DeviceId, value);
             }
         }
 
         //All use fields instead of Properties, for avoid mvc binding
-        private readonly string _productType;
-        private readonly string _apiVersion;
-        private readonly HttpMethod _httpMethod;
-        private readonly bool _needAuthenticate;
-        private readonly string _resourceName;
-        private readonly string? _condition;
-        private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
-        private readonly IDictionary<string, string> _parameters = new Dictionary<string, string>();
+        private readonly string productType;
+        private readonly string apiVersion;
+        private readonly HttpMethod httpMethod;
+        private readonly bool needAuthenticate;
+        private readonly string resourceName;
+        private readonly string condition;
+        private readonly IDictionary<string, string> headers = new Dictionary<string, string>();
+        private readonly IDictionary<string, string> parameters = new Dictionary<string, string>();
 
         public string GetProductType()
         {
-            return _productType;
+            return productType;
         }
 
         public string GetApiVersion()
         {
-            return _apiVersion;
+            return apiVersion;
         }
 
         public HttpMethod GetHttpMethod()
         {
-            return _httpMethod;
+            return httpMethod;
         }
 
         public bool GetNeedAuthenticate()
         {
-            return _needAuthenticate;
+            return needAuthenticate;
         }
 
         public string GetResourceName()
         {
-            return _resourceName;
+            return resourceName;
         }
 
-        public string? GetCondition()
+        public string GetCondition()
         {
-            return _condition;
+            return condition;
         }
 
-        protected string? GetParameter(string name)
+        protected string GetParameter(string name)
         {
-            if (_parameters.TryGetValue(name, out string value))
+            if (parameters.TryGetValue(name, out string value))
             {
                 return value;
             }
@@ -78,48 +71,48 @@ namespace HB.Framework.Common.Mobile
 
         protected void SetParameter(string name, string value)
         {
-            _parameters[name] = value;
+            parameters[name] = value;
         }
 
         public void AddParameter(string name, string value)
         {
-            if (_parameters.ContainsKey(name))
+            if (parameters.ContainsKey(name))
             {
                 throw new ArgumentException($"Request Already has a parameter named {name}");
             }
 
-            _parameters.Add(name, value);
+            parameters.Add(name, value);
         }
 
         public void AddHeader(string name, string value)
         {
-            if (_headers.ContainsKey(name))
+            if (headers.ContainsKey(name))
             {
                 throw new ArgumentException($"Request Already has a header named {name}");
             }
 
-            _headers.Add(name, value);
+            headers.Add(name, value);
         }
 
         public IDictionary<string, string> GetParameters()
         {
-            return _parameters;
+            return parameters;
         }
 
         public IDictionary<string, string> GetHeaders()
         {
-            return _headers;
+            return headers;
         }
 
 
-        public ResourceRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string? condition = null)
+        public ResourceRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string condition = null)
         {
-            _productType = productType.ThrowIfNullOrEmpty(nameof(productType));
-            _apiVersion = apiVersion;
-            _httpMethod = httpMethod.ThrowIfNull(nameof(httpMethod));
-            _needAuthenticate = needAuthenticate;
-            _resourceName = resourceName;
-            _condition = condition;
+            this.productType = productType.ThrowIfNullOrEmpty(nameof(productType));
+            this.apiVersion = apiVersion;
+            this.httpMethod = httpMethod.ThrowIfNull(nameof(httpMethod));
+            this.needAuthenticate = needAuthenticate;
+            this.resourceName = resourceName;
+            this.condition = condition;
         }
     }
 }

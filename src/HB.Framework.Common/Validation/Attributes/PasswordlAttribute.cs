@@ -8,7 +8,7 @@
                 ErrorMessage = "xxxx";
         }
 
-        public override bool IsValid(object? value)
+        public override bool IsValid(object value)
         {
             if (value == null)
             {

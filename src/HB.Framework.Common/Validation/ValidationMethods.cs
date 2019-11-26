@@ -1,4 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace HB.Framework.Common.Validate
 {
@@ -13,7 +18,7 @@ namespace HB.Framework.Common.Validate
 
             return Regex.IsMatch(str, RegExpressions.Email);
         }
-
+        
         public static bool IsMobilePhone(string str)
         {
             if (string.IsNullOrEmpty(str))

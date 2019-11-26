@@ -12,7 +12,7 @@ namespace HB.Framework.Common
     public class StringTagParser
     {
         private readonly string _matchPattern = @"(\[%\w+%\])";
-        private readonly Hashtable _tagCache = new Hashtable();       
+        private readonly Hashtable tagCache = new Hashtable();       
 
         public StringTagParser() { }
 
@@ -27,40 +27,40 @@ namespace HB.Framework.Common
         {
             foreach (KeyValuePair<string, string> tag in ThrowIf.Null(tags, nameof(tags)))
             {
-                _tagCache.Add(tag.Key, tag.Value);
+                tagCache.Add(tag.Key, tag.Value);
             }
         }
 
         public bool Exist(string Tag)
         {
-            return _tagCache.ContainsKey(Tag);
+            return tagCache.ContainsKey(Tag);
         }
 
         public void AddTag(string Tag, string Value)
         {
-            _tagCache.Add(Tag, Value);
+            tagCache.Add(Tag, Value);
         }
 
         public void AddOrReplace(string Tag, string Value)
         {
-            _tagCache[Tag] = Value;
+            tagCache[Tag] = Value;
         }
 
         public void RemoveTag(string Tag)
         {
-            _tagCache.Remove(Tag);
+            tagCache.Remove(Tag);
         }
 
         public void ClearTags()
         {
-            _tagCache.Clear();
+            tagCache.Clear();
         }
 
         #endregion
 
         private string ReplaceTagHandler(Match token)
         {
-            return _tagCache.Contains(token.Value) ? _tagCache[token.Value].ToString() : string.Empty;
+            return tagCache.Contains(token.Value) ? tagCache[token.Value].ToString() : string.Empty;
         }
 
         public string Parse(string stringWithTag)

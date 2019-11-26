@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Text;
 
 namespace System
 {
@@ -7,7 +9,7 @@ namespace System
     {
         public static IEnumerable<MethodInfo> GetMethodWithAttribute<T>(this Type type) where T : Attribute
         {
-            //ThrowIf.Null(type, nameof(type));
+            ThrowIf.Null(type, nameof(type));
 
             List<MethodInfo> lst = new List<MethodInfo>();
 

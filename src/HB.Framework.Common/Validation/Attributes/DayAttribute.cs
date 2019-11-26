@@ -1,5 +1,9 @@
 ﻿using HB.Framework.Common.Validate;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HB.Framework.Common.Validation.Attributes
 {
@@ -14,7 +18,7 @@ namespace HB.Framework.Common.Validation.Attributes
             }
         }
 
-        public override bool IsValid(object? value)
+        public override bool IsValid(object value)
         {
             if (value == null)
             {

@@ -5,7 +5,7 @@ namespace System
     {
         public ErrorCode Code { get; set; }
 
-        public string? Message { get; set; }
+        public string Message { get; set; }
 
         private ErrorResponse() { }
 

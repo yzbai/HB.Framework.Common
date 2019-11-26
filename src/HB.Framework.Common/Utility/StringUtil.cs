@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace System
@@ -7,28 +8,28 @@ namespace System
     {
         #region String Encode to bytes
 
-        public static byte[] GetUTF8Bytes(this string item)
+        public static byte[] GetUTF8Bytes(string item)
         {
-            //if (item == null)
-            //{
-            //    return null;
-            //}
+            if (item == null)
+            {
+                return null;
+            }
             return Encoding.UTF8.GetBytes(item);
         }
 
-        public static string GetUTF8String(this byte[] item)
+        public static string GetUTF8String(byte[] item)
         {
-            //if (item == null)
-            //{
-            //    return null;
-            //}
+            if (item == null)
+            {
+                return null;
+            }
 
             return Encoding.UTF8.GetString(item);
         }
 
-        public static string ToHexString(this byte[] bytes)
+        public static string ToHexString(byte[] bytes)
         {
-            //ThrowIf.Null(bytes, nameof(bytes));
+            ThrowIf.Null(bytes, nameof(bytes));
 
             StringBuilder hex = new StringBuilder();
 
@@ -44,25 +45,24 @@ namespace System
 
         #region Collection to String
 
-        private static readonly string[] _separator = { "-)#@$(-" };
-        private static readonly int _separatorLength = _separator[0].Length;
-
+        private static readonly string[] separator = { "-)#@$(-" };
+        private static readonly int separatorLength = separator[0].Length;
         public static string ListToString(IEnumerable<string> list)
         {
             StringBuilder builder = new StringBuilder();
             bool added = false;
 
-            foreach (string str in /*ThrowIf.Null(*/list/*, nameof(list))*/)
+            foreach (string str in ThrowIf.Null(list, nameof(list)))
             {
                 builder.Append(str);
-                builder.Append(_separator[0]);
+                builder.Append(separator[0]);
 
                 added = true;
             }
 
             if (added)
             {
-                builder.Remove(builder.Length - _separatorLength, _separatorLength);
+                builder.Remove(builder.Length - separatorLength, separatorLength);
             }
 
             return builder.ToString();
@@ -72,12 +72,12 @@ namespace System
         {
             List<string> list = new List<string>();
 
-            //if (string.IsNullOrEmpty(longStr))
-            //{
-            //    return list;
-            //}
+            if (string.IsNullOrEmpty(longStr))
+            {
+                return list;
+            }
 
-            string[] results = longStr.Split(_separator, StringSplitOptions.None);
+            string[] results = longStr.Split(separator, StringSplitOptions.None);
 
             foreach (string str in results)
             {
@@ -89,10 +89,10 @@ namespace System
 
         public static string DictionaryToString(IDictionary<string, string> subjectNodeSetIds)
         {
-            //if (subjectNodeSetIds == null || subjectNodeSetIds.Count == 0)
-            //{
-            //    return null;
-            //}
+            if (subjectNodeSetIds == null || subjectNodeSetIds.Count == 0)
+            {
+                return null;
+            }
 
             StringBuilder builder = new StringBuilder();
             bool added = false;
@@ -100,16 +100,16 @@ namespace System
             foreach (KeyValuePair<string, string> kv in subjectNodeSetIds)
             {
                 builder.Append(kv.Key);
-                builder.Append(_separator[0]);
+                builder.Append(separator[0]);
                 builder.Append(kv.Value);
-                builder.Append(_separator[0]);
+                builder.Append(separator[0]);
 
                 added = true;
             }
 
             if (added)
             {
-                builder.Remove(builder.Length - _separatorLength, _separatorLength);
+                builder.Remove(builder.Length - separatorLength, separatorLength);
             }
 
             return builder.ToString();
@@ -119,12 +119,12 @@ namespace System
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
-            //if (string.IsNullOrEmpty(jointSubjectNodeSetIds))
-            //{
-            //    return dict;
-            //}
+            if (string.IsNullOrEmpty(jointSubjectNodeSetIds))
+            {
+                return dict;
+            }
 
-            string[] result = jointSubjectNodeSetIds.Split(_separator, StringSplitOptions.None);
+            string[] result = jointSubjectNodeSetIds.Split(separator, StringSplitOptions.None);
 
             if (result.Length % 2 != 0)
             {
@@ -145,12 +145,12 @@ namespace System
 
         public static bool IsIn(this string str, params string[] words)
         {
-            //if (str == null)
-            //{
-            //    throw new ArgumentNullException(nameof(str));
-            //}
+            if (str == null)
+            {
+                throw new ArgumentNullException(nameof(str));
+            }
 
-            if (/*words == null || */words.Length == 0)
+            if (words == null || words.Length == 0)
             {
                 return false;
             }
@@ -173,7 +173,7 @@ namespace System
         /// <returns></returns>
         public static bool IsAllUpper(this string str)
         {
-            if (/*str == null || */str.Length == 0)
+            if (str == null || str.Length == 0)
             {
                 return false;
             }
@@ -196,7 +196,7 @@ namespace System
         /// <returns></returns>
         public static bool IsAllLower(this string str)
         {
-            if (/*str == null || */str.Length == 0)
+            if (str == null || str.Length == 0)
             {
                 return false;
             }
@@ -212,14 +212,33 @@ namespace System
             return true;
         }
 
+        public static bool IsNullOrEmpty(this string str)
+        {
+            return string.IsNullOrEmpty(str);
+        }
+
+        //太容易产生Bug
+        //public static bool IsNotNullOrEmpty(this string str)
+        //{
+        //    return !string.IsNullOrEmpty(str);
+        //}
+
+        public static void RequireNotNullOrEmpty(this string str, string parmName)
+        {
+            if (string.IsNullOrEmpty(str))
+            {
+                throw new ArgumentNullException(parmName);
+            }
+        }
+
         public static string RemoveSuffix(this string str, string suffix)
         {
-            //if (str == null || suffix == null)
-            //{
-            //    return str;
-            //}
+            if (str == null || suffix == null)
+            {
+                return str;
+            }
 
-            return str.EndsWith(suffix, GlobalSettings.Comparison) ? str.Substring(0, str.Length - suffix.Length) : str;
+            return str.EndsWith(suffix, GlobalSettings.Comparison) ? str.Substring(0, str.Length - suffix.Length) : str; 
         }
 
         #endregion
