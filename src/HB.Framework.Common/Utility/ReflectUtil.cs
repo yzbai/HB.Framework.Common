@@ -7,9 +7,6 @@ using System.Linq;
 
 namespace System
 {
-    /// <summary>
-    /// TODO: Use 
-    /// </summary>
     [Obsolete("请使用AssemblyLoadContext来实现", true)]
     public static class ReflectUtil
     {
@@ -32,7 +29,6 @@ namespace System
                 .Where(t => condition(t));
         }
 
-        //TODO: Use metacontext later when update into .net 3.0
         public static IEnumerable<Type> GetAllTypeByCondition(IList<string> assembliesToCheck, Func<Type, bool> condition)
         {
             return assembliesToCheck
