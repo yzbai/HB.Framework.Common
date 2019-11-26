@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace HB.Framework.Common.Mobile
+﻿namespace HB.Framework.Common.Mobile
 {
     public static class MobileInfoNames
     {
@@ -12,7 +8,6 @@ namespace HB.Framework.Common.Mobile
         public const string DeviceAddress = "DeviceAddress";
 
         public const string AccessToken = "AccessToken";
-
         public const string RefreshToken = "RefreshToken";
     }
 }

@@ -13,10 +13,7 @@ namespace System.Collections.Generic
 
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
-            if (enumerable == null)
-            {
-                throw new ArgumentNullException(nameof(enumerable));
-            }
+            ThrowIf.Null(enumerable, nameof(enumerable));
 
             foreach (T t in enumerable)
             {
@@ -26,11 +23,7 @@ namespace System.Collections.Generic
 
         public static async Task ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> action)
         {
-            if (enumerable == null)
-            {
-                throw new ArgumentNullException(nameof(enumerable));
-            }
-
+            ThrowIf.Null(enumerable, nameof(enumerable));
 
             foreach (T t in enumerable)
             {
@@ -57,10 +50,7 @@ namespace System.Collections.Generic
 
         public static IDictionary<TKey, TValue> CloningWithValues<TKey, TValue> (this IDictionary<TKey, TValue> original) where TValue : ICloneable
         {
-            if (original == null)
-            {
-                return null;
-            }
+            ThrowIf.Null(original, nameof(original));
 
             IDictionary<TKey, TValue> ret = new Dictionary<TKey, TValue>();
 
@@ -81,10 +71,7 @@ namespace System.Collections.Generic
 
         public static IDictionary<TKey, int> CloningWithValues<TKey>(this IDictionary<TKey, int> original)
         {
-            if (original == null)
-            {
-                return null;
-            }
+            ThrowIf.Null(original, nameof(original));
 
             IDictionary<TKey, int> ret = new Dictionary<TKey, int>();
 
@@ -104,10 +91,7 @@ namespace System.Collections.Generic
 
         public static IDictionary<TKey, TNewValue> ConvertValue<TKey, TValue, TNewValue>(this IDictionary<TKey, TValue> original, Func<TValue, TNewValue> converter)
         {
-            if (original == null)
-            {
-                return null;
-            }
+            ThrowIf.Null(original, nameof(original));
 
             IDictionary<TKey, TNewValue> ret = new Dictionary<TKey, TNewValue>();
 
@@ -121,10 +105,7 @@ namespace System.Collections.Generic
 
         public static IList<T> CloneWithValues<T>(this IList<T> lst) where T : ICloneable
         {
-            if (lst == null)
-            {
-                return null;
-            }
+            ThrowIf.Null(lst, nameof(lst));
 
             List<T> retList = new List<T>();
 

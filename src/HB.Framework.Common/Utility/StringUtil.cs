@@ -45,8 +45,8 @@ namespace System
 
         #region Collection to String
 
-        private static readonly string[] separator = { "-)#@$(-" };
-        private static readonly int separatorLength = separator[0].Length;
+        private static readonly string[] _separator = { "-)#@$(-" };
+        private static readonly int _separatorLength = _separator[0].Length;
         public static string ListToString(IEnumerable<string> list)
         {
             StringBuilder builder = new StringBuilder();
@@ -55,14 +55,14 @@ namespace System
             foreach (string str in ThrowIf.Null(list, nameof(list)))
             {
                 builder.Append(str);
-                builder.Append(separator[0]);
+                builder.Append(_separator[0]);
 
                 added = true;
             }
 
             if (added)
             {
-                builder.Remove(builder.Length - separatorLength, separatorLength);
+                builder.Remove(builder.Length - _separatorLength, _separatorLength);
             }
 
             return builder.ToString();
@@ -77,7 +77,7 @@ namespace System
                 return list;
             }
 
-            string[] results = longStr.Split(separator, StringSplitOptions.None);
+            string[] results = longStr.Split(_separator, StringSplitOptions.None);
 
             foreach (string str in results)
             {
@@ -100,16 +100,16 @@ namespace System
             foreach (KeyValuePair<string, string> kv in subjectNodeSetIds)
             {
                 builder.Append(kv.Key);
-                builder.Append(separator[0]);
+                builder.Append(_separator[0]);
                 builder.Append(kv.Value);
-                builder.Append(separator[0]);
+                builder.Append(_separator[0]);
 
                 added = true;
             }
 
             if (added)
             {
-                builder.Remove(builder.Length - separatorLength, separatorLength);
+                builder.Remove(builder.Length - _separatorLength, _separatorLength);
             }
 
             return builder.ToString();
@@ -124,7 +124,7 @@ namespace System
                 return dict;
             }
 
-            string[] result = jointSubjectNodeSetIds.Split(separator, StringSplitOptions.None);
+            string[] result = jointSubjectNodeSetIds.Split(_separator, StringSplitOptions.None);
 
             if (result.Length % 2 != 0)
             {

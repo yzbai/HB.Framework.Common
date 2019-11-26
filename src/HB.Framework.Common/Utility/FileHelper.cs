@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace HB.Framework.Common.Utility
+namespace System
 {
     public static class FileHelper
     {
@@ -30,32 +26,24 @@ namespace HB.Framework.Common.Utility
 
         public static void SaveToFile(byte[] buffer, string path)
         {
-            if (string.IsNullOrWhiteSpace(path))
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ThrowIf.NullOrEmpty(path, nameof(path));
+            ThrowIf.Null(buffer, nameof(buffer));
 
-            if (buffer == null)
-            {
-                throw new ArgumentNullException(nameof(buffer));
-            }
+            using FileStream fileStream = new FileStream(path, FileMode.CreateNew);
+            using BinaryWriter binaryWriter = new BinaryWriter(fileStream);
 
-            using (FileStream fileStream = new FileStream(path, FileMode.CreateNew))
-            {
-                using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
-                {
-                    binaryWriter.Write(buffer);
+            binaryWriter.Write(buffer);
 
-                    binaryWriter.Close();
-                }
+            binaryWriter.Close();
 
-                fileStream.Close();
-            }
+            fileStream.Close();
         }
 
         public static byte[] ComputeHash(string filePath)
         {
-            var runCount = 1;
+            ThrowIf.NullOrEmpty(filePath, nameof(filePath));
+
+            int runCount = 1;
 
             while (runCount < 4)
             {
@@ -63,13 +51,9 @@ namespace HB.Framework.Common.Utility
                 {
                     if (File.Exists(filePath))
                     {
-                        using (var fs = File.OpenRead(filePath))
-                        {
-                            using (System.Security.Cryptography.SHA256 sha256Obj = System.Security.Cryptography.SHA256.Create())
-                            { 
-                                return sha256Obj.ComputeHash(fs);
-                            }
-                        }
+                        using FileStream fs = File.OpenRead(filePath);
+                        using System.Security.Cryptography.SHA256 sha256Obj = System.Security.Cryptography.SHA256.Create();
+                        return sha256Obj.ComputeHash(fs);
                     }
                     else
                     {

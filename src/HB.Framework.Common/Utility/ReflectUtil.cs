@@ -5,8 +5,12 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 
-namespace HB.Framework.Common.Utility
+namespace System
 {
+    /// <summary>
+    /// TODO: Use 
+    /// </summary>
+    [Obsolete("请使用AssemblyLoadContext来实现", true)]
     public static class ReflectUtil
     {
         public static IEnumerable<Assembly> GetAllAssemblies()
@@ -31,14 +35,9 @@ namespace HB.Framework.Common.Utility
         //TODO: Use metacontext later when update into .net 3.0
         public static IEnumerable<Type> GetAllTypeByCondition(IList<string> assembliesToCheck, Func<Type, bool> condition)
         {
-            return assembliesToCheck.ThrowIfNullOrEmpty(nameof(assembliesToCheck))
+            return assembliesToCheck
                 .SelectMany(assemblyName => Assembly.Load(assemblyName).GetTypes())
                 .Where(t => condition(t));
         }
-
-        //public static string GetTypeSimpleName(this Type type)
-        //{
-        //    type.Name
-        //}
     }
 }

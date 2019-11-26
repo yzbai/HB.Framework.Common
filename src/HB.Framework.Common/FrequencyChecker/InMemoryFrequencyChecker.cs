@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace HB.Framework.Common
 {
     public class InMemoryFrequencyChecker
     {
-        private readonly ConcurrentDictionary<string, long> timestamps = new ConcurrentDictionary<string, long>();
+        private readonly ConcurrentDictionary<string, long> _timestamps = new ConcurrentDictionary<string, long>();
 
         public bool Check(string resourceType, string resource, TimeSpan aliveTimeSpan)
         {
@@ -17,16 +13,16 @@ namespace HB.Framework.Common
 
             long currentTimestampSeconds = TimeUtil.CurrentTimestampSeconds();
 
-            if (!timestamps.TryGetValue(key, out long storedTimestamp))
+            if (!_timestamps.TryGetValue(key, out long storedTimestamp))
             {
-                timestamps[key] = currentTimestampSeconds;
+                _timestamps[key] = currentTimestampSeconds;
 
                 return true;
             }
 
             if (TimeUtil.CurrentTimestampSeconds() - storedTimestamp > aliveTimeSpan.TotalSeconds)
             {
-                timestamps[key] = currentTimestampSeconds;
+                _timestamps[key] = currentTimestampSeconds;
                 return true;
             }
 
@@ -37,7 +33,7 @@ namespace HB.Framework.Common
         {
             string key = GetKey(resourceType, resource);
 
-            timestamps.TryRemove(key, out _);
+            _timestamps.TryRemove(key, out _);
         }
 
         private static string GetKey(string resourceType, string resource)

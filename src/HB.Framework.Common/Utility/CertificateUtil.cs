@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Security.Cryptography.X509Certificates;
 
-namespace System.Security.Cryptography.X509Certificates
+namespace System
 {
     public static class CertificateUtil
     {
@@ -14,31 +12,22 @@ namespace System.Security.Cryptography.X509Certificates
         public static X509Certificate2 GetBySubject(string subjectName)
         {
             return GetBySubject(subjectName, StoreLocation.CurrentUser) ?? GetBySubject(subjectName, StoreLocation.LocalMachine);
-
-            //if (cert == null)
-            //{
-            //    LogHelper.GlobalLogger.LogCritical("证书找不到，SubjectName : {0}", subjectName);
-            //}
-
-            //return cert;
         }
 
 
         public static X509Certificate2 GetBySubject(string subjectName, StoreLocation storeLocation)
         {
-            using (X509Store store = new X509Store(storeLocation))
+            using X509Store store = new X509Store(storeLocation);
+            store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+
+            X509Certificate2Collection collection = store.Certificates.Find(X509FindType.FindBySubjectDistinguishedName, subjectName, true);
+
+            if (collection.Count != 1)
             {
-                store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-
-                X509Certificate2Collection collection = store.Certificates.Find(X509FindType.FindBySubjectDistinguishedName, subjectName, true);
-
-                if (collection.Count != 1)
-                {
-                    return null;
-                }
-
-                return collection[0];
+                return null;
             }
+
+            return collection[0];
         }
 
         public static X509Certificate2 GetByThumbprint(string thumbprint)
@@ -54,19 +43,17 @@ namespace System.Security.Cryptography.X509Certificates
         /// <returns></returns>
         public static X509Certificate2 GetByThumbprint(string thumbprint, StoreLocation storeLocation)
         {
-            using (X509Store store = new X509Store(storeLocation))
+            using X509Store store = new X509Store(storeLocation);
+            store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+
+            X509Certificate2Collection collection = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, true);
+
+            if (collection.Count != 1)
             {
-                store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
-
-                X509Certificate2Collection collection = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, true);
-
-                if (collection.Count != 1)
-                {
-                    return null;
-                }
-
-                return collection[0];
+                return null;
             }
+
+            return collection[0];
         }
     }
 }
