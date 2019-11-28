@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace System
 {
-    [Obsolete("请使用AssemblyLoadContext来实现", true)]
+    //TODO:[Obsolete("请使用AssemblyLoadContext来实现", true)]
     public static class ReflectUtil
     {
         public static IEnumerable<Assembly> GetAllAssemblies()

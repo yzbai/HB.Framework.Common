@@ -20,6 +20,42 @@ namespace System
             return o;
         }
 
+        public static T NullOrNotValid<T>([ValidatedNotNull]T o, string paramName) where T : ValidatableObject
+        {
+            if (o == null)
+            {
+                throw new ArgumentNullException(paramName);
+            }
+
+            if (!o.IsValid())
+            {
+                throw new ValidateErrorException(o);
+            }
+
+            return o;
+        }
+
+        public static IEnumerable<T> NullOrNotValid<T>([ValidatedNotNull]IEnumerable<T> ts, string paramName) where T : ValidatableObject
+        {
+            if (ts == null)
+            {
+                throw new ArgumentNullException(paramName);
+            }
+
+            if (ts.Any())
+            {
+                ts.ForEach(t =>
+                {
+                    if (!t.IsValid())
+                    {
+                        throw new ValidateErrorException(t);
+                    }
+                });
+            }
+
+            return ts;
+        }
+
         public static IDictionary<TKey, TValue> NullOrEmpty<TKey, TValue>([ValidatedNotNull]IDictionary<TKey, TValue> dict, string paramName)
         {
             if (dict == null || dict.Count == 0)
@@ -75,7 +111,7 @@ namespace System
 
         public static string ThrowIfNullOrEmpty([ValidatedNotNull]this string o, string paramName)
         {
-            if(string.IsNullOrEmpty(o))
+            if (string.IsNullOrEmpty(o))
             {
                 throw new ArgumentException(paramName);
             }
@@ -107,7 +143,7 @@ namespace System
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
         public static string ThrowIfNotEqual(this string a, string b, string paramName)
         {
-            if (a == null && b!=null || a!=null && !a.Equals(b, GlobalSettings.Comparison))
+            if (a == null && b != null || a != null && !a.Equals(b, GlobalSettings.Comparison))
             {
                 throw new ArgumentException("ThrowIf_NotEqual_Error_Message", paramName);
             }
