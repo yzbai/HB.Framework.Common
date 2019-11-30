@@ -1,11 +1,9 @@
-﻿using System;
+﻿using MsgPack.Serialization;
 using System.Buffers;
 using System.Buffers.Text;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -32,19 +30,19 @@ namespace System
 
         public static T FromJson<T>(string jsonString)
         {
-            ThrowIf.NullOrEmpty(jsonString, nameof(jsonString));
-
-            return JsonSerializer.Deserialize<T>(jsonString, _jsonSerializerOptions);
+            return jsonString.IsNullOrEmpty() ? default : JsonSerializer.Deserialize<T>(jsonString, _jsonSerializerOptions);
         }
 
         public static object FromJson(Type type, string jsonString)
         {
+            if (jsonString.IsNullOrEmpty())
+            {
+                return null;
+            }
+
             ThrowIf.Null(type, nameof(type));
-            ThrowIf.NullOrEmpty(jsonString, nameof(jsonString));
 
             return JsonSerializer.Deserialize(jsonString, type, _jsonSerializerOptions);
-
-            //return JsonConvert.DeserializeObject(jsonString, type);
         }
 
         public static string FromJson(string jsonString, string name)
@@ -59,15 +57,11 @@ namespace System
             }
 
             return null;
-
-            //JObject jObject = JObject.Parse(jsonString);
-
-            //return jObject[name].ToString();
         }
 
         #endregion
 
-        #region Binary Serialize
+        #region BinaryFormatter Serialize
 
         public static byte[] ToBytes(object thing)
         {
@@ -84,7 +78,10 @@ namespace System
 
         public static object ToObject(byte[] bytes)
         {
-            ThrowIf.NullOrEmpty(bytes, nameof(bytes));
+            if (bytes.IsNullOrEmpty())
+            {
+                return null;
+            }
 
             using MemoryStream memoryStream = new MemoryStream();
             BinaryFormatter binaryFormatter = new BinaryFormatter();
@@ -93,6 +90,34 @@ namespace System
             memoryStream.Seek(0, SeekOrigin.Begin);
 
             return binaryFormatter.Deserialize(memoryStream);
+        }
+
+        #endregion
+
+
+        #region MsgPack Serialize
+
+        public static byte[] Pack<T>(T t)
+        {
+            MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>();
+            using MemoryStream stream = new MemoryStream();
+
+            serializer.Pack(stream, t);
+
+            return stream.ToArray();
+        }
+
+        public static T UnPack<T>(byte[] bytes)
+        {
+            if(bytes.IsNullOrEmpty())
+            {
+                return default;
+            }
+
+            MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>();
+            using MemoryStream stream = new MemoryStream(bytes);
+
+            return serializer.Unpack(stream);
         }
 
         #endregion

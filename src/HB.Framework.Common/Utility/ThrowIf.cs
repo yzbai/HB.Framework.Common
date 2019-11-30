@@ -46,9 +46,12 @@ namespace System
             {
                 ts.ForEach(t =>
                 {
-                    if (!t.IsValid())
+                    if (t != null)
                     {
-                        throw new ValidateErrorException(t);
+                        if (!t.IsValid())
+                        {
+                            throw new ValidateErrorException(t);
+                        }
                     }
                 });
             }
@@ -60,7 +63,7 @@ namespace System
         {
             if (dict == null || dict.Count == 0)
             {
-                throw new ArgumentException(paramName);
+                throw new ArgumentException("NullOrEmpty", paramName);
             }
 
             return dict;
@@ -70,23 +73,34 @@ namespace System
         {
             if (lst == null || !lst.Any())
             {
-                throw new ArgumentException(paramName);
+                throw new ArgumentException("NullOrEmpty", paramName);
             }
 
             return lst;
         }
 
+        public static IEnumerable<T> AnyNull<T>([ValidatedNotNull]IEnumerable<T> lst, string paramName)
+        {
+            if (lst == null || lst.Any(t => t == null))
+            {
+                throw new ArgumentException("NullOrAnyNull", paramName);
+            }
+
+            return lst;
+        }
+
+
+
         public static string NullOrEmpty([ValidatedNotNull]string o, string paramName)
         {
             if (string.IsNullOrEmpty(o))
             {
-                throw new ArgumentException(paramName);
+                throw new ArgumentException("NullOrEmpty", paramName);
             }
 
             return o;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
         public static string NotEqual(string a, string b, string paramName)
         {
             if (a == null && b != null || a != null && !a.Equals(b, GlobalSettings.Comparison))
@@ -113,7 +127,7 @@ namespace System
         {
             if (string.IsNullOrEmpty(o))
             {
-                throw new ArgumentException(paramName);
+                throw new ArgumentException("ThrowIfNullOrEmpty", paramName);
             }
 
             return o;
@@ -123,7 +137,7 @@ namespace System
         {
             if (dict == null || dict.Count == 0)
             {
-                throw new ArgumentException(paramName);
+                throw new ArgumentException("ThrowIfNullOrEmpty", paramName);
             }
 
             return dict;
@@ -133,14 +147,13 @@ namespace System
         {
             if (lst == null || !lst.Any())
             {
-                throw new ArgumentException(paramName);
+                throw new ArgumentException("ThrowIfNullOrEmpty", paramName);
             }
 
             return lst;
         }
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1303:Do not pass literals as localized parameters", Justification = "<Pending>")]
         public static string ThrowIfNotEqual(this string a, string b, string paramName)
         {
             if (a == null && b != null || a != null && !a.Equals(b, GlobalSettings.Comparison))

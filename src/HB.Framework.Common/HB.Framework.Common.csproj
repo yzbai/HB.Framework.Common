@@ -23,9 +23,12 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="MsgPack.Cli" Version="1.0.1" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.6.0" />
     <PackageReference Include="System.Numerics.Vectors" Version="4.5.0" />
     <PackageReference Include="System.Text.Json" Version="4.6.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

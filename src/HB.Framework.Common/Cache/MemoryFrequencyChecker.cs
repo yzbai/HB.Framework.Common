@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace HB.Framework.Common
+namespace System
 {
-    public class InMemoryFrequencyChecker
+    public class MemoryFrequencyChecker
     {
         private readonly ConcurrentDictionary<string, long> _timestamps = new ConcurrentDictionary<string, long>();
 
@@ -41,6 +41,6 @@ namespace HB.Framework.Common
             return resourceType + resource;
         }
 
- 
+
     }
 }

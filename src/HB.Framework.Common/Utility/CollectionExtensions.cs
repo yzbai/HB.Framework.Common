@@ -127,6 +127,11 @@ namespace System.Collections.Generic
             return ts != null && ts.Any();
         }
 
+        public static bool IsNotNullOrEmpty(this Array array)
+        {
+            return array != null && array.Length != 0;
+        }
+
         public static NameValueCollection ToHttpValueCollection(this IEnumerable<KeyValuePair<string, string>> dict)
         {
             ThrowIf.Null(dict, nameof(dict));
