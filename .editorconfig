@@ -4,4 +4,5 @@
 dotnet_diagnostic.CA1707.severity = none
 
 # CA1303: Do not pass literals as localized parameters
-dotnet_diagnostic.CA1303.severity = suggestion
+dotnet_diagnostic.CA1303.severity = none
+

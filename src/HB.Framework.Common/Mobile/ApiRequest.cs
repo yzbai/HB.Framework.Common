@@ -5,10 +5,8 @@ using System.Net.Http;
 
 namespace HB.Framework.Common.Mobile
 {
-    public class ResourceRequest : ValidatableObject
+    public class ApiRequest : ValidatableObject
     {
-        
-
         //All use fields instead of Properties, for avoid mvc binding
         private readonly string _productType;
         private readonly string _apiVersion;
@@ -18,6 +16,23 @@ namespace HB.Framework.Common.Mobile
         private readonly string _condition;
         private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
         private readonly IDictionary<string, string> _parameters = new Dictionary<string, string>();
+
+        [Required]
+        public string DeviceId
+        {
+            get { return GetParameter(MobileInfoNames.DeviceId); }
+            set { SetParameter(MobileInfoNames.DeviceId, value); }
+        }
+
+        public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string condition = null)
+        {
+            _productType = productType.ThrowIfNullOrEmpty(nameof(productType));
+            _apiVersion = apiVersion;
+            _httpMethod = httpMethod.ThrowIfNull(nameof(httpMethod));
+            _needAuthenticate = needAuthenticate;
+            _resourceName = resourceName;
+            _condition = condition;
+        }
 
         public string GetProductType()
         {
@@ -49,38 +64,9 @@ namespace HB.Framework.Common.Mobile
             return _condition;
         }
 
-        [Required]
-        public string DeviceId
-        {
-            get
-            {
-                return GetParameter(MobileInfoNames.DeviceId);
-            }
-
-            set
-            {
-                SetParameter(MobileInfoNames.DeviceId, value);
-            }
-        }
-
-        protected string GetParameter(string name)
-        {
-            if (_parameters.TryGetValue(name, out string value))
-            {
-                return value;
-            }
-
-            return null;
-        }
-
         public IDictionary<string, string> GetParameters()
         {
             return _parameters;
-        }
-
-        protected void SetParameter(string name, string value)
-        {
-            _parameters[name] = value;
         }
 
         public void AddParameter(string name, string value)
@@ -108,14 +94,19 @@ namespace HB.Framework.Common.Mobile
             _headers.Add(name, value);
         }
 
-        public ResourceRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string condition = null)
+        protected string GetParameter(string name)
         {
-            _productType = productType.ThrowIfNullOrEmpty(nameof(productType));
-            _apiVersion = apiVersion;
-            _httpMethod = httpMethod.ThrowIfNull(nameof(httpMethod));
-            _needAuthenticate = needAuthenticate;
-            _resourceName = resourceName;
-            _condition = condition;
+            if (_parameters.TryGetValue(name, out string value))
+            {
+                return value;
+            }
+
+            return null;
+        }
+
+        protected void SetParameter(string name, string value)
+        {
+            _parameters[name] = value;
         }
     }
 }

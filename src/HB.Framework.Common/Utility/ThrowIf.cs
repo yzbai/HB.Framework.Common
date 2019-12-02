@@ -1,4 +1,5 @@
 ﻿using HB.Framework.Common;
+using HB.Framework.Common.Validate;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -99,6 +100,66 @@ namespace System
             }
 
             return o;
+        }
+
+        public static string NullOrNotMobile([ValidatedNotNull]string mobile, string paramName)
+        {
+            if (string.IsNullOrEmpty(mobile))
+            {
+                throw new ArgumentException("NullOrEmpty", paramName);
+            }
+
+            if (!ValidationMethods.IsMobilePhone(mobile))
+            {
+                throw new ArgumentException("NullOrNotMobile", paramName);
+            }
+
+            return mobile;
+        }
+
+        public static string NullOrNotPassword([ValidatedNotNull]string parssword, string paramName)
+        {
+            if (string.IsNullOrEmpty(parssword))
+            {
+                throw new ArgumentException("NullOrEmpty", paramName);
+            }
+
+            if (!ValidationMethods.IsPassword(parssword))
+            {
+                throw new ArgumentException("NullOrNotPassword", paramName);
+            }
+
+            return parssword;
+        }
+
+        public static string NullOrNotUserName([ValidatedNotNull]string userName, string paramName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                throw new ArgumentException("NullOrEmpty", paramName);
+            }
+
+            if (!ValidationMethods.IsUserName(userName))
+            {
+                throw new ArgumentException("NullOrNotUserName", paramName);
+            }
+
+            return userName;
+        }
+
+        public static string NullOrNotEmail([ValidatedNotNull]string email, string paramName)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentException("NullOrEmpty", paramName);
+            }
+
+            if (!ValidationMethods.IsEmail(email))
+            {
+                throw new ArgumentException("NullOrNotEmail", paramName);
+            }
+
+            return email;
         }
 
         public static string NotEqual(string a, string b, string paramName)

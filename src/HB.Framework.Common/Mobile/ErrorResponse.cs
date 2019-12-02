@@ -1,5 +1,5 @@
 ﻿
-namespace System
+namespace HB.Framework.Common.Mobile
 {
     public class ErrorResponse
     {
@@ -9,12 +9,7 @@ namespace System
 
         private ErrorResponse() { }
 
-        public ErrorResponse(ErrorCode code)
-        {
-            Code = code;
-        }
-
-        public ErrorResponse(ErrorCode code, string message)
+        public ErrorResponse(ErrorCode code, string message = null)
         {
             Code = code;
             Message = message;

@@ -1,4 +1,4 @@
 ﻿namespace HB.Framework.Common.Mobile
 {
-    public class ResourceResponse { }
+    public class ApiData { }
 }
