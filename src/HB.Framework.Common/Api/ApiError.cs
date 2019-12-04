@@ -1,6 +1,6 @@
-﻿namespace HB.Framework.Common.Mobile
+﻿namespace HB.Framework.Common.Api
 {
-    public enum ErrorCode
+    public enum ApiError
     {
         FAILED = 0,
         OK = 1,
@@ -30,9 +30,9 @@
 
     public static class ErrorCodeExtensions
     {
-        public static bool IsSuccess(this ErrorCode errorCode)
+        public static bool IsSuccess(this ApiError errorCode)
         {
-            return errorCode == ErrorCode.OK;
+            return errorCode == ApiError.OK;
         }
     }
 }

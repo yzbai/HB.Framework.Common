@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 
-namespace HB.Framework.Common.Mobile
+namespace HB.Framework.Common.Api
 {
     public class ApiRequest : ValidatableObject
     {
@@ -17,20 +17,20 @@ namespace HB.Framework.Common.Mobile
         private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
         private readonly IDictionary<string, string> _parameters = new Dictionary<string, string>();
 
-        [Required]
-        public string DeviceId
-        {
-            get { return GetParameter(MobileInfoNames.DeviceId); }
-            set { SetParameter(MobileInfoNames.DeviceId, value); }
-        }
+        //[Required]
+        //public string DeviceId
+        //{
+        //    get { return GetParameter(MobileInfoNames.DeviceId); }
+        //    set { SetParameter(MobileInfoNames.DeviceId, value); }
+        //}
 
         public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string condition = null)
         {
             _productType = productType.ThrowIfNullOrEmpty(nameof(productType));
-            _apiVersion = apiVersion;
+            _apiVersion = apiVersion.ThrowIfNullOrEmpty(nameof(apiVersion));
             _httpMethod = httpMethod.ThrowIfNull(nameof(httpMethod));
             _needAuthenticate = needAuthenticate;
-            _resourceName = resourceName;
+            _resourceName = resourceName.ThrowIfNullOrEmpty(nameof(resourceName));
             _condition = condition;
         }
 
