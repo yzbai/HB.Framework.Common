@@ -148,8 +148,8 @@ namespace System.Threading.Tasks
 
             foreach (Task<T> inputTask in inputTasks)
             {
-                inputTask.ContinueWith(continuation, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default)；
-                    }
+                inputTask.ContinueWith(continuation, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+            }
 
             return results;
 
