@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace System.Threading.Tasks
 {
@@ -98,14 +95,12 @@ namespace System.Threading.Tasks
         public static async Task<IEnumerable<TResult>> Concurrence<TResult, T>(IEnumerable<Task<T>> tasks, Func<T, TResult> convertor, bool continueOnCapturedContext = false)
         {
             List<TResult> results = new List<TResult>();
-            List<Task<T>> taskList = tasks.ToList();
 
-            while(taskList.Any())
+            foreach (Task<Task<T>> bucket in Interleaved(tasks))
             {
-                Task<T> finished = await Task.WhenAny(taskList).ConfigureAwait(continueOnCapturedContext);
-                taskList.Remove(finished);
+                Task<T> t = await bucket.ConfigureAwait(continueOnCapturedContext);
 
-                T finishedT = await finished.ConfigureAwait(continueOnCapturedContext);
+                T finishedT = await t.ConfigureAwait(continueOnCapturedContext);
 
                 results.Add(convertor(finishedT));
             }
@@ -116,19 +111,53 @@ namespace System.Threading.Tasks
         public static async Task<IEnumerable<TResult>> Concurrence<TResult, T>(IEnumerable<Task<IEnumerable<T>>> tasks, Func<T, TResult> convertor, bool continueOnCapturedContext = false)
         {
             List<TResult> results = new List<TResult>();
-            List<Task<IEnumerable<T>>> taskList = tasks.ToList();
 
-            while (taskList.Any())
+            foreach (Task<Task<IEnumerable<T>>> bucket in Interleaved(tasks))
             {
-                Task<IEnumerable<T>> finished = await Task.WhenAny(taskList).ConfigureAwait(continueOnCapturedContext);
-                taskList.Remove(finished);
+                Task<IEnumerable<T>> t = await bucket.ConfigureAwait(continueOnCapturedContext);
 
-                IEnumerable<T> finishedTs = await finished.ConfigureAwait(continueOnCapturedContext);
+                IEnumerable<T> finishedTs = await t.ConfigureAwait(continueOnCapturedContext);
 
                 finishedTs.ForEach(item => results.Add(convertor(item)));
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// https://devblogs.microsoft.com/pfxteam/processing-tasks-as-they-complete/
+        /// 按谁先执行完的顺序返回任务数组
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tasks"></param>
+        /// <returns></returns>
+        public static Task<Task<T>>[] Interleaved<T>(IEnumerable<Task<T>> tasks)
+        {
+            List<Task<T>> inputTasks = tasks.ToList();
+
+            TaskCompletionSource<Task<T>>[] buckets = new TaskCompletionSource<Task<T>>[inputTasks.Count];
+            Task<Task<T>>[] results = new Task<Task<T>>[buckets.Length];
+
+            for (int i = 0; i < buckets.Length; i++)
+            {
+                buckets[i] = new TaskCompletionSource<Task<T>>();
+                results[i] = buckets[i].Task;
+            }
+
+            int nextTaskIndex = -1;
+
+            foreach (Task<T> inputTask in inputTasks)
+            {
+                inputTask.ContinueWith(continuation, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default)；
+                    }
+
+            return results;
+
+            void continuation(Task<T> completed)
+            {
+                TaskCompletionSource<Task<T>> bucket = buckets[Interlocked.Increment(ref nextTaskIndex)];
+                bucket.TrySetResult(completed);
+            }
         }
     }
 }

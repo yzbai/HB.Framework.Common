@@ -33,11 +33,11 @@ namespace System
             return false;
         }
 
-        public async Task ResetAsync(string resourceType, string resource)
+        public Task ResetAsync(string resourceType, string resource)
         {
             string key = GetKey(resourceType, resource);
 
-            await _cache.RemoveAsync(key).ConfigureAwait(false);
+            return _cache.RemoveAsync(key);
         }
 
         private static string GetKey(string resourceType, string resource)
