@@ -96,7 +96,7 @@ namespace System.Threading.Tasks
         {
             List<TResult> results = new List<TResult>();
 
-            foreach (Task<Task<T>> bucket in Interleaved(tasks))
+            foreach (Task<Task<T>> bucket in OrderByFinishedSequence(tasks))
             {
                 Task<T> t = await bucket.ConfigureAwait(continueOnCapturedContext);
 
@@ -112,7 +112,7 @@ namespace System.Threading.Tasks
         {
             List<TResult> results = new List<TResult>();
 
-            foreach (Task<Task<IEnumerable<T>>> bucket in Interleaved(tasks))
+            foreach (Task<Task<IEnumerable<T>>> bucket in OrderByFinishedSequence(tasks))
             {
                 Task<IEnumerable<T>> t = await bucket.ConfigureAwait(continueOnCapturedContext);
 
@@ -131,7 +131,7 @@ namespace System.Threading.Tasks
         /// <typeparam name="T"></typeparam>
         /// <param name="tasks"></param>
         /// <returns></returns>
-        public static Task<Task<T>>[] Interleaved<T>(IEnumerable<Task<T>> tasks)
+        public static Task<Task<T>>[] OrderByFinishedSequence<T>(IEnumerable<Task<T>> tasks)
         {
             List<Task<T>> inputTasks = tasks.ToList();
 

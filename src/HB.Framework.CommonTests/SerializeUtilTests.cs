@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit.Abstractions;
 using HB.Framework.CommonTests;
-using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Buffers.Text;
 using System.Buffers;
@@ -53,16 +52,24 @@ namespace System.Tests
 
             Assert.True(obj.Number == newtonObj.Number && obj.Price == newtonObj.Price);
         }
-    }
 
-    
-    class NumberTestCls
-    {
-        [System.Text.Json.Serialization.JsonConverter(typeof(IntToStringConverter))]
-        public int Number { get; set; }
+        [Fact]
+        public void Collection_Test()
+        {
+            IList<Student> students = new List<Student> { StudentMocker.MockOneStudent(), StudentMocker.MockOneStudent() };
 
-        [JsonConverter(typeof(DoubleToStringConverter))]
-        public double Price { get; set; }
+            string json = SerializeUtil.ToJson(students);
+            string newtonJson = Newtonsoft.Json.JsonConvert.SerializeObject(students, new Newtonsoft.Json.Converters.StringEnumConverter());
+
+            _outputHelper.WriteLine(json);
+            _outputHelper.WriteLine(newtonJson);
+
+            Assert.Equal(json, newtonJson);
+
+            IList<Student> fromJson = SerializeUtil.FromJson<IList<Student>>(json);
+
+
+        }
     }
 
    
