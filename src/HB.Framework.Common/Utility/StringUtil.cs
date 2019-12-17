@@ -145,10 +145,7 @@ namespace System
 
         public static bool IsIn(this string str, params string[] words)
         {
-            if (str == null)
-            {
-                throw new ArgumentNullException(nameof(str));
-            }
+            ThrowIf.Null(str, nameof(str));
 
             if (words == null || words.Length == 0)
             {
@@ -222,14 +219,6 @@ namespace System
         //{
         //    return !string.IsNullOrEmpty(str);
         //}
-
-        public static void RequireNotNullOrEmpty(this string str, string parmName)
-        {
-            if (string.IsNullOrEmpty(str))
-            {
-                throw new ArgumentNullException(parmName);
-            }
-        }
 
         public static string RemoveSuffix(this string str, string suffix)
         {

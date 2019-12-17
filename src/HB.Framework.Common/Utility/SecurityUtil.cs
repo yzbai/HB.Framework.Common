@@ -29,10 +29,7 @@ namespace System
 
         public static string GetHash(string item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ThrowIf.Null(item, nameof(item));
 
             using SHA256 sha256Obj = SHA256.Create();
             byte[] hashBytes = sha256Obj.ComputeHash(Encoding.UTF8.GetBytes(item));

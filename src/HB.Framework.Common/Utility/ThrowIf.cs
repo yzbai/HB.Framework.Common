@@ -62,9 +62,9 @@ namespace System
 
         public static IDictionary<TKey, TValue> NullOrEmpty<TKey, TValue>([ValidatedNotNull]IDictionary<TKey, TValue> dict, string paramName)
         {
-            if (dict == null || dict.Count == 0)
+            if (dict == null || !dict.Any())
             {
-                throw new ArgumentException("NullOrEmpty", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.DictionaryNullOrEmptyErrorMessage, paramName);
             }
 
             return dict;
@@ -74,7 +74,7 @@ namespace System
         {
             if (lst == null || !lst.Any())
             {
-                throw new ArgumentException("NullOrEmpty", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.CollectionNullOrEmptyErrorMessage, paramName);
             }
 
             return lst;
@@ -84,7 +84,7 @@ namespace System
         {
             if (lst == null || lst.Any(t => t == null))
             {
-                throw new ArgumentException("NullOrAnyNull", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.CollectionAnyNullErrorMessage, paramName);
             }
 
             return lst;
@@ -96,7 +96,7 @@ namespace System
         {
             if (string.IsNullOrEmpty(o))
             {
-                throw new ArgumentException("NullOrEmpty", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.ParameterNullOrEmptyErrorMessage, paramName);
             }
 
             return o;
@@ -104,14 +104,9 @@ namespace System
 
         public static string NullOrNotMobile([ValidatedNotNull]string mobile, string paramName)
         {
-            if (string.IsNullOrEmpty(mobile))
+            if (string.IsNullOrEmpty(mobile) || !ValidationMethods.IsMobilePhone(mobile))
             {
-                throw new ArgumentException("NullOrEmpty", paramName);
-            }
-
-            if (!ValidationMethods.IsMobilePhone(mobile))
-            {
-                throw new ArgumentException("NullOrNotMobile", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotMobileErrorMessage, paramName);
             }
 
             return mobile;
@@ -119,14 +114,9 @@ namespace System
 
         public static string NullOrNotPassword([ValidatedNotNull]string parssword, string paramName)
         {
-            if (string.IsNullOrEmpty(parssword))
+            if (string.IsNullOrEmpty(parssword) || !ValidationMethods.IsPassword(parssword))
             {
-                throw new ArgumentException("NullOrEmpty", paramName);
-            }
-
-            if (!ValidationMethods.IsPassword(parssword))
-            {
-                throw new ArgumentException("NullOrNotPassword", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotPasswordErrorMessage, paramName);
             }
 
             return parssword;
@@ -134,14 +124,9 @@ namespace System
 
         public static string NullOrNotUserName([ValidatedNotNull]string userName, string paramName)
         {
-            if (string.IsNullOrEmpty(userName))
+            if (string.IsNullOrEmpty(userName) || !ValidationMethods.IsUserName(userName))
             {
-                throw new ArgumentException("NullOrEmpty", paramName);
-            }
-
-            if (!ValidationMethods.IsUserName(userName))
-            {
-                throw new ArgumentException("NullOrNotUserName", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotUserNameErrorMessage, paramName);
             }
 
             return userName;
@@ -149,14 +134,9 @@ namespace System
 
         public static string NullOrNotEmail([ValidatedNotNull]string email, string paramName)
         {
-            if (string.IsNullOrEmpty(email))
+            if (string.IsNullOrEmpty(email) || !ValidationMethods.IsEmail(email))
             {
-                throw new ArgumentException("NullOrEmpty", paramName);
-            }
-
-            if (!ValidationMethods.IsEmail(email))
-            {
-                throw new ArgumentException("NullOrNotEmail", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotEmailErrorMessage, paramName);
             }
 
             return email;
@@ -166,7 +146,7 @@ namespace System
         {
             if (a == null && b != null || a != null && !a.Equals(b, GlobalSettings.Comparison))
             {
-                throw new ArgumentException("ThrowIf_NotEqual_Error_Message", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.StringNotEqualErrorMessage, paramName);
             }
 
             return a;
@@ -188,7 +168,7 @@ namespace System
         {
             if (string.IsNullOrEmpty(o))
             {
-                throw new ArgumentException("ThrowIfNullOrEmpty", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.ParameterNullOrEmptyErrorMessage, paramName);
             }
 
             return o;
@@ -196,9 +176,9 @@ namespace System
 
         public static IDictionary<TKey, TValue> ThrowIfNullOrEmpty<TKey, TValue>([ValidatedNotNull]this IDictionary<TKey, TValue> dict, string paramName)
         {
-            if (dict == null || dict.Count == 0)
+            if (dict == null || !dict.Any())
             {
-                throw new ArgumentException("ThrowIfNullOrEmpty", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.DictionaryNullOrEmptyErrorMessage, paramName);
             }
 
             return dict;
@@ -208,7 +188,7 @@ namespace System
         {
             if (lst == null || !lst.Any())
             {
-                throw new ArgumentException("ThrowIfNullOrEmpty", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.CollectionNullOrEmptyErrorMessage, paramName);
             }
 
             return lst;
@@ -219,7 +199,7 @@ namespace System
         {
             if (a == null && b != null || a != null && !a.Equals(b, GlobalSettings.Comparison))
             {
-                throw new ArgumentException("ThrowIf_NotEqual_Error_Message", paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.StringNotEqualErrorMessage, paramName);
             }
 
             return a;
