@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace System
 {
     public static class LoggerExtensions
     {
-        public static void LogException(this ILogger logger, Exception exception, LogLevel logLevel = LogLevel.Error)
+        public static void LogException(this ILogger logger, Exception exception, string message =null, LogLevel logLevel = LogLevel.Error, [CallerMemberName]string caller = "")
         {
             ThrowIf.Null(logger, nameof(logger));
             ThrowIf.Null(exception, nameof(exception));
@@ -27,7 +28,7 @@ namespace System
                 }
             }
 
-            logger.Log(logLevel, exception, $"Message:{exception.Message}, InnerMessage:{exception.InnerException?.Message} ## {stringBuilder.ToString()}");
+            logger.Log(logLevel, exception, $"Caller : {caller}, Context : {message}, ExceptionMessage:{exception.Message}, InnerExceptionMessage:{exception.InnerException?.Message} ## {stringBuilder.ToString()}");
         }
 
     }

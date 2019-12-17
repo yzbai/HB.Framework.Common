@@ -8,7 +8,7 @@
         NOTAFTERTODAY = 5,
         TEXT = 6,
         SMSFAILSEND = 8,
-        TOKENRERESHERROR = 10,
+        TokenRefresherError = 10,
         APITOKENVALIDATEERROR = 11,
         TOKENCREATEERROR = 12,
         DATAOPERATIONFAILED = 14,

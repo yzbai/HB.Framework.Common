@@ -67,7 +67,7 @@ namespace Microsoft.Extensions.Caching.Distributed
         /// <param name="cache"></param>
         /// <param name="key"></param>
         /// <returns>true:存在; false: 不存在</returns>
-        public static async Task<bool> RemoveIfExistAsync(this IDistributedCache cache, string key)
+        public static async Task<bool> IsExistThenRemoveAsync(this IDistributedCache cache, string key)
         {
             ThrowIf.Null(cache, nameof(cache));
             ThrowIf.NullOrEmpty(key, nameof(key));
