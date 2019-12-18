@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace System
 {
-    public static class FileHelper
+    public static class FileUtil
     {
         //public static async Task<byte[]> ReadFormFileAsync(IFormFile file)
         //{

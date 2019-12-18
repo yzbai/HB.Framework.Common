@@ -5,11 +5,11 @@ using System.Text;
 
 namespace System
 {
-    public static class ValueConverter
+    public static class ValueConverterUtil
     {
         private static readonly Dictionary<Type, Func<object, object>> _convertFunDict = new Dictionary<Type, Func<object, object>>();
 
-        static ValueConverter()
+        static ValueConverterUtil()
         {
             #region type to type
 
@@ -57,46 +57,47 @@ namespace System
 
         /// <summary>
         /// 将数据库的值转换为内存C#值
+        /// 用在从数据库查询后，数据库值转为类型值
         /// </summary>
         /// <returns>The value to type value.</returns>
-        /// <param name="type">Type.</param>
+        /// <param name="targetType">想要转成的C#类型</param>
         /// <param name="dbValue">Db value.</param>
-        public static object DbValueToTypeValue(Type type, object dbValue)
+        public static object DbValueToTypeValue(object dbValue, Type targetType)
         {
-            ThrowIf.Null(type, nameof(type));
+            ThrowIf.Null(targetType, nameof(targetType));
             ThrowIf.Null(dbValue, nameof(dbValue));
 
             if (dbValue.GetType() == typeof(DBNull))
             {
-                return type.IsValueType ? Activator.CreateInstance(type) : null;
+                return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
             }
 
-            if (type.IsEnum)
+            if (targetType.IsEnum)
             {
-                return Enum.Parse(type, dbValue.ToString(), true);
+                return Enum.Parse(targetType, dbValue.ToString(), true);
                 //return Convert.ToInt32(value, GlobalSettings.Culture);
             }
 
-            if (type.IsAssignableFrom(typeof(IList<string>)))
+            if (targetType.IsAssignableFrom(typeof(IList<string>)))
             {
                 return StringUtil.StringToList(dbValue.ToString());
             }
 
-            if (type.IsAssignableFrom(typeof(IDictionary<string, string>)))
+            if (targetType.IsAssignableFrom(typeof(IDictionary<string, string>)))
             {
                 return StringUtil.StringToDictionary(dbValue.ToString());
             }
 
-            Func<object, object> convertFn = _convertFunDict[type];
+            Func<object, object> convertFn = _convertFunDict[targetType];
             return convertFn(dbValue);
         }
 
         /// <summary>
-        /// 将C#值转换为字符串，便于Database存放
+        /// 将C#值转换为字符串，便于拼接SQL字符串
         /// </summary>
         /// <returns>The value to db value.</returns>
         /// <param name="value">Value.</param>
-        public static string TypeValueToDbValue(object value)
+        public static string TypeValueToStringValue(object value)
         {
             string valueStr;
 
