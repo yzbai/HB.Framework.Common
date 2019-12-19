@@ -17,6 +17,8 @@ namespace System
 
         public static X509Certificate2 GetBySubject(string subjectName, StoreLocation storeLocation)
         {
+            ThrowIf.NullOrEmpty(subjectName, nameof(subjectName));
+
             using X509Store store = new X509Store(storeLocation);
             store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
 
@@ -43,6 +45,8 @@ namespace System
         /// <returns></returns>
         public static X509Certificate2 GetByThumbprint(string thumbprint, StoreLocation storeLocation)
         {
+            ThrowIf.NullOrEmpty(thumbprint, nameof(thumbprint));
+
             using X509Store store = new X509Store(storeLocation);
             store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
 

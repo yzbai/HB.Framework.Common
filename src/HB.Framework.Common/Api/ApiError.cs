@@ -10,7 +10,7 @@
         SMSFAILSEND = 8,
         TokenRefresherError = 10,
         APITOKENVALIDATEERROR = 11,
-        TOKENCREATEERROR = 12,
+        TokenCreateError = 12,
         DATAOPERATIONFAILED = 14,
         DATANOTWRITEABLE = 15,
         ARGUMENTERROR = 18,
