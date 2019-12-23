@@ -5,7 +5,6 @@ using System.Text;
 
 namespace HB.Framework.Common.Validate
 {
-    //TODO: 补充正则表达式
     public static class RegExpressions
     {
         public static readonly string Url = "^(https?://)"
