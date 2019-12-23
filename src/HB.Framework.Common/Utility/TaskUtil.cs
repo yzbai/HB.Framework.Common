@@ -5,6 +5,19 @@ namespace System.Threading.Tasks
 {
     public static class TaskUtil
     {
+        /// <summary>
+        /// 使用MySqlConnector的数据库操作，不能使用并行
+        /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <typeparam name="T1"></typeparam>
+        /// <typeparam name="T2"></typeparam>
+        /// <param name="task1"></param>
+        /// <param name="task2"></param>
+        /// <param name="convertor1"></param>
+        /// <param name="convertor2"></param>
+        /// <param name="continueOnCapturedContext"></param>
+        /// <returns></returns>
         public static async Task<IEnumerable<TResult>> Concurrence<TResult, T1, T2>(
            Task<IEnumerable<T1>> task1,
            Task<IEnumerable<T2>> task2,
@@ -39,6 +52,10 @@ namespace System.Threading.Tasks
             return results;
         }
 
+        /// <summary>
+        /// 使用MySqlConnector的数据库操作，不能使用并行
+        /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
+        /// </summary>
         public static async Task<IEnumerable<TResult>> Concurrence<TResult, T1, T2, T3>(
            Task<IEnumerable<T1>> task1,
            Task<IEnumerable<T2>> task2,
@@ -82,16 +99,28 @@ namespace System.Threading.Tasks
             return results;
         }
 
+        /// <summary>
+        /// 使用MySqlConnector的数据库操作，不能使用并行
+        /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
+        /// </summary>
         public static Task Concurrence(IEnumerable<Task> tasks)
         {
             return Task.WhenAll(tasks);
         }
 
+        /// <summary>
+        /// 使用MySqlConnector的数据库操作，不能使用并行
+        /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
+        /// </summary>
         public static Task<TResult[]> Concurrence<TResult>(IEnumerable<Task<TResult>> tasks)
         {
             return Task.WhenAll(tasks);
         }
 
+        /// <summary>
+        /// 使用MySqlConnector的数据库操作，不能使用并行
+        /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
+        /// </summary>
         public static async Task<IEnumerable<TResult>> Concurrence<TResult, T>(IEnumerable<Task<T>> tasks, Func<T, TResult> convertor, bool continueOnCapturedContext = false)
         {
             List<TResult> results = new List<TResult>();
@@ -108,6 +137,10 @@ namespace System.Threading.Tasks
             return results;
         }
 
+        /// <summary>
+        /// 使用MySqlConnector的数据库操作，不能使用并行
+        /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
+        /// </summary>
         public static async Task<IEnumerable<TResult>> Concurrence<TResult, T>(IEnumerable<Task<IEnumerable<T>>> tasks, Func<T, TResult> convertor, bool continueOnCapturedContext = false)
         {
             List<TResult> results = new List<TResult>();

@@ -112,14 +112,19 @@ namespace System
             return mobile;
         }
 
-        public static string NullOrNotPassword([ValidatedNotNull]string parssword, string paramName)
+        public static string NotPassword([ValidatedNotNull]string password, string paramName, bool canBeNull)
         {
-            if (string.IsNullOrEmpty(parssword) || !ValidationMethods.IsPassword(parssword))
+            if (canBeNull && password == null)
+            {
+                return password;
+            }
+
+            if (string.IsNullOrEmpty(password) || !ValidationMethods.IsPassword(password))
             {
                 throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotPasswordErrorMessage, paramName);
             }
 
-            return parssword;
+            return password;
         }
 
         public static string NullOrNotUserName([ValidatedNotNull]string userName, string paramName)

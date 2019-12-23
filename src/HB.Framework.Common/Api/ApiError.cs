@@ -7,7 +7,7 @@
         NOAUTHORITY = 4,
         NOTAFTERTODAY = 5,
         TEXT = 6,
-        SMSFAILSEND = 8,
+        SmsCodeInvalid = 8,
         TokenRefresherError = 10,
         APITOKENVALIDATEERROR = 11,
         TokenCreateError = 12,

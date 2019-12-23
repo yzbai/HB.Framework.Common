@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Linq;
+using System.Collections;
 
 namespace System
 {
@@ -13,22 +15,24 @@ namespace System
             ThrowIf.Null(logger, nameof(logger));
             ThrowIf.Null(exception, nameof(exception));
 
-            StringBuilder stringBuilder = new StringBuilder();
+            //TODO: Collection was modified; enumeration operation may not execute.解决这个问题
 
-            foreach (string key in exception.Data.Keys)
-            {
-                stringBuilder.Append($"{key}:{exception.Data[key].ToString()}, ");
-            }
+            //StringBuilder stringBuilder = new StringBuilder();
 
-            if (exception.InnerException != null)
-            {
-                foreach (string key in exception.InnerException.Data)
-                {
-                    stringBuilder.Append($"{key}:{exception.InnerException.Data[key].ToString()}, ");
-                }
-            }
+            //foreach (string key in exception.Data.Keys)
+            //{
+            //    stringBuilder.Append($"{key}:{exception.Data[key].ToString()}, ");
+            //}
 
-            logger.Log(logLevel, exception, $"Caller : {caller}, Context : {message}, ExceptionMessage:{exception.Message}, InnerExceptionMessage:{exception.InnerException?.Message} ## {stringBuilder.ToString()}");
+            //if (exception.InnerException != null)
+            //{
+            //    foreach (string key in exception.InnerException.Data.Keys)
+            //    {
+            //        stringBuilder.Append($"{key}:{exception.InnerException.Data[key].ToString()}, ");
+            //    }
+            //}
+
+            logger.Log(logLevel, exception, $"Caller : {caller}, Context : {message}, ExceptionMessage:{exception.Message}, InnerExceptionMessage:{exception.InnerException?.Message}"); // ## {stringBuilder.ToString()}");
         }
 
     }
