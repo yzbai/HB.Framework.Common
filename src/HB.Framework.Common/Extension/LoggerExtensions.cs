@@ -10,14 +10,20 @@ namespace System
 {
     public static class LoggerExtensions
     {
-        public static void LogException(this ILogger logger, Exception exception, string message =null, LogLevel logLevel = LogLevel.Error, [CallerMemberName]string caller = "")
+        public static void LogException(this ILogger logger, Exception exception, string message =null, LogLevel logLevel = LogLevel.Error, [CallerMemberName]string caller = null)
         {
             ThrowIf.Null(logger, nameof(logger));
-            ThrowIf.Null(exception, nameof(exception));
+            //ThrowIf.Null(exception, nameof(exception));
 
-            //TODO: Collection was modified; enumeration operation may not execute.解决这个问题
+            if (exception == null)
+            {
+                return;
+            }
+
+            ////TODO: Collection was modified; enumeration operation may not execute.解决这个问题
 
             //StringBuilder stringBuilder = new StringBuilder();
+
 
             //foreach (string key in exception.Data.Keys)
             //{

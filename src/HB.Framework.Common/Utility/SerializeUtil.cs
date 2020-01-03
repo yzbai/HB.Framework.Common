@@ -1,4 +1,5 @@
 ﻿using MsgPack.Serialization;
+using System;
 using System.Buffers;
 using System.Buffers.Text;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace System
 {
@@ -33,6 +35,30 @@ namespace System
             return jsonString.IsNullOrEmpty() ? default : JsonSerializer.Deserialize<T>(jsonString, _jsonSerializerOptions);
         }
 
+        /// <summary>
+        /// FromJsonAsync
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <param name="responseStream"></param>
+        /// <returns></returns>
+        /// <exception cref="JsonException"></exception>
+        public static async Task<object> FromJsonAsync(Type dataType, Stream responseStream)
+        {
+            return await JsonSerializer.DeserializeAsync(responseStream, dataType, _jsonSerializerOptions).ConfigureAwait(false);
+        }
+
+        public static async Task<T> FromJsonAsync<T>(Stream responseStream)
+        {
+            return await JsonSerializer.DeserializeAsync<T>(responseStream, _jsonSerializerOptions).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// FromJson
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="jsonString"></param>
+        /// <returns></returns>
+        /// <exception cref="JsonException"></exception>
         public static object FromJson(Type type, string jsonString)
         {
             if (jsonString.IsNullOrEmpty())
@@ -45,6 +71,15 @@ namespace System
             return JsonSerializer.Deserialize(jsonString, type, _jsonSerializerOptions);
         }
 
+        /// <summary>
+        /// FromJson
+        /// </summary>
+        /// <param name="jsonString"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="JsonException"></exception>
+        /// <exception cref="System.InvalidOperationException"></exception>
+        /// <exception cref="System.ObjectDisposedException"></exception>
         public static string FromJson(string jsonString, string name)
         {
             JsonDocument jsonDocument = JsonDocument.Parse(jsonString);
@@ -63,6 +98,13 @@ namespace System
 
         #region BinaryFormatter Serialize
 
+        /// <summary>
+        /// ToBytes
+        /// </summary>
+        /// <param name="thing"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
+        /// <exception cref="System.Security.SecurityException"></exception>
         public static byte[] ToBytes(object thing)
         {
             ThrowIf.Null(thing, nameof(thing));
@@ -76,6 +118,15 @@ namespace System
             return memoryStream.ToArray();
         }
 
+        /// <summary>
+        /// ToObject
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="System.ObjectDisposedException"></exception>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
+        /// <exception cref="System.Security.SecurityException"></exception>
         public static object ToObject(byte[] bytes)
         {
             if (bytes.IsNullOrEmpty())
@@ -120,6 +171,8 @@ namespace System
             return serializer.Unpack(stream);
         }
 
+        
+
         #endregion
     }
 
@@ -135,7 +188,7 @@ namespace System
                     return number;
                 }
 
-                if (Int32.TryParse(reader.GetString(), out number))
+                if (int.TryParse(reader.GetString(), out number))
                 {
                     return number;
                 }
@@ -164,7 +217,7 @@ namespace System
                     return number;
                 }
 
-                if (Double.TryParse(reader.GetString(), out number))
+                if (double.TryParse(reader.GetString(), out number))
                 {
                     return number;
                 }
