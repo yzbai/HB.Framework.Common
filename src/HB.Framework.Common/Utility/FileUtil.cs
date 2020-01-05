@@ -5,38 +5,33 @@ namespace System
 {
     public static class FileUtil
     {
-        //public static async Task<byte[]> ReadFormFileAsync(IFormFile file)
-        //{
-        //    if (file == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(file));
-        //    }
-
-        //    using (Stream stream = file.OpenReadStream())
-        //    {
-        //        byte[] buffer = new byte[stream.Length];
-
-        //        await stream.ReadAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
-
-        //        stream.Close();
-
-        //        return buffer;
-        //    }
-        //}
-
-        public static void SaveToFile(byte[] buffer, string path)
+        /// <exception cref="System.Security.SecurityException"></exception>
+        /// <exception cref="FileNotFoundException"></exception>
+        /// <exception cref="System.UnauthorizedAccessException"></exception>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        /// <exception cref="PathTooLongException"></exception>
+        /// <exception cref="System.ObjectDisposedException"></exception>
+        public static bool TrySaveToFile(byte[] buffer, string path)
         {
             ThrowIf.NullOrEmpty(path, nameof(path));
             ThrowIf.Null(buffer, nameof(buffer));
 
-            using FileStream fileStream = new FileStream(path, FileMode.CreateNew);
-            using BinaryWriter binaryWriter = new BinaryWriter(fileStream);
+            try
+            {
+                using FileStream fileStream = new FileStream(path, FileMode.CreateNew);
+                using BinaryWriter binaryWriter = new BinaryWriter(fileStream);
 
-            binaryWriter.Write(buffer);
+                binaryWriter.Write(buffer);
 
-            binaryWriter.Close();
+                binaryWriter.Close();
 
-            fileStream.Close();
+                fileStream.Close();
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         public static byte[] ComputeHash(string filePath)

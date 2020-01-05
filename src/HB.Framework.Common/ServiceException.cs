@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace HB.Framework.Common
+namespace System
 {
     public class ServiceException : Exception
     {

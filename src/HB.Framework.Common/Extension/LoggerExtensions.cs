@@ -10,7 +10,12 @@ namespace System
 {
     public static class LoggerExtensions
     {
-        public static void LogException(this ILogger logger, Exception exception, string message =null, LogLevel logLevel = LogLevel.Error, [CallerMemberName]string caller = null)
+        public static void LogException(this ILogger logger, Exception exception, [CallerMemberName]string caller = null)
+        {
+            logger.LogException(exception, null, LogLevel.Error, caller);
+        }
+
+        public static void LogException(this ILogger logger, Exception exception, string message, LogLevel logLevel = LogLevel.Error, [CallerMemberName]string caller = null)
         {
             ThrowIf.Null(logger, nameof(logger));
             //ThrowIf.Null(exception, nameof(exception));

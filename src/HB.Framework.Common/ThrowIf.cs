@@ -21,6 +21,7 @@ namespace System
             return o;
         }
 
+        /// <exception cref="ValidateErrorException"></exception>
         public static T NullOrNotValid<T>([ValidatedNotNull]T o, string paramName) where T : ValidatableObject
         {
             if (o == null)
@@ -36,6 +37,7 @@ namespace System
             return o;
         }
 
+        /// <exception cref="ValidateErrorException"></exception>
         public static IEnumerable<T> NullOrNotValid<T>([ValidatedNotNull]IEnumerable<T> ts, string paramName) where T : ValidatableObject
         {
             if (ts == null)

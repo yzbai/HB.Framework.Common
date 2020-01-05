@@ -49,7 +49,7 @@ namespace System.Collections.Generic
             items.ForEach(t => original.Add(t));
         }
 
-        public static IDictionary<TKey, TValue> CloningWithValues<TKey, TValue> (this IDictionary<TKey, TValue> original) where TValue : ICloneable
+        public static IDictionary<TKey, TValue> CloningWithValues<TKey, TValue>(this IDictionary<TKey, TValue> original) where TValue : ICloneable
         {
             ThrowIf.Null(original, nameof(original));
 
@@ -57,15 +57,10 @@ namespace System.Collections.Generic
 
             foreach (KeyValuePair<TKey, TValue> entry in original)
             {
-                try
-                {
-                    ICloneable cloneable = entry.Value as ICloneable;
-                    ret.Add(entry.Key, (TValue)cloneable.Clone());
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+
+                ICloneable cloneable = entry.Value as ICloneable;
+                ret.Add(entry.Key, (TValue)cloneable.Clone());
+
             }
             return ret;
         }
@@ -112,7 +107,7 @@ namespace System.Collections.Generic
 
             foreach (var item in lst)
             {
-                retList.Add((T)item.Clone()); 
+                retList.Add((T)item.Clone());
             }
 
             return retList;
