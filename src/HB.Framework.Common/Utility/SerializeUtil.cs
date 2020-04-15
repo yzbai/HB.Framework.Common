@@ -98,6 +98,8 @@ namespace System
 
         #region BinaryFormatter Serialize
 
+        //https://blog.marcgravell.com/2020/03/why-do-i-rag-on-binaryformatter.html
+
         /// <summary>
         /// ToBytes
         /// </summary>
@@ -105,6 +107,7 @@ namespace System
         /// <returns></returns>
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         /// <exception cref="System.Security.SecurityException"></exception>
+        [Obsolete("Do not use BinaryFormatter, for reason https://blog.marcgravell.com/2020/03/why-do-i-rag-on-binaryformatter.html", true)]
         public static byte[] ToBytes(object thing)
         {
             ThrowIf.Null(thing, nameof(thing));
@@ -127,6 +130,7 @@ namespace System
         /// <exception cref="System.ObjectDisposedException"></exception>
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         /// <exception cref="System.Security.SecurityException"></exception>
+        [Obsolete("Do not use BinaryFormatter, for reason https://blog.marcgravell.com/2020/03/why-do-i-rag-on-binaryformatter.html", true)]
         public static object ToObject(byte[] bytes)
         {
             if (bytes.IsNullOrEmpty())
@@ -148,6 +152,12 @@ namespace System
 
         #region MsgPack Serialize
 
+        /// <summary>
+        /// Pack
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         public static byte[] Pack<T>(T t)
         {
             MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>();
@@ -158,6 +168,14 @@ namespace System
             return stream.ToArray();
         }
 
+        /// <summary>
+        /// UnPack
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
+        /// <exception cref="MsgPack.MessageTypeException"></exception>
+        /// <exception cref="MsgPack.InvalidMessagePackStreamException"></exception>
         public static T UnPack<T>(byte[] bytes)
         {
             if(bytes.IsNullOrEmpty())
@@ -183,6 +201,7 @@ namespace System
             if (reader.TokenType == JsonTokenType.String)
             {
                 ReadOnlySpan<byte> span = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
+
                 if (Utf8Parser.TryParse(span, out int number, out int bytesConsumed) && span.Length == bytesConsumed)
                 {
                     return number;
