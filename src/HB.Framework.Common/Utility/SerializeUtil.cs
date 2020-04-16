@@ -189,67 +189,114 @@ namespace System
             return serializer.Unpack(stream);
         }
 
-        
-
         #endregion
     }
 
     public class IntToStringConverter : JsonConverter<int>
     {
+        /// <summary>
+        /// Read
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="type"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public override int Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.String)
+            try
             {
-                ReadOnlySpan<byte> span = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
-
-                if (Utf8Parser.TryParse(span, out int number, out int bytesConsumed) && span.Length == bytesConsumed)
+                if (reader.TokenType == JsonTokenType.String)
                 {
-                    return number;
+                    ReadOnlySpan<byte> span = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
+
+                    if (Utf8Parser.TryParse(span, out int number, out int bytesConsumed) && span.Length == bytesConsumed)
+                    {
+                        return number;
+                    }
+
+                    if (int.TryParse(reader.GetString(), out number))
+                    {
+                        return number;
+                    }
                 }
 
-                if (int.TryParse(reader.GetString(), out number))
-                {
-                    return number;
-                }
+                return reader.GetInt32();
             }
-            return reader.GetInt32();
+            catch(InvalidOperationException)
+            {
+                return 0;
+            }
         }
 
+        /// <summary>
+        /// Write
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="value"></param>
+        /// <param name="options"></param>
         public override void Write(Utf8JsonWriter writer, int value, JsonSerializerOptions options)
         {
             ThrowIf.Null(writer, nameof(writer));
 
-            writer.WriteStringValue(value.ToString(GlobalSettings.Culture));
+            try
+            {
+                writer.WriteStringValue(value.ToString(GlobalSettings.Culture));
+            }
+            catch (InvalidOperationException) { }
         }
     }
 
     public class DoubleToStringConverter : JsonConverter<double>
     {
+        /// <summary>
+        /// Read
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="typeToConvert"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
         public override double Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.String)
+            try
             {
-                ReadOnlySpan<byte> span = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
-
-                if (Utf8Parser.TryParse(span, out double number, out int bytesConsumed) && span.Length == bytesConsumed)
+                if (reader.TokenType == JsonTokenType.String)
                 {
-                    return number;
+                    ReadOnlySpan<byte> span = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
+
+                    if (Utf8Parser.TryParse(span, out double number, out int bytesConsumed) && span.Length == bytesConsumed)
+                    {
+                        return number;
+                    }
+
+                    if (double.TryParse(reader.GetString(), out number))
+                    {
+                        return number;
+                    }
                 }
 
-                if (double.TryParse(reader.GetString(), out number))
-                {
-                    return number;
-                }
+                return reader.GetDouble();
             }
-
-            return reader.GetDouble();
+            catch (InvalidOperationException) 
+            {
+                return 0;
+            }
         }
 
+        /// <summary>
+        /// Write
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="value"></param>
+        /// <param name="options"></param>
         public override void Write(Utf8JsonWriter writer, double value, JsonSerializerOptions options)
         {
-            ThrowIf.Null(writer, nameof(writer));
+            try
+            {
+                ThrowIf.Null(writer, nameof(writer));
 
-            writer.WriteStringValue(value.ToString(GlobalSettings.Culture));
+                writer.WriteStringValue(value.ToString(GlobalSettings.Culture));
+            }
+            catch (InvalidOperationException) { }
         }
     }
 }

@@ -9,6 +9,11 @@ namespace System
     {
         private static readonly Dictionary<Type, Func<object, object>> _convertFunDict = new Dictionary<Type, Func<object, object>>();
 
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <exception cref="InvalidCastException"></exception>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         static ValueConverterUtil()
         {
             #region type to type
@@ -31,7 +36,7 @@ namespace System
             _convertFunDict[typeof(DateTime)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(DateTimeOffset)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(Convert.ToDateTime(o, GlobalSettings.Culture), DateTimeKind.Utc); };
             _convertFunDict[typeof(TimeSpan)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(byte[])] = o => { return SerializeUtil.ToBytes(o); };
+            _convertFunDict[typeof(byte[])] = o => { return SerializeUtil.Pack(o); };
             _convertFunDict[typeof(byte?)] = o => { return o == null ? null : (object)Convert.ToByte(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(sbyte?)] = o => { return o == null ? null : (object)Convert.ToSByte(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(short?)] = o => { return o == null ? null : (object)Convert.ToInt16(o, GlobalSettings.Culture); };
@@ -62,6 +67,13 @@ namespace System
         /// <returns>The value to type value.</returns>
         /// <param name="targetType">想要转成的C#类型</param>
         /// <param name="dbValue">Db value.</param>
+        /// <exception cref="TargetInvocationException">Ignore.</exception>
+        /// <exception cref="MethodAccessException">Ignore.</exception>
+        /// <exception cref="MemberAccessException">Ignore.</exception>
+        /// <exception cref="System.Runtime.InteropServices.InvalidComObjectException">Ignore.</exception>
+        /// <exception cref="MissingMethodException">Ignore.</exception>
+        /// <exception cref="System.Runtime.InteropServices.COMException">Ignore.</exception>
+        /// <exception cref="TypeLoadException">Ignore.</exception>
         public static object DbValueToTypeValue(object dbValue, Type targetType)
         {
             ThrowIf.Null(targetType, nameof(targetType));

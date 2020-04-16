@@ -5,13 +5,6 @@ namespace System
 {
     public static class FileUtil
     {
-        /// <exception cref="System.Security.SecurityException"></exception>
-        /// <exception cref="FileNotFoundException"></exception>
-        /// <exception cref="System.UnauthorizedAccessException"></exception>
-        /// <exception cref="IOException"></exception>
-        /// <exception cref="DirectoryNotFoundException"></exception>
-        /// <exception cref="PathTooLongException"></exception>
-        /// <exception cref="System.ObjectDisposedException"></exception>
         public static bool TrySaveToFile(byte[] buffer, string path)
         {
             ThrowIf.NullOrEmpty(path, nameof(path));
@@ -27,14 +20,37 @@ namespace System
                 binaryWriter.Close();
 
                 fileStream.Close();
-            }
-            catch(Exception ex)
-            {
 
+                return true;
+            }
+            catch (System.Security.SecurityException)
+            {
+                return false;
+            }
+            catch (System.UnauthorizedAccessException)
+            {
+                return false;
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+            catch (System.ObjectDisposedException)
+            {
+                return false;
             }
         }
 
-        public static byte[] ComputeHash(string filePath)
+        /// <summary>
+        /// ComputeFileHash
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="System.ObjectDisposedException"></exception>
+        /// <exception cref="System.Reflection.TargetInvocationException"></exception>
+        /// <exception cref="System.UnauthorizedAccessException"></exception>
+        public static byte[] ComputeFileHash(string filePath)
         {
             ThrowIf.NullOrEmpty(filePath, nameof(filePath));
 
@@ -57,6 +73,7 @@ namespace System
                 }
                 catch (IOException ex)
                 {
+                    //-2147024864意思是 另一个程序正在使用此文件,进程无法访问
                     if (runCount == 3 || ex.HResult != -2147024864)
                     {
                         throw;
@@ -69,7 +86,7 @@ namespace System
                 }
             }
 
-            return new byte[20];
+            throw new FileLoadException();
         }
     }
 }

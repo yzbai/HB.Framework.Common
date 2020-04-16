@@ -27,6 +27,13 @@ namespace System
         //    //return Convert.ToBase64String(md5Bytes);
         //}
 
+        /// <summary>
+        /// GetHash
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Reflection.TargetInvocationException"></exception>
+        /// <exception cref="System.ObjectDisposedException"></exception>
         public static string GetHash(string item)
         {
             ThrowIf.Null(item, nameof(item));
@@ -37,6 +44,15 @@ namespace System
             return Convert.ToBase64String(hashBytes);
         }
 
+        /// <summary>
+        /// GetHash
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Reflection.TargetInvocationException"></exception>
+        /// <exception cref="System.ObjectDisposedException"></exception>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
+        /// <exception cref="System.Security.SecurityException"></exception>
         public static string GetHash<T>(T item)
         {
             if (item == null)
@@ -45,11 +61,19 @@ namespace System
             }
 
             using SHA256 sha256Obj = SHA256.Create();
-            byte[] result = sha256Obj.ComputeHash(SerializeUtil.ToBytes(item));
+            byte[] result = sha256Obj.ComputeHash(SerializeUtil.Pack(item));
 
             return Convert.ToBase64String(result);
         }
 
+        /// <summary>
+        /// EncryptPwdWithSalt
+        /// </summary>
+        /// <param name="pwd"></param>
+        /// <param name="salt"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Reflection.TargetInvocationException"></exception>
+        /// <exception cref="System.ObjectDisposedException"></exception>
         public static string EncryptPwdWithSalt(string pwd, string salt)
         {
             return GetHash(pwd + salt);

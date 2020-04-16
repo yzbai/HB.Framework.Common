@@ -2,6 +2,17 @@
 
 namespace NullReferenceConsole
 {
+    struct TestStruct
+    {
+        public int age;
+        public string name;
+
+        public TestStruct(int a, string n)
+        {
+            age = a;
+            name = n;
+        }
+    }
     class Program
     {
 
@@ -44,9 +55,38 @@ namespace NullReferenceConsole
         /// </summary>
         /// <param name="args"></param>
         /// <exception cref="System.IO.IOException"></exception>
+        /// <exception cref="System.Reflection.TargetInvocationException"></exception>
+        /// <exception cref="MethodAccessException"></exception>
+        /// <exception cref="MemberAccessException"></exception>
+        /// <exception cref="System.Runtime.InteropServices.InvalidComObjectException"></exception>
+        /// <exception cref="MissingMethodException"></exception>
+        /// <exception cref="System.Runtime.InteropServices.COMException"></exception>
+        /// <exception cref="TypeLoadException"></exception>
         static void Main(string[] args)
         {
-            
+
+            object? structObj = Activator.CreateInstance(typeof(TestStruct));
+
+            TestStruct testStruct = (TestStruct)structObj!;
+
+            Console.WriteLine(testStruct.age);
+            Console.WriteLine(testStruct.name);
+
+            int number = 21;
+
+            Type type = number.GetType();
+
+            if (type.IsValueType)
+            {
+                object? obj = Activator.CreateInstance(type);
+
+                Type type1 = obj!.GetType();
+
+                int? count = 10;
+
+                Type type2 = count.GetType();
+
+            }
 
             Console.WriteLine("Hello World!");
         }
