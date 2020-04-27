@@ -1,19 +1,18 @@
-﻿using HB.Framework.Common;
+﻿#nullable enable
+
+using HB.Framework.Common;
 using HB.Framework.Common.Validate;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
 namespace System
 {
-    [AttributeUsage(AttributeTargets.Parameter)]
-    public sealed class ValidatedNotNullAttribute : Attribute
-    {
-    }
-
     public static class ThrowIf
     {
-        public static T Null<T>([ValidatedNotNull]T o, string paramName) where T : class
+        [return:NotNull]
+        public static T Null<T>([ValidatedNotNull]T? o, string paramName) where T : class
         {
             if (o == null)
                 throw new ArgumentNullException(paramName);
@@ -22,7 +21,8 @@ namespace System
         }
 
         /// <exception cref="ValidateErrorException"></exception>
-        public static T NullOrNotValid<T>([ValidatedNotNull]T o, string paramName) where T : ValidatableObject
+        [return:NotNull]
+        public static T NullOrNotValid<T>([ValidatedNotNull]T? o, string paramName) where T : ValidatableObject
         {
             if (o == null)
             {
@@ -38,7 +38,8 @@ namespace System
         }
 
         /// <exception cref="ValidateErrorException"></exception>
-        public static IEnumerable<T> NullOrNotValid<T>([ValidatedNotNull]IEnumerable<T> ts, string paramName) where T : ValidatableObject
+        [return:NotNull]
+        public static IEnumerable<T> NullOrNotValid<T>([ValidatedNotNull]IEnumerable<T>? ts, string paramName) where T : ValidatableObject
         {
             if (ts == null)
             {
@@ -62,7 +63,8 @@ namespace System
             return ts;
         }
 
-        public static IDictionary<TKey, TValue> NullOrEmpty<TKey, TValue>([ValidatedNotNull]IDictionary<TKey, TValue> dict, string paramName)
+        [return:NotNull]
+        public static IDictionary<TKey, TValue> NullOrEmpty<TKey, TValue>([ValidatedNotNull]IDictionary<TKey, TValue>? dict, string paramName)
         {
             if (dict == null || !dict.Any())
             {
@@ -72,7 +74,8 @@ namespace System
             return dict;
         }
 
-        public static IEnumerable<T> NullOrEmpty<T>([ValidatedNotNull]IEnumerable<T> lst, string paramName)
+        [return:NotNull]
+        public static IEnumerable<T> NullOrEmpty<T>([ValidatedNotNull]IEnumerable<T>? lst, string paramName)
         {
             if (lst == null || !lst.Any())
             {
@@ -82,7 +85,8 @@ namespace System
             return lst;
         }
 
-        public static IEnumerable<T> AnyNull<T>([ValidatedNotNull]IEnumerable<T> lst, string paramName)
+        [return:NotNull]
+        public static IEnumerable<T> AnyNull<T>([ValidatedNotNull]IEnumerable<T>? lst, string paramName)
         {
             if (lst == null || lst.Any(t => t == null))
             {
@@ -93,8 +97,8 @@ namespace System
         }
 
 
-
-        public static string NullOrEmpty([ValidatedNotNull]string o, string paramName)
+        [return:NotNull]
+        public static string NullOrEmpty([ValidatedNotNull]string? o, string paramName)
         {
             if (string.IsNullOrEmpty(o))
             {
@@ -104,9 +108,10 @@ namespace System
             return o;
         }
 
-        public static string NullOrNotMobile([ValidatedNotNull]string mobile, string paramName)
+        [return:NotNull]
+        public static string NullOrNotMobile([ValidatedNotNull]string? mobile, string paramName)
         {
-            if (string.IsNullOrEmpty(mobile) || !ValidationMethods.IsMobilePhone(mobile))
+            if (!ValidationMethods.IsMobilePhone(mobile))
             {
                 throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotMobileErrorMessage, paramName);
             }
@@ -114,14 +119,14 @@ namespace System
             return mobile;
         }
 
-        public static string NotPassword([ValidatedNotNull]string password, string paramName, bool canBeNull)
+        public static string? NotPassword([ValidatedNotNull]string? password, string paramName, bool canBeNull)
         {
             if (canBeNull && password == null)
             {
                 return password;
             }
 
-            if (string.IsNullOrEmpty(password) || !ValidationMethods.IsPassword(password))
+            if (!ValidationMethods.IsPassword(password))
             {
                 throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotPasswordErrorMessage, paramName);
             }
@@ -129,9 +134,10 @@ namespace System
             return password;
         }
 
-        public static string NullOrNotUserName([ValidatedNotNull]string userName, string paramName)
+        [return:NotNull]
+        public static string NullOrNotUserName([ValidatedNotNull]string? userName, string paramName)
         {
-            if (string.IsNullOrEmpty(userName) || !ValidationMethods.IsUserName(userName))
+            if (!ValidationMethods.IsUserName(userName))
             {
                 throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotUserNameErrorMessage, paramName);
             }
@@ -139,9 +145,10 @@ namespace System
             return userName;
         }
 
-        public static string NullOrNotEmail([ValidatedNotNull]string email, string paramName)
+        [return:NotNull]
+        public static string NullOrNotEmail([ValidatedNotNull]string? email, string paramName)
         {
-            if (string.IsNullOrEmpty(email) || !ValidationMethods.IsEmail(email))
+            if (!ValidationMethods.IsEmail(email))
             {
                 throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotEmailErrorMessage, paramName);
             }
@@ -149,7 +156,9 @@ namespace System
             return email;
         }
 
-        public static string NotEqual(string a, string b, string paramName)
+
+        [return:MaybeNull]
+        public static string? NotEqual(string? a, string? b, string paramName)
         {
             if (a == null && b != null || a != null && !a.Equals(b, GlobalSettings.Comparison))
             {
@@ -161,9 +170,7 @@ namespace System
     }
     public static class ThrowIfExtensions
     {
-
-
-        public static T ThrowIfNull<T>([ValidatedNotNull]this T o, string paramName) where T : class
+        public static T ThrowIfNull<T>([ValidatedNotNull]this T? o, string paramName) where T : class
         {
             if (o == null)
                 throw new ArgumentNullException(paramName);
@@ -171,7 +178,8 @@ namespace System
             return o;
         }
 
-        public static string ThrowIfNullOrEmpty([ValidatedNotNull]this string o, string paramName)
+        [return:NotNull]
+        public static string ThrowIfNullOrEmpty([ValidatedNotNull]this string? o, string paramName)
         {
             if (string.IsNullOrEmpty(o))
             {
@@ -181,7 +189,8 @@ namespace System
             return o;
         }
 
-        public static IDictionary<TKey, TValue> ThrowIfNullOrEmpty<TKey, TValue>([ValidatedNotNull]this IDictionary<TKey, TValue> dict, string paramName)
+        [return:NotNull]
+        public static IDictionary<TKey, TValue> ThrowIfNullOrEmpty<TKey, TValue>([ValidatedNotNull]this IDictionary<TKey, TValue>? dict, string paramName)
         {
             if (dict == null || !dict.Any())
             {
@@ -191,7 +200,8 @@ namespace System
             return dict;
         }
 
-        public static IEnumerable<T> ThrowIfNullOrEmpty<T>([ValidatedNotNull]this IEnumerable<T> lst, string paramName)
+        [return:NotNull]
+        public static IEnumerable<T> ThrowIfNullOrEmpty<T>([ValidatedNotNull]this IEnumerable<T>? lst, string paramName)
         {
             if (lst == null || !lst.Any())
             {
@@ -202,7 +212,8 @@ namespace System
         }
 
 
-        public static string ThrowIfNotEqual(this string a, string b, string paramName)
+        [return:MaybeNull]
+        public static string? ThrowIfNotEqual(this string? a, string? b, string paramName)
         {
             if (a == null && b != null || a != null && !a.Equals(b, GlobalSettings.Comparison))
             {
@@ -213,3 +224,5 @@ namespace System
         }
     }
 }
+
+#nullable restore

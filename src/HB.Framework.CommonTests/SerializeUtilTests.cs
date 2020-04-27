@@ -46,11 +46,11 @@ namespace System.Tests
             string json = "{\"Number\": \"123\", \"Price\": \"12.123456789\"}";
             
 
-            NumberTestCls obj = SerializeUtil.FromJson<NumberTestCls>(json);
+            NumberTestCls? obj = SerializeUtil.FromJson<NumberTestCls>(json);
 
             NumberTestCls newtonObj = Newtonsoft.Json.JsonConvert.DeserializeObject<NumberTestCls>(json);
 
-            Assert.True(obj.Number == newtonObj.Number && obj.Price == newtonObj.Price);
+            Assert.True(obj!.Number == newtonObj.Number && obj.Price == newtonObj.Price);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace System.Tests
 
             Assert.Equal(json, newtonJson);
 
-            IList<Student> fromJson = SerializeUtil.FromJson<IList<Student>>(json);
+            IList<Student>? fromJson = SerializeUtil.FromJson<IList<Student>>(json);
 
 
         }

@@ -1,9 +1,9 @@
-﻿using System;
+﻿#nullable enable
+
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Linq;
+using System.Reflection;
 
 namespace System
 {
@@ -21,7 +21,7 @@ namespace System
 
         public static IEnumerable<Type> GetAllTypeByCondition(Func<Type, bool> condition)
         {
-            
+
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             return Directory

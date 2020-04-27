@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿#nullable enable
+
+using System.IO;
 using System.Threading;
 
 namespace System
@@ -7,9 +9,6 @@ namespace System
     {
         public static bool TrySaveToFile(byte[] buffer, string path)
         {
-            ThrowIf.NullOrEmpty(path, nameof(path));
-            ThrowIf.Null(buffer, nameof(buffer));
-
             try
             {
                 using FileStream fileStream = new FileStream(path, FileMode.CreateNew);
@@ -52,8 +51,6 @@ namespace System
         /// <exception cref="System.UnauthorizedAccessException"></exception>
         public static byte[] ComputeFileHash(string filePath)
         {
-            ThrowIf.NullOrEmpty(filePath, nameof(filePath));
-
             int runCount = 1;
 
             while (runCount < 4)

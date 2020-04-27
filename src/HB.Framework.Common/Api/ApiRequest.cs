@@ -1,6 +1,7 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 
 namespace HB.Framework.Common.Api
@@ -13,7 +14,7 @@ namespace HB.Framework.Common.Api
         private readonly HttpMethod _httpMethod;
         private readonly bool _needAuthenticate;
         private readonly string _resourceName;
-        private readonly string _condition;
+        private readonly string? _condition;
         private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
         private readonly IDictionary<string, string> _parameters = new Dictionary<string, string>();
 
@@ -24,7 +25,7 @@ namespace HB.Framework.Common.Api
         //    set { SetParameter(MobileInfoNames.DeviceId, value); }
         //}
 
-        public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string condition = null)
+        public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string? condition = null)
         {
             _productType = productType.ThrowIfNullOrEmpty(nameof(productType));
             _apiVersion = apiVersion.ThrowIfNullOrEmpty(nameof(apiVersion));
@@ -59,7 +60,7 @@ namespace HB.Framework.Common.Api
             return _resourceName;
         }
 
-        public string GetCondition()
+        public string? GetCondition()
         {
             return _condition;
         }
@@ -94,7 +95,7 @@ namespace HB.Framework.Common.Api
             _headers.Add(name, value);
         }
 
-        protected string GetParameter(string name)
+        protected string? GetParameter(string name)
         {
             if (_parameters.TryGetValue(name, out string value))
             {

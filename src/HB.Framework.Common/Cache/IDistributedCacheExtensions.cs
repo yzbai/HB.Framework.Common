@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
-using HB.Framework.Common;
-using System.Text;
+﻿#nullable enable
+
 using System;
+using System.Threading.Tasks;
 
 namespace Microsoft.Extensions.Caching.Distributed
 {
@@ -9,7 +9,7 @@ namespace Microsoft.Extensions.Caching.Distributed
     {
         #region Generic
 
-        public static void Set<T>(this IDistributedCache cache, string key, T value, DistributedCacheEntryOptions options) where T :class
+        public static void Set<T>(this IDistributedCache cache, string key, T value, DistributedCacheEntryOptions options) where T : class
         {
             ThrowIf.Null(cache, nameof(cache));
             ThrowIf.NullOrEmpty(key, nameof(key));
@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.Caching.Distributed
             return cache.SetAsync(key, SerializeUtil.Pack(value), options);
         }
 
-        public static T Get<T>(this IDistributedCache cache, string key) where T : class
+        public static T? Get<T>(this IDistributedCache cache, string key) where T : class
         {
             ThrowIf.Null(cache, nameof(cache));
             ThrowIf.NullOrEmpty(key, nameof(key));
@@ -34,7 +34,7 @@ namespace Microsoft.Extensions.Caching.Distributed
             return SerializeUtil.UnPack<T>(bytes);
         }
 
-        public static async Task<T> GetAsync<T>(this IDistributedCache cache, string key) where T : class
+        public static async Task<T?> GetAsync<T>(this IDistributedCache cache, string key) where T : class
         {
             ThrowIf.Null(cache, nameof(cache));
             ThrowIf.NullOrEmpty(key, nameof(key));
@@ -84,6 +84,6 @@ namespace Microsoft.Extensions.Caching.Distributed
         }
 
         #endregion
-        
+
     }
 }

@@ -1,17 +1,22 @@
-﻿using Microsoft.Extensions.Logging;
+﻿#nullable enable
+
+using Microsoft.Extensions.Logging;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 namespace System
 {
     public static class GlobalSettings
     {
-        public static CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
+        [NotNull]public static CultureInfo Culture { get; set; } = CultureInfo.InvariantCulture;
 
-        public static StringComparison Comparison { get; set; } = StringComparison.InvariantCulture;
+        [NotNull]public static StringComparison Comparison { get; set; } = StringComparison.InvariantCulture;
 
-        public static StringComparison ComparisonIgnoreCase { get; set; } = StringComparison.InvariantCultureIgnoreCase;
+        [NotNull]public static StringComparison ComparisonIgnoreCase { get; set; } = StringComparison.InvariantCultureIgnoreCase;
 
-        public static ILogger Logger { get; set; }
+        [MaybeNull, DisallowNull]public static ILogger? Logger { get; set; }
 
     }
 }
+
+#nullable restore

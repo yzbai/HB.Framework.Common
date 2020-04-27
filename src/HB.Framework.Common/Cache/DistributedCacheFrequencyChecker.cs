@@ -1,15 +1,13 @@
-﻿using HB.Framework.Common;
+﻿#nullable enable
+
 using Microsoft.Extensions.Caching.Distributed;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace System
 {
     public class DistributedCacheFrequencyChecker
     {
-        private const string _Prefix = "Freq_C";
+        private const string _prefix = "Freq_C";
 
         private readonly IDistributedCache _cache;
 
@@ -22,7 +20,7 @@ namespace System
         {
             string key = GetKey(resourceType, resource);
 
-            string value = await _cache.GetStringAsync(key).ConfigureAwait(false);
+            string? value = await _cache.GetStringAsync(key).ConfigureAwait(false);
 
             if (string.IsNullOrEmpty(value))
             {
@@ -42,7 +40,7 @@ namespace System
 
         private static string GetKey(string resourceType, string resource)
         {
-            return $"{_Prefix}:{resourceType}:{resource}";
+            return $"{_prefix}:{resourceType}:{resource}";
         }
     }
 }

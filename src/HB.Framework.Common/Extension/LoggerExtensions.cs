@@ -1,31 +1,25 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿#nullable enable
+
+using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Linq;
-using System.Collections;
 
 namespace System
 {
     public static class LoggerExtensions
     {
-        public static void LogException(this ILogger logger, Exception exception, [CallerMemberName]string caller = null)
+        public static void LogException(this ILogger logger, Exception exception, [CallerMemberName] string? caller = null)
         {
             logger.LogException(exception, null, LogLevel.Error, caller);
         }
 
-        public static void LogException(this ILogger logger, Exception exception, string message, LogLevel logLevel = LogLevel.Error, [CallerMemberName]string caller = null)
+        public static void LogException(this ILogger logger, Exception? exception, string? message, LogLevel logLevel = LogLevel.Error, [CallerMemberName] string? caller = null)
         {
-            ThrowIf.Null(logger, nameof(logger));
-            //ThrowIf.Null(exception, nameof(exception));
-
             if (exception == null)
             {
                 return;
             }
 
-            ////TODO: Collection was modified; enumeration operation may not execute.解决这个问题
+            //TODO: Collection was modified; enumeration operation may not execute.解决这个问题
 
             //StringBuilder stringBuilder = new StringBuilder();
 

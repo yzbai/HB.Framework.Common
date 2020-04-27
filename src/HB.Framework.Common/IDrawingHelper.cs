@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿#nullable enable
+
+using System.IO;
 
 namespace System
 {
@@ -7,3 +9,5 @@ namespace System
         void WriteImageToStream(Stream target, string imageContentType, int width, int height, string code);
     }
 }
+
+#nullable restore

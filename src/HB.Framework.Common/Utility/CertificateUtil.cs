@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿#nullable enable
+
+using System.Security.Cryptography.X509Certificates;
 
 namespace System
 {
@@ -9,16 +11,14 @@ namespace System
         /// </summary>
         /// <param name="subjectName"></param>
         /// <returns></returns>
-        public static X509Certificate2 GetBySubject(string subjectName)
+        public static X509Certificate2? GetBySubject(string subjectName)
         {
             return GetBySubject(subjectName, StoreLocation.CurrentUser) ?? GetBySubject(subjectName, StoreLocation.LocalMachine);
         }
 
 
-        public static X509Certificate2 GetBySubject(string subjectName, StoreLocation storeLocation)
+        public static X509Certificate2? GetBySubject(string subjectName, StoreLocation storeLocation)
         {
-            ThrowIf.NullOrEmpty(subjectName, nameof(subjectName));
-
             using X509Store store = new X509Store(storeLocation);
             store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
 
@@ -32,7 +32,7 @@ namespace System
             return collection[0];
         }
 
-        public static X509Certificate2 GetByThumbprint(string thumbprint)
+        public static X509Certificate2? GetByThumbprint(string thumbprint)
         {
             return GetByThumbprint(thumbprint, StoreLocation.CurrentUser) ?? GetByThumbprint(thumbprint, StoreLocation.LocalMachine);
         }
@@ -43,10 +43,8 @@ namespace System
         /// <param name="thumbprint"></param>
         /// <param name="storeLocation"></param>
         /// <returns></returns>
-        public static X509Certificate2 GetByThumbprint(string thumbprint, StoreLocation storeLocation)
+        public static X509Certificate2? GetByThumbprint(string thumbprint, StoreLocation storeLocation)
         {
-            ThrowIf.NullOrEmpty(thumbprint, nameof(thumbprint));
-
             using X509Store store = new X509Store(storeLocation);
             store.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
 

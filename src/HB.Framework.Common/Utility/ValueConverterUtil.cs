@@ -1,19 +1,17 @@
-﻿using System;
+﻿#nullable enable
+
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System
 {
     public static class ValueConverterUtil
     {
-        private static readonly Dictionary<Type, Func<object, object>> _convertFunDict = new Dictionary<Type, Func<object, object>>();
+        private static readonly Dictionary<Type, Func<object, object?>> _convertFunDict = new Dictionary<Type, Func<object, object?>>();
 
         /// <summary>
         /// ctor
         /// </summary>
-        /// <exception cref="InvalidCastException"></exception>
-        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         static ValueConverterUtil()
         {
             #region type to type
@@ -36,26 +34,28 @@ namespace System
             _convertFunDict[typeof(DateTime)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(DateTimeOffset)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(Convert.ToDateTime(o, GlobalSettings.Culture), DateTimeKind.Utc); };
             _convertFunDict[typeof(TimeSpan)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
+
+            _convertFunDict[typeof(byte?)] = o => { return Convert.ToByte(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(sbyte?)] = o => { return Convert.ToSByte(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(short?)] = o => { return Convert.ToInt16(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(ushort?)] = o => { return Convert.ToUInt16(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(int?)] = o => { return Convert.ToInt32(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(uint?)] = o => { return Convert.ToUInt32(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(long?)] = o => { return Convert.ToInt64(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(ulong?)] = o => { return Convert.ToUInt64(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(float?)] = o => { return Convert.ToSingle(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(double?)] = o => { return Convert.ToDouble(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(decimal?)] = o => { return Convert.ToDecimal(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(bool?)] = o => { return Convert.ToBoolean(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(char?)] = o => { return Convert.ToChar(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(Guid?)] = o => { return Guid.Parse(o.ToString()); };
+            _convertFunDict[typeof(DateTime?)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(DateTimeOffset?)] = o => { return (DateTimeOffset?)DateTime.SpecifyKind(Convert.ToDateTime(o, GlobalSettings.Culture), DateTimeKind.Utc); };
+            _convertFunDict[typeof(TimeSpan?)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
+
             _convertFunDict[typeof(byte[])] = o => { return SerializeUtil.Pack(o); };
-            _convertFunDict[typeof(byte?)] = o => { return o == null ? null : (object)Convert.ToByte(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(sbyte?)] = o => { return o == null ? null : (object)Convert.ToSByte(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(short?)] = o => { return o == null ? null : (object)Convert.ToInt16(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(ushort?)] = o => { return o == null ? null : (object)Convert.ToUInt16(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(int?)] = o => { return o == null ? null : (object)Convert.ToInt32(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(uint?)] = o => { return o == null ? null : (object)Convert.ToUInt32(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(long?)] = o => { return o == null ? null : (object)Convert.ToInt64(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(ulong?)] = o => { return o == null ? null : (object)Convert.ToUInt64(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(float?)] = o => { return o == null ? null : (object)Convert.ToSingle(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(double?)] = o => { return o == null ? null : (object)Convert.ToDouble(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(decimal?)] = o => { return o == null ? null : (object)Convert.ToDecimal(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(bool?)] = o => { return o == null ? null : (object)Convert.ToBoolean(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(char?)] = o => { return o == null ? null : (object)Convert.ToChar(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(Guid?)] = o => { return o == null ? null : (object)Guid.Parse(o.ToString()); };
-            _convertFunDict[typeof(DateTime?)] = o => { return o == null ? null : (object)Convert.ToDateTime(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(DateTimeOffset?)] = o => { return o == null ? null : (DateTimeOffset?)DateTime.SpecifyKind(Convert.ToDateTime(o, GlobalSettings.Culture), DateTimeKind.Utc); };
-            _convertFunDict[typeof(TimeSpan?)] = o => { return o == null ? null : (object)Convert.ToDateTime(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(object)] = o => { return o ?? null; };
-            _convertFunDict[typeof(DBNull)] = o => { return o == null ? null : DBNull.Value; };
+            _convertFunDict[typeof(DBNull)] = o => { return DBNull.Value; };
 
             #endregion
         }
@@ -67,27 +67,20 @@ namespace System
         /// <returns>The value to type value.</returns>
         /// <param name="targetType">想要转成的C#类型</param>
         /// <param name="dbValue">Db value.</param>
-        /// <exception cref="TargetInvocationException">Ignore.</exception>
-        /// <exception cref="MethodAccessException">Ignore.</exception>
-        /// <exception cref="MemberAccessException">Ignore.</exception>
-        /// <exception cref="System.Runtime.InteropServices.InvalidComObjectException">Ignore.</exception>
-        /// <exception cref="MissingMethodException">Ignore.</exception>
-        /// <exception cref="System.Runtime.InteropServices.COMException">Ignore.</exception>
-        /// <exception cref="TypeLoadException">Ignore.</exception>
-        public static object DbValueToTypeValue(object dbValue, Type targetType)
+        public static object? DbValueToTypeValue(object dbValue, Type targetType)
         {
-            ThrowIf.Null(targetType, nameof(targetType));
             ThrowIf.Null(dbValue, nameof(dbValue));
+            ThrowIf.Null(targetType, nameof(targetType));
 
             if (dbValue.GetType() == typeof(DBNull))
             {
-                return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
+                //return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
+                return default;
             }
 
             if (targetType.IsEnum)
             {
                 return Enum.Parse(targetType, dbValue.ToString(), true);
-                //return Convert.ToInt32(value, GlobalSettings.Culture);
             }
 
             if (targetType.IsAssignableFrom(typeof(IList<string>)))
@@ -100,7 +93,7 @@ namespace System
                 return StringUtil.StringToDictionary(dbValue.ToString());
             }
 
-            Func<object, object> convertFn = _convertFunDict[targetType];
+            Func<object, object?> convertFn = _convertFunDict[targetType];
             return convertFn(dbValue);
         }
 
@@ -109,58 +102,33 @@ namespace System
         /// </summary>
         /// <returns>The value to db value.</returns>
         /// <param name="value">Value.</param>
-        public static string TypeValueToStringValue(object value)
+        [return:NotNullIfNotNull("value")]
+        public static string? TypeValueToStringValue(object? value)
         {
-            string valueStr;
-
-            if (value != null)
+            if (value == null)
             {
-                Type type = value.GetType();
-
-                if (type.IsEnum)
-                {
-                    valueStr = ((Enum)value).ToString();
-                    //valueStr = ((Int32)value).ToString(GlobalSettings.Culture);
-                }
-                else if (typeof(IList<string>).IsAssignableFrom(type))
-                {
-                    valueStr = StringUtil.ListToString(value as IList<string>);
-                }
-                else if (typeof(IDictionary<string, string>).IsAssignableFrom(type))
-                {
-                    valueStr = StringUtil.DictionaryToString(value as IDictionary<string, string>);
-                }
-                else if (type == typeof(string))
-                {
-                    valueStr = (string)value;
-                }
-                else if (type == typeof(DateTime))
-                {
-                    valueStr = ((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss", GlobalSettings.Culture);
-                }
-                else if (type == typeof(DateTimeOffset))
-                {
-                    valueStr = ((DateTimeOffset)value).ToString("yyyy-MM-dd HH:mm:ss", GlobalSettings.Culture);
-                }
-                else if (type == typeof(bool))
-                {
-                    valueStr = (bool)value ? "1" : "0";
-                }
-                else if (type == typeof(DBNull))
-                {
-                    valueStr = null;
-                }
-                else
-                {
-                    valueStr = value.ToString();
-                }
-            }
-            else
-            {
-                valueStr = null;
+                return null;
             }
 
-            return valueStr;
+            Type type = value.GetType();
+
+            if (type.IsEnum)
+            {
+                return value.ToString();
+            }
+
+            return value switch
+            {
+                string str => str,
+                Enum e => e.ToString(),
+                DBNull _ => null,
+                DateTime dt => dt.ToString("yyyy-MM-dd HH:mm:ss", GlobalSettings.Culture),
+                DateTimeOffset dt=>dt.ToString("yyyy-MM-dd HH:mm:ss", GlobalSettings.Culture),
+                bool b=> b?"1":"0",
+                IList<string> lst=> StringUtil.ListToString(lst),
+                IDictionary<string, string> dict=>StringUtil.DictionaryToString(dict),
+                _ => value.ToString()
+            };
         }
     }
 }

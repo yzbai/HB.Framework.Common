@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace HB.Framework.CommonTests
@@ -22,7 +23,7 @@ namespace HB.Framework.CommonTests
 
     public class Student
     {
-        public string ChineseName { get; set; }
+        public string ChineseName { get; set; } = default!;
 
         public StudentType StudentType { get; set; }
 
@@ -41,7 +42,7 @@ namespace HB.Framework.CommonTests
 
     public class Book
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
 
         public double Price { get; set; }
     }

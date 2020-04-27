@@ -1,25 +1,25 @@
-﻿using HB.Framework.Common.Validate;
-using System;
-using System.Collections.Generic;
+﻿#nullable enable
+
+using HB.Framework.Common.Validate;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HB.Framework.Common.Validation.Attributes
 {
     public sealed class PositiveNumberAttribute : ValidationAttribute
     {
+        public bool CanBeNull { get; set; } = true;
+
         public PositiveNumberAttribute()
         {
             if (string.IsNullOrEmpty(ErrorMessage))
             {
-                ErrorMessage = "xxx";
+                ErrorMessage = "Not a Positive Number.";
             }
         }
 
         public override bool IsValid(object value)
         {
-            if (value == null) { return true; }
+            if (value == null) { return CanBeNull; }
 
 
             return value is string text && ValidationMethods.IsPositiveNumber(text);

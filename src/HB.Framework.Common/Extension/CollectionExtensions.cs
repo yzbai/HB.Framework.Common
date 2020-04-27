@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#nullable enable
+
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -13,9 +12,7 @@ namespace System.Collections.Generic
 
         public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
         {
-            ThrowIf.Null(enumerable, nameof(enumerable));
-
-            foreach (T t in enumerable)
+            foreach (T t in enumerable.ThrowIfNull(nameof(enumerable)))
             {
                 action(t);
             }
@@ -23,9 +20,7 @@ namespace System.Collections.Generic
 
         public static async Task ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> action)
         {
-            ThrowIf.Null(enumerable, nameof(enumerable));
-
-            foreach (T t in enumerable)
+            foreach (T t in enumerable.ThrowIfNull(nameof(enumerable)))
             {
                 await action(t).ConfigureAwait(false);
             }
@@ -34,30 +29,20 @@ namespace System.Collections.Generic
 
         public static void Add<TKey, TValue>(this IDictionary<TKey, TValue> original, IDictionary<TKey, TValue> toAdds)
         {
-            ThrowIf.Null(original, nameof(original));
-            ThrowIf.Null(toAdds, nameof(toAdds));
-
             toAdds.ForEach(kv => original.Add(kv.Key, kv.Value));
-
         }
 
         public static void Add<T>(this IList<T> original, IEnumerable<T> items)
         {
-            ThrowIf.NullOrEmpty(original, nameof(original));
-            ThrowIf.NullOrEmpty(items, nameof(items));
-
             items.ForEach(t => original.Add(t));
         }
 
         public static IDictionary<TKey, TValue> CloningWithValues<TKey, TValue>(this IDictionary<TKey, TValue> original) where TValue : ICloneable
         {
-            ThrowIf.Null(original, nameof(original));
-
             IDictionary<TKey, TValue> ret = new Dictionary<TKey, TValue>();
 
-            foreach (KeyValuePair<TKey, TValue> entry in original)
+            foreach (KeyValuePair<TKey, TValue> entry in original.ThrowIfNull(nameof(original)))
             {
-
                 ICloneable cloneable = entry.Value as ICloneable;
                 ret.Add(entry.Key, (TValue)cloneable.Clone());
 
@@ -67,11 +52,9 @@ namespace System.Collections.Generic
 
         public static IDictionary<TKey, int> CloningWithValues<TKey>(this IDictionary<TKey, int> original)
         {
-            ThrowIf.Null(original, nameof(original));
-
             IDictionary<TKey, int> ret = new Dictionary<TKey, int>();
 
-            foreach (KeyValuePair<TKey, int> entry in original)
+            foreach (KeyValuePair<TKey, int> entry in original.ThrowIfNull(nameof(original)))
             {
                 try
                 {
@@ -87,11 +70,9 @@ namespace System.Collections.Generic
 
         public static IDictionary<TKey, TNewValue> ConvertValue<TKey, TValue, TNewValue>(this IDictionary<TKey, TValue> original, Func<TValue, TNewValue> converter)
         {
-            ThrowIf.Null(original, nameof(original));
-
             IDictionary<TKey, TNewValue> ret = new Dictionary<TKey, TNewValue>();
 
-            foreach (var pair in original)
+            foreach (KeyValuePair<TKey, TValue> pair in original.ThrowIfNull(nameof(original)))
             {
                 ret.Add(pair.Key, converter(pair.Value));
             }
@@ -101,11 +82,9 @@ namespace System.Collections.Generic
 
         public static IList<T> CloneWithValues<T>(this IList<T> lst) where T : ICloneable
         {
-            ThrowIf.Null(lst, nameof(lst));
-
             List<T> retList = new List<T>();
 
-            foreach (var item in lst)
+            foreach (T item in lst.ThrowIfNull(nameof(lst)))
             {
                 retList.Add((T)item.Clone());
             }
@@ -113,25 +92,23 @@ namespace System.Collections.Generic
             return retList;
         }
 
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T> ts)
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T>? ts)
         {
             return ts == null || !ts.Any();
         }
 
-        public static bool IsNotNullOrEmpty<T>(this IEnumerable<T> ts)
+        public static bool IsNotNullOrEmpty<T>(this IEnumerable<T>? ts)
         {
             return ts != null && ts.Any();
         }
 
-        public static bool IsNotNullOrEmpty(this Array array)
+        public static bool IsNotNullOrEmpty(this Array? array)
         {
             return array != null && array.Length != 0;
         }
 
         public static NameValueCollection ToHttpValueCollection(this IEnumerable<KeyValuePair<string, string>> dict)
         {
-            ThrowIf.Null(dict, nameof(dict));
-
             NameValueCollection nameValueCollection = HttpUtility.ParseQueryString("");
 
             dict.ForEach(kv => nameValueCollection.Add(kv.Key, kv.Value));

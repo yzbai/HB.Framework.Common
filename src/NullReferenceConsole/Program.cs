@@ -13,6 +13,13 @@ namespace NullReferenceConsole
             name = n;
         }
     }
+
+    enum TestEnum
+    {
+        A,
+        B,
+        C
+    }
     class Program
     {
 
@@ -64,31 +71,18 @@ namespace NullReferenceConsole
         /// <exception cref="TypeLoadException"></exception>
         static void Main(string[] args)
         {
+            string dd = "safasf";
 
-            object? structObj = Activator.CreateInstance(typeof(TestStruct));
+            byte[] bytes = new byte[0];
 
-            TestStruct testStruct = (TestStruct)structObj!;
+            string[] vs = new string[0];
 
-            Console.WriteLine(testStruct.age);
-            Console.WriteLine(testStruct.name);
 
-            int number = 21;
 
-            Type type = number.GetType();
+            dd.IsIn(null);
 
-            if (type.IsValueType)
-            {
-                object? obj = Activator.CreateInstance(type);
-
-                Type type1 = obj!.GetType();
-
-                int? count = 10;
-
-                Type type2 = count.GetType();
-
-            }
-
-            Console.WriteLine("Hello World!");
+            "xx".IsIn(null);
+            
         }
 
         /// <summary>
@@ -99,6 +93,19 @@ namespace NullReferenceConsole
         static void testFun(string str)
         {
             Console.WriteLine(str.Length);
+        }
+
+        
+    }
+
+    public static class Extensions
+    {
+        public static bool IsIn(this string? str, params string?[]? words)
+        {
+
+ 
+
+            return false;
         }
     }
 }

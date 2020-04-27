@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿#nullable enable
 
 namespace HB.Framework.Common.Validate
 {
@@ -41,7 +38,7 @@ namespace HB.Framework.Common.Validate
 
         public static readonly string Number
             = @"^([+-]?)\d*\.?\d+$";
-          
+
         public static readonly string PositiveNumber
             = @"^[1-9]\d*|0$";
 
@@ -76,7 +73,7 @@ namespace HB.Framework.Common.Validate
             = @"^((0?[1-9])|((1|2)[0-9])|30|31)$";
 
         public static readonly string Year
-            =@"^[1-2][0-9][0-9][0-9]";
+            = @"^[1-2][0-9][0-9][0-9]";
 
         public static readonly string Month
             = @"^(0?[1-9]|1[0-2])$";
@@ -84,4 +81,4 @@ namespace HB.Framework.Common.Validate
 }
 
 
-
+#nullable restore

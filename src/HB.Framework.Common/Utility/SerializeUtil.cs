@@ -1,8 +1,11 @@
-﻿using MsgPack.Serialization;
+﻿#nullable enable
+
+using MsgPack.Serialization;
 using System;
 using System.Buffers;
 using System.Buffers.Text;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.Encodings.Web;
@@ -30,6 +33,7 @@ namespace System
             return JsonSerializer.Serialize(entity, _jsonSerializerOptions);
         }
 
+        [return: MaybeNull]
         public static T FromJson<T>(string jsonString)
         {
             return jsonString.IsNullOrEmpty() ? default : JsonSerializer.Deserialize<T>(jsonString, _jsonSerializerOptions);
@@ -59,14 +63,12 @@ namespace System
         /// <param name="jsonString"></param>
         /// <returns></returns>
         /// <exception cref="JsonException"></exception>
-        public static object FromJson(Type type, string jsonString)
+        public static object? FromJson(Type type, string jsonString)
         {
             if (jsonString.IsNullOrEmpty())
             {
                 return null;
             }
-
-            ThrowIf.Null(type, nameof(type));
 
             return JsonSerializer.Deserialize(jsonString, type, _jsonSerializerOptions);
         }
@@ -80,7 +82,7 @@ namespace System
         /// <exception cref="JsonException"></exception>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.ObjectDisposedException"></exception>
-        public static string FromJson(string jsonString, string name)
+        public static string? FromJson(string jsonString, string name)
         {
             JsonDocument jsonDocument = JsonDocument.Parse(jsonString);
 
@@ -131,7 +133,7 @@ namespace System
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         /// <exception cref="System.Security.SecurityException"></exception>
         [Obsolete("Do not use BinaryFormatter, for reason https://blog.marcgravell.com/2020/03/why-do-i-rag-on-binaryformatter.html", true)]
-        public static object ToObject(byte[] bytes)
+        public static object? ToObject(byte[] bytes)
         {
             if (bytes.IsNullOrEmpty())
             {
@@ -158,7 +160,7 @@ namespace System
         /// <param name="t"></param>
         /// <returns></returns>
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
-        public static byte[] Pack<T>(T t)
+        public static byte[] Pack<T>([DisallowNull]T t)
         {
             MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>();
             using MemoryStream stream = new MemoryStream();
@@ -176,9 +178,10 @@ namespace System
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         /// <exception cref="MsgPack.MessageTypeException"></exception>
         /// <exception cref="MsgPack.InvalidMessagePackStreamException"></exception>
-        public static T UnPack<T>(byte[] bytes)
+        [return: MaybeNull]
+        public static T UnPack<T>(byte[]? bytes)
         {
-            if(bytes.IsNullOrEmpty())
+            if (bytes.IsNullOrEmpty())
             {
                 return default;
             }
@@ -222,7 +225,7 @@ namespace System
 
                 return reader.GetInt32();
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 return 0;
             }
@@ -276,7 +279,7 @@ namespace System
 
                 return reader.GetDouble();
             }
-            catch (InvalidOperationException) 
+            catch (InvalidOperationException)
             {
                 return 0;
             }

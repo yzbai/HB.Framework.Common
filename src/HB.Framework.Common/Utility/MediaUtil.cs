@@ -1,6 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
 using System.Collections.Generic;
-using System.Text;
 
 namespace System
 {
@@ -356,18 +356,16 @@ namespace System
             #endregion
         }
 
-        public static string GetFileTypeByMediaType(string mediaType)
+        public static string? GetFileTypeByMediaType(string mediaType)
         {
-            ThrowIf.NullOrEmpty(mediaType, nameof(mediaType));
-
-            string mType = mediaType.ToLower(GlobalSettings.Culture);
+            string mType = mediaType.ThrowIfNullOrEmpty(nameof(mediaType)).ToLower(GlobalSettings.Culture);
 
             if (_mediaType2FileTypeDict.ContainsKey(mType))
             {
                 return _mediaType2FileTypeDict[mType];
             }
 
-            return "";
+            return null;
         }
     }
 }

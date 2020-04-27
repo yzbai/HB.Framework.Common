@@ -1,12 +1,18 @@
-﻿namespace System.ComponentModel.DataAnnotations
+﻿#nullable enable
+
+using HB.Framework.Common.Validate;
+
+namespace System.ComponentModel.DataAnnotations
 {
     public sealed class UserNameAttribute : ValidationAttribute
     {
+        public bool CanBeNull { get; set; } = true;
+
         public UserNameAttribute()
         {
             if (string.IsNullOrEmpty(ErrorMessage))
             {
-                ErrorMessage = "xxxx";
+                ErrorMessage = "Not a valid UserName.";
             }
         }
 
@@ -14,17 +20,12 @@
         {
             if (value == null)
             {
-                return true;
+                return CanBeNull;
             }
 
-            string str = value as string;
-
-            if (string.IsNullOrEmpty(str) || str.Length > 50)
-            {
-                return false;
-            }
-
-            return HB.Framework.Common.Validate.ValidationMethods.IsUserName(str);
+            return value is string text
+                && text.Length <= ValidationSettings.UserNameMaxLength
+                && ValidationMethods.IsUserName(text);
         }
     }
 }

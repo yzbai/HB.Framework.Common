@@ -1,11 +1,17 @@
-﻿namespace System.ComponentModel.DataAnnotations
+﻿#nullable enable
+
+using HB.Framework.Common.Validate;
+
+namespace System.ComponentModel.DataAnnotations
 {
     public sealed class MobileAttribute : ValidationAttribute
     {
+        public bool CanBeNull { get; set; } = true;
+
         public MobileAttribute()
         {
             if (string.IsNullOrEmpty(ErrorMessage))
-                ErrorMessage = "xxxxxxxxxxxxxxxxxxxx";
+                ErrorMessage = "Not a Valid Mobile";
         }
 
         public override bool IsValid(object value)
@@ -15,14 +21,7 @@
                 return true;
             }
 
-            string str = value as string;
-
-            if (string.IsNullOrEmpty(str))
-            {
-                return false;
-            }
-
-            return HB.Framework.Common.Validate.ValidationMethods.IsMobilePhone(str);
+            return value is string text && ValidationMethods.IsMobilePhone(text);
         }
     }
 }

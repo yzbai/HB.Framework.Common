@@ -1,4 +1,6 @@
-﻿namespace HB.Framework.Common.Api
+﻿#nullable enable
+
+namespace HB.Framework.Common.Api
 {
     public enum ApiError
     {

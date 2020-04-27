@@ -1,4 +1,6 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -25,7 +27,7 @@ namespace System
 
         public void AddTags(IList<KeyValuePair<string, string>> tags)
         {
-            foreach (KeyValuePair<string, string> tag in ThrowIf.Null(tags, nameof(tags)))
+            foreach (KeyValuePair<string, string> tag in tags.ThrowIfNull(nameof(tags)))
             {
                 _tagCache.Add(tag.Key, tag.Value);
             }
@@ -58,15 +60,17 @@ namespace System
 
         #endregion
 
-        private string ReplaceTagHandler(Match token)
-        {
-            return _tagCache.Contains(token.Value) ? _tagCache[token.Value].ToString() : string.Empty;
-        }
-
         public string Parse(string stringWithTag)
         {
             MatchEvaluator replaceCallback = new MatchEvaluator(ReplaceTagHandler);
             return Regex.Replace(stringWithTag, _matchPattern, replaceCallback);
         }
+
+        private string ReplaceTagHandler(Match token)
+        {
+            return _tagCache.Contains(token.Value) ? _tagCache[token.Value].ToString() : string.Empty;
+        }
     }
 }
+
+#nullable restore

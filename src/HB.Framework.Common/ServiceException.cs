@@ -1,23 +1,32 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace System
 {
     public class ServiceException : Exception
     {
-        public string ServiceName { get; set; }
+        [MaybeNull, DisallowNull] public string? ServiceName { get; set; }
 
-        public ServiceException(string message) : base(message)
+        public ServiceException(string message) : base(message) { }
+
+        public ServiceException(string message, Exception innerException) : base(message, innerException) { }
+
+        public ServiceException() { }
+
+        public ServiceException(string serviceName, string message) : this(message)
         {
+            ServiceName = serviceName;
         }
 
-        public ServiceException(string message, Exception innerException) : base(message, innerException)
+        public ServiceException(string serviceName, string message, Exception innerException) : this(message, innerException)
         {
-        }
-
-        public ServiceException()
-        {
+            ServiceName = serviceName;
         }
     }
 }
+
+#nullable restore

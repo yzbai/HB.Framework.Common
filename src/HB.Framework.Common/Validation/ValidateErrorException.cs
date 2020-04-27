@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#nullable enable
+
+using System;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace HB.Framework.Common
 {
@@ -28,3 +28,5 @@ namespace HB.Framework.Common
         }
     }
 }
+
+#nullable restore
