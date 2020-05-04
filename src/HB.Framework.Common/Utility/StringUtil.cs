@@ -183,9 +183,14 @@ namespace System
             return true;
         }
 
-        public static bool IsNullOrEmpty(this string? str)
+        public static bool IsNullOrEmpty([ValidatedNotNull]this string? str)
         {
             return string.IsNullOrEmpty(str);
+        }
+
+        public static bool IsNotNullOrEmpty([ValidatedNotNull]this string? str)
+        {
+            return !string.IsNullOrEmpty(str);
         }
 
         //太容易产生Bug

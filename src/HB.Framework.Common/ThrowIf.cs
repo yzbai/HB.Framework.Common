@@ -178,6 +178,19 @@ namespace System
             return o;
         }
 
+        public static T ThrowIfNullOrNotValid<T>([ValidatedNotNull]this T? o, string paramName) where T : class, ISupportValidate
+        {
+            if (o == null)
+                throw new ArgumentNullException(paramName);
+
+            if (!o.IsValid())
+            {
+                throw new ValidateErrorException(o);
+            }
+
+            return o;
+        }
+
         [return:NotNull]
         public static string ThrowIfNullOrEmpty([ValidatedNotNull]this string? o, string paramName)
         {

@@ -9,6 +9,7 @@ namespace HB.Framework.Common
     /// <summary>
     /// 基础领域模型
     /// 内建验证机制。
+    /// 不能应对嵌套的类的验证
     /// </summary>
     public class ValidatableObject : ISupportValidate
     {
