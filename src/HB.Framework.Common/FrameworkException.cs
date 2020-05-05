@@ -22,6 +22,14 @@ namespace System
     {
         Unkonwn = 0,
         Database = 1,
+        EventBus = 2,
+        KVStore = 3,
+        AliyunSms = 4,
+        AliyunOss = 5,
+        RedisDatabase = 6,
+        Authorization = 7,
+        Identity = 8,
+        Validation = 9,
     }
 }
 
