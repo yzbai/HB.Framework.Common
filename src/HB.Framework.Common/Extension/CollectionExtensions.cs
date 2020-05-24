@@ -1,11 +1,14 @@
 ﻿#nullable enable
 
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace System.Collections.Generic
+namespace System
 {
     public static class CollectionExtensions
     {
@@ -114,6 +117,29 @@ namespace System.Collections.Generic
             dict.ForEach(kv => nameValueCollection.Add(kv.Key, kv.Value));
 
             return nameValueCollection;
+        }
+
+        public static string? ToJoinedString(this IEnumerable ts, string seprator)
+        {
+            if (ts == null)
+            {
+                return null;
+            }
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (object obj in ts)
+            {
+                stringBuilder.Append(obj.ToString());
+                stringBuilder.Append(seprator);
+            }
+
+            if (stringBuilder.Length != 0)
+            {
+                stringBuilder.Remove(stringBuilder.Length - 1, 1);
+            }
+
+            return stringBuilder.ToString();
         }
     }
 }

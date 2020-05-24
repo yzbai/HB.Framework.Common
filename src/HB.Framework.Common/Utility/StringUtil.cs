@@ -141,7 +141,12 @@ namespace System
         {
             foreach (string? word in words)
             {
-                return str == null ? word == null : str.Equals(word, GlobalSettings.Comparison);
+                bool isEqual = str == null ? word == null : str.Equals(word, GlobalSettings.Comparison);
+
+                if (isEqual)
+                {
+                    return true;
+                }
             }
 
             return false;

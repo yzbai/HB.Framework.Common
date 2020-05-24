@@ -30,6 +30,7 @@ namespace System
         Authorization = 7,
         Identity = 8,
         Validation = 9,
+        TCaptha = 10,
     }
 }
 
