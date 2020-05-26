@@ -31,8 +31,8 @@ namespace System
             _convertFunDict[typeof(string)] = o => { return Convert.ToString(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(char)] = o => { return Convert.ToChar(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(Guid)] = o => { return Guid.Parse(o.ToString()); };
-            _convertFunDict[typeof(DateTime)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(DateTimeOffset)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(Convert.ToDateTime(o, GlobalSettings.Culture), DateTimeKind.Utc); };
+            _convertFunDict[typeof(DateTime)] = o => { return DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat,GlobalSettings.Culture); };
+            _convertFunDict[typeof(DateTimeOffset)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat, GlobalSettings.Culture), DateTimeKind.Utc); };
             _convertFunDict[typeof(TimeSpan)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
 
             _convertFunDict[typeof(byte?)] = o => { return Convert.ToByte(o, GlobalSettings.Culture); };
@@ -49,8 +49,8 @@ namespace System
             _convertFunDict[typeof(bool?)] = o => { return Convert.ToBoolean(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(char?)] = o => { return Convert.ToChar(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(Guid?)] = o => { return Guid.Parse(o.ToString()); };
-            _convertFunDict[typeof(DateTime?)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(DateTimeOffset?)] = o => { return (DateTimeOffset?)DateTime.SpecifyKind(Convert.ToDateTime(o, GlobalSettings.Culture), DateTimeKind.Utc); };
+            _convertFunDict[typeof(DateTime?)] = o => { return o == null ? null : new DateTime?(DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat, GlobalSettings.Culture)); };
+            _convertFunDict[typeof(DateTimeOffset?)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat, GlobalSettings.Culture), DateTimeKind.Utc); };
             _convertFunDict[typeof(TimeSpan?)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
 
             _convertFunDict[typeof(byte[])] = o => { return SerializeUtil.Pack(o); };
@@ -122,8 +122,8 @@ namespace System
                 string str => str,
                 Enum e => e.ToString(),
                 DBNull _ => null,
-                DateTime dt => dt.ToString("yyyy-MM-dd HH:mm:ss", GlobalSettings.Culture),
-                DateTimeOffset dt=>dt.ToString("yyyy-MM-dd HH:mm:ss", GlobalSettings.Culture),
+                DateTime dt => dt.ToString(GlobalSettings.DateTimeFormat, GlobalSettings.Culture),
+                DateTimeOffset dt=>dt.ToString(GlobalSettings.DateTimeFormat, GlobalSettings.Culture),
                 bool b=> b?"1":"0",
                 IList<string> lst=> StringUtil.ListToString(lst),
                 IDictionary<string, string> dict=>StringUtil.DictionaryToString(dict),

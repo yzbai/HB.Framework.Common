@@ -16,6 +16,10 @@ namespace System
 
         [MaybeNull, DisallowNull]public static ILogger? Logger { get; set; }
 
+        public static readonly string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+
+        public static readonly string DebugTag = "HB_HB_HB";
+
     }
 }
 
