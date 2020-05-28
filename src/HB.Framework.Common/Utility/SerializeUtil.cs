@@ -201,6 +201,7 @@ namespace System
         /// <param name="type"></param>
         /// <param name="options"></param>
         /// <returns></returns>
+        /// <exception cref="System.InvalidOperationException">Ignore.</exception>
         public override int Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
         {
             try

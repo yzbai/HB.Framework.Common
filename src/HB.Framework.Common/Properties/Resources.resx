@@ -141,6 +141,9 @@
   <data name="ParameterNullOrEmptyErrorMessage" xml:space="preserve">
     <value>the parameter is null or empty</value>
   </data>
+  <data name="StringCanNotBeEmpty" xml:space="preserve">
+    <value>string can not be empty.</value>
+  </data>
   <data name="StringNotEqualErrorMessage" xml:space="preserve">
     <value>two string is not equal.</value>
   </data>

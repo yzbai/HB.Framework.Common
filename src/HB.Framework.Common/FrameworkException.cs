@@ -1,9 +1,5 @@
 ﻿#nullable enable
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace System
 {
@@ -32,6 +28,7 @@ namespace System
         Validation = 9,
         TCaptha = 10,
         Cache = 11,
+        Client = 12,
     }
 }
 

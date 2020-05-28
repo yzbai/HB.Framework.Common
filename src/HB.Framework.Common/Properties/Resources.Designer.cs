@@ -133,6 +133,15 @@ namespace HB.Framework.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to string can not be empty..
+        /// </summary>
+        internal static string StringCanNotBeEmpty {
+            get {
+                return ResourceManager.GetString("StringCanNotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to two string is not equal..
         /// </summary>
         internal static string StringNotEqualErrorMessage {

@@ -69,8 +69,8 @@ namespace System
         /// <param name="pwd"></param>
         /// <param name="salt"></param>
         /// <returns></returns>
-        /// <exception cref="System.Reflection.TargetInvocationException"></exception>
-        /// <exception cref="System.ObjectDisposedException"></exception>
+        /// <exception cref="System.Reflection.TargetInvocationException">Ignore.</exception>
+        /// <exception cref="System.ObjectDisposedException">Ignore.</exception>
         public static string EncryptPwdWithSalt(string pwd, string salt)
         {
             return GetHash(pwd + salt);

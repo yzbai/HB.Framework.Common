@@ -75,7 +75,6 @@ namespace System
         /// <param name="dict"></param>
         /// <param name="paramName"></param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.ArgumentException"></exception>
         [return: NotNull]
         public static IDictionary<TKey, TValue> NullOrEmpty<TKey, TValue>([ValidatedNotNull] IDictionary<TKey, TValue>? dict, string paramName)
@@ -94,7 +93,6 @@ namespace System
         /// <param name="lst"></param>
         /// <param name="paramName"></param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.ArgumentException"></exception>
         [return: NotNull]
         public static IEnumerable<T> NullOrEmpty<T>([ValidatedNotNull] IEnumerable<T>? lst, string paramName)
@@ -125,12 +123,28 @@ namespace System
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        public static string Empty(string str, string paramName)
+        {
+            if (str.Length == 0)
+            {
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.StringCanNotBeEmpty, paramName);
+            }
+
+            return str;
+        }
+
+        /// <summary>
         /// AnyNull
         /// </summary>
         /// <param name="lst"></param>
         /// <param name="paramName"></param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.ArgumentException"></exception>
         [return: NotNull]
         public static IEnumerable<T> AnyNull<T>([ValidatedNotNull] IEnumerable<T>? lst, string paramName)
@@ -321,7 +335,6 @@ namespace System
         /// <param name="dict"></param>
         /// <param name="paramName"></param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.ArgumentException"></exception>
         [return: NotNull]
         public static IDictionary<TKey, TValue> ThrowIfNullOrEmpty<TKey, TValue>([ValidatedNotNull] this IDictionary<TKey, TValue>? dict, string paramName)
@@ -340,7 +353,6 @@ namespace System
         /// <param name="lst"></param>
         /// <param name="paramName"></param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.ArgumentException"></exception>
         [return: NotNull]
         public static IEnumerable<T> ThrowIfNullOrEmpty<T>([ValidatedNotNull] this IEnumerable<T>? lst, string paramName)
