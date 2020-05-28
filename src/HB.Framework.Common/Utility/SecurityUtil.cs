@@ -1,9 +1,10 @@
 ﻿#nullable enable
 
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
-using System.Globalization;
-using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace System
 {
@@ -54,10 +55,10 @@ namespace System
         /// <exception cref="System.ObjectDisposedException"></exception>
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         /// <exception cref="System.Security.SecurityException"></exception>
-        public static string GetHash<T>([DisallowNull]T item)
+        public static async Task<string> GetHashAsync<T>([DisallowNull] T item) where T : class
         {
             using SHA256 sha256Obj = SHA256.Create();
-            byte[] result = sha256Obj.ComputeHash(SerializeUtil.Pack(item));
+            byte[] result = sha256Obj.ComputeHash(await SerializeUtil.PackAsync(item).ConfigureAwait(false));
 
             return Convert.ToBase64String(result);
         }
@@ -119,7 +120,7 @@ namespace System
 
         public static byte[] HexToByteArray(string hexString)
         {
-            byte[] bytes = new byte[hexString.ThrowIfNull(nameof(hexString)).Length / 2];
+            byte[] bytes = new byte[hexString.Length / 2];
 
             for (int i = 0; i < hexString.Length; i += 2)
             {

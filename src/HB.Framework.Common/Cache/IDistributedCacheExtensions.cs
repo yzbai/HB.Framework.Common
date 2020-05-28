@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using HB.Framework.Common.Cache;
 using System;
 using System.Threading.Tasks;
 
@@ -9,56 +10,89 @@ namespace Microsoft.Extensions.Caching.Distributed
     {
         #region Generic
 
-        public static void Set<T>(this IDistributedCache cache, string key, T value, DistributedCacheEntryOptions options) where T : class
+        /// <summary>
+        /// SetAsync
+        /// </summary>
+        /// <param name="cache"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        /// <exception cref="HB.Framework.Common.Cache.CacheException"></exception>
+        public static async Task SetAsync<T>(this IDistributedCache cache, string key, T value, DistributedCacheEntryOptions options) where T : class
         {
-            ThrowIf.Null(cache, nameof(cache));
-            ThrowIf.NullOrEmpty(key, nameof(key));
+            try
+            {
+                byte[] bytes = await SerializeUtil.PackAsync(value).ConfigureAwait(false);
 
-            cache.Set(key, SerializeUtil.Pack(value), options);
+                await cache.SetAsync(key, bytes, options).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new CacheException($"Cache SetAsync Error. Key:{key}, Value:{SerializeUtil.ToJson(value)}", ex);
+            }
         }
 
-        public static Task SetAsync<T>(this IDistributedCache cache, string key, T value, DistributedCacheEntryOptions options) where T : class
-        {
-            ThrowIf.Null(cache, nameof(cache));
-            ThrowIf.NullOrEmpty(key, nameof(key));
-
-            return cache.SetAsync(key, SerializeUtil.Pack(value), options);
-        }
-
-        public static T? Get<T>(this IDistributedCache cache, string key) where T : class
-        {
-            ThrowIf.Null(cache, nameof(cache));
-            ThrowIf.NullOrEmpty(key, nameof(key));
-
-            byte[] bytes = cache.Get(key);
-            return SerializeUtil.UnPack<T>(bytes);
-        }
-
+        /// <summary>
+        /// GetAsync
+        /// </summary>
+        /// <param name="cache"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        /// <exception cref="HB.Framework.Common.Cache.CacheException"></exception>
         public static async Task<T?> GetAsync<T>(this IDistributedCache cache, string key) where T : class
         {
-            ThrowIf.Null(cache, nameof(cache));
-            ThrowIf.NullOrEmpty(key, nameof(key));
-
-            byte[] bytes = await cache.GetAsync(key).ConfigureAwait(false);
-            return SerializeUtil.UnPack<T>(bytes);
+            try
+            {
+                byte[] bytes = await cache.GetAsync(key).ConfigureAwait(false);
+                return await SerializeUtil.UnPackAsync<T>(bytes).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new CacheException($"Cache GetAsync Error. Key:{key}", ex);
+            }
         }
 
-        public static void SetInt(this IDistributedCache cache, string key, int value, DistributedCacheEntryOptions options)
+        /// <summary>
+        /// SetIntAsync
+        /// </summary>
+        /// <param name="cache"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="options"></param>
+        /// <returns></returns>
+        /// <exception cref="CacheException"></exception>
+        public static async Task SetIntAsync(this IDistributedCache cache, string key, int value, DistributedCacheEntryOptions options)
         {
-            ThrowIf.Null(cache, nameof(cache));
-            ThrowIf.NullOrEmpty(key, nameof(key));
-
-            cache.SetString(key, Convert.ToString(value, GlobalSettings.Culture), options);
+            try
+            {
+                await cache.SetStringAsync(key, Convert.ToString(value, GlobalSettings.Culture), options).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new CacheException($"Cache SetIntAsync Error. Key:{key}, Value:{value}", ex);
+            }
         }
 
-        public static int? GetInt(this IDistributedCache cache, string key)
+        /// <summary>
+        /// GetIntAsync
+        /// </summary>
+        /// <param name="cache"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        /// <exception cref="CacheException"></exception>
+        public static async Task<int> GetIntAsync(this IDistributedCache cache, string key)
         {
-            ThrowIf.Null(cache, nameof(cache));
-            ThrowIf.NullOrEmpty(key, nameof(key));
+            try
+            {
+                string value = await cache.GetStringAsync(key).ConfigureAwait(false);
 
-            string value = cache.GetString(key);
-
-            return Convert.ToInt32(value, GlobalSettings.Culture);
+                return value.ToInt32();
+            }
+            catch (Exception ex)
+            {
+                throw new CacheException($"Cache GetIntAsync Error. Key:{key}", ex);
+            }
         }
 
         /// <summary>
@@ -67,20 +101,25 @@ namespace Microsoft.Extensions.Caching.Distributed
         /// <param name="cache"></param>
         /// <param name="key"></param>
         /// <returns>true:存在; false: 不存在</returns>
+        /// <exception cref="CacheException"></exception>
         public static async Task<bool> IsExistThenRemoveAsync(this IDistributedCache cache, string key)
         {
-            ThrowIf.Null(cache, nameof(cache));
-            ThrowIf.NullOrEmpty(key, nameof(key));
-
-            byte[] result = await cache.GetAsync(key).ConfigureAwait(false);
-
-            if (result != null && result.Length > 0)
+            try
             {
-                await cache.RemoveAsync(key).ConfigureAwait(false);
-                return true;
-            }
+                byte[] result = await cache.GetAsync(key).ConfigureAwait(false);
 
-            return false;
+                if (result != null && result.Length > 0)
+                {
+                    await cache.RemoveAsync(key).ConfigureAwait(false);
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new CacheException($"Cache IsExistThenRemoveAsync Error. Key:{key}", ex);
+            }
         }
 
         #endregion

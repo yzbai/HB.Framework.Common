@@ -5,14 +5,20 @@ using HB.Framework.Common.Validate;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 
 namespace System
 {
     public static class ThrowIf
     {
-        [return:NotNull]
-        public static T Null<T>([ValidatedNotNull]T? o, string paramName) where T : class
+        /// <summary>
+        /// Null
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        [return: NotNull]
+        public static T Null<T>([ValidatedNotNull] T? o, string paramName) where T : class
         {
             if (o == null)
                 throw new ArgumentNullException(paramName);
@@ -20,15 +26,15 @@ namespace System
             return o;
         }
 
+        /// <summary>
+        /// NotValid
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
         /// <exception cref="ValidateErrorException"></exception>
-        [return:NotNull]
-        public static T NullOrNotValid<T>([ValidatedNotNull]T? o, string paramName) where T : ValidatableObject
+        [return: NotNull]
+        public static T NotValid<T>(T o) where T : ValidatableObject
         {
-            if (o == null)
-            {
-                throw new ArgumentNullException(paramName);
-            }
-
             if (!o.IsValid())
             {
                 throw new ValidateErrorException(o);
@@ -37,34 +43,42 @@ namespace System
             return o;
         }
 
-        /// <exception cref="ValidateErrorException"></exception>
-        [return:NotNull]
-        public static IEnumerable<T> NullOrNotValid<T>([ValidatedNotNull]IEnumerable<T>? ts, string paramName) where T : ValidatableObject
+        /// <summary>
+        /// NotValid
+        /// </summary>
+        /// <param name="ts"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="HB.Framework.Common.ValidateErrorException"></exception>
+        [return: NotNull]
+        public static IEnumerable<T> NotValid<T>([ValidatedNotNull] IEnumerable<T> ts) where T : ValidatableObject
         {
-            if (ts == null)
-            {
-                throw new ArgumentNullException(paramName);
-            }
-
             if (ts.Any())
             {
                 ts.ForEach(t =>
                 {
-                    if (t != null)
+
+                    if (!t.IsValid())
                     {
-                        if (!t.IsValid())
-                        {
-                            throw new ValidateErrorException(t);
-                        }
+                        throw new ValidateErrorException(t);
                     }
+
                 });
             }
 
             return ts;
         }
 
-        [return:NotNull]
-        public static IDictionary<TKey, TValue> NullOrEmpty<TKey, TValue>([ValidatedNotNull]IDictionary<TKey, TValue>? dict, string paramName)
+        /// <summary>
+        /// NullOrEmpty
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: NotNull]
+        public static IDictionary<TKey, TValue> NullOrEmpty<TKey, TValue>([ValidatedNotNull] IDictionary<TKey, TValue>? dict, string paramName)
         {
             if (dict == null || !dict.Any())
             {
@@ -74,8 +88,16 @@ namespace System
             return dict;
         }
 
-        [return:NotNull]
-        public static IEnumerable<T> NullOrEmpty<T>([ValidatedNotNull]IEnumerable<T>? lst, string paramName)
+        /// <summary>
+        /// NullOrEmpty
+        /// </summary>
+        /// <param name="lst"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: NotNull]
+        public static IEnumerable<T> NullOrEmpty<T>([ValidatedNotNull] IEnumerable<T>? lst, string paramName)
         {
             if (lst == null || !lst.Any())
             {
@@ -85,8 +107,33 @@ namespace System
             return lst;
         }
 
-        [return:NotNull]
-        public static IEnumerable<T> AnyNull<T>([ValidatedNotNull]IEnumerable<T>? lst, string paramName)
+        /// <summary>
+        /// Empty
+        /// </summary>
+        /// <param name="lst"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        public static IEnumerable<T> Empty<T>(IEnumerable<T> lst, string paramName)
+        {
+            if (!lst.Any())
+            {
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.CollectionNullOrEmptyErrorMessage, paramName);
+            }
+
+            return lst;
+        }
+
+        /// <summary>
+        /// AnyNull
+        /// </summary>
+        /// <param name="lst"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: NotNull]
+        public static IEnumerable<T> AnyNull<T>([ValidatedNotNull] IEnumerable<T>? lst, string paramName)
         {
             if (lst == null || lst.Any(t => t == null))
             {
@@ -97,8 +144,15 @@ namespace System
         }
 
 
-        [return:NotNull]
-        public static string NullOrEmpty([ValidatedNotNull]string? o, string paramName)
+        /// <summary>
+        /// NullOrEmpty
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: NotNull]
+        public static string NullOrEmpty([ValidatedNotNull] string? o, string paramName)
         {
             if (string.IsNullOrEmpty(o))
             {
@@ -108,8 +162,15 @@ namespace System
             return o;
         }
 
-        [return:NotNull]
-        public static string NullOrNotMobile([ValidatedNotNull]string? mobile, string paramName)
+        /// <summary>
+        /// NullOrNotMobile
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: NotNull]
+        public static string NullOrNotMobile([ValidatedNotNull] string? mobile, string paramName)
         {
             if (!ValidationMethods.IsMobilePhone(mobile))
             {
@@ -119,7 +180,15 @@ namespace System
             return mobile;
         }
 
-        public static string? NotPassword([ValidatedNotNull]string? password, string paramName, bool canBeNull)
+        /// <summary>
+        /// NotPassword
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="paramName"></param>
+        /// <param name="canBeNull"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        public static string? NotPassword([ValidatedNotNull] string? password, string paramName, bool canBeNull)
         {
             if (canBeNull && password == null)
             {
@@ -134,8 +203,15 @@ namespace System
             return password;
         }
 
-        [return:NotNull]
-        public static string NullOrNotUserName([ValidatedNotNull]string? userName, string paramName)
+        /// <summary>
+        /// NullOrNotUserName
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: NotNull]
+        public static string NullOrNotUserName([ValidatedNotNull] string? userName, string paramName)
         {
             if (!ValidationMethods.IsUserName(userName))
             {
@@ -145,8 +221,15 @@ namespace System
             return userName;
         }
 
-        [return:NotNull]
-        public static string NullOrNotEmail([ValidatedNotNull]string? email, string paramName)
+        /// <summary>
+        /// NullOrNotEmail
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: NotNull]
+        public static string NullOrNotEmail([ValidatedNotNull] string? email, string paramName)
         {
             if (!ValidationMethods.IsEmail(email))
             {
@@ -157,7 +240,15 @@ namespace System
         }
 
 
-        [return:MaybeNull]
+        /// <summary>
+        /// NotEqual
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: MaybeNull]
         public static string? NotEqual(string? a, string? b, string paramName)
         {
             if (a == null && b != null || a != null && !a.Equals(b, GlobalSettings.Comparison))
@@ -170,7 +261,14 @@ namespace System
     }
     public static class ThrowIfExtensions
     {
-        public static T ThrowIfNull<T>([ValidatedNotNull]this T? o, string paramName) where T : class
+        /// <summary>
+        /// ThrowIfNull
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        public static T ThrowIfNull<T>([ValidatedNotNull] this T? o, string paramName) where T : class
         {
             if (o == null)
                 throw new ArgumentNullException(paramName);
@@ -178,7 +276,15 @@ namespace System
             return o;
         }
 
-        public static T ThrowIfNullOrNotValid<T>([ValidatedNotNull]this T? o, string paramName) where T : class, ISupportValidate
+        /// <summary>
+        /// ThrowIfNullOrNotValid
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="HB.Framework.Common.ValidateErrorException"></exception>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        public static T ThrowIfNullOrNotValid<T>([ValidatedNotNull] this T? o, string paramName) where T : class, ISupportValidate
         {
             if (o == null)
                 throw new ArgumentNullException(paramName);
@@ -191,8 +297,15 @@ namespace System
             return o;
         }
 
-        [return:NotNull]
-        public static string ThrowIfNullOrEmpty([ValidatedNotNull]this string? o, string paramName)
+        /// <summary>
+        /// ThrowIfNullOrEmpty
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: NotNull]
+        public static string ThrowIfNullOrEmpty([ValidatedNotNull] this string? o, string paramName)
         {
             if (string.IsNullOrEmpty(o))
             {
@@ -202,8 +315,16 @@ namespace System
             return o;
         }
 
-        [return:NotNull]
-        public static IDictionary<TKey, TValue> ThrowIfNullOrEmpty<TKey, TValue>([ValidatedNotNull]this IDictionary<TKey, TValue>? dict, string paramName)
+        /// <summary>
+        /// ThrowIfNullOrEmpty
+        /// </summary>
+        /// <param name="dict"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: NotNull]
+        public static IDictionary<TKey, TValue> ThrowIfNullOrEmpty<TKey, TValue>([ValidatedNotNull] this IDictionary<TKey, TValue>? dict, string paramName)
         {
             if (dict == null || !dict.Any())
             {
@@ -213,8 +334,16 @@ namespace System
             return dict;
         }
 
-        [return:NotNull]
-        public static IEnumerable<T> ThrowIfNullOrEmpty<T>([ValidatedNotNull]this IEnumerable<T>? lst, string paramName)
+        /// <summary>
+        /// ThrowIfNullOrEmpty
+        /// </summary>
+        /// <param name="lst"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: NotNull]
+        public static IEnumerable<T> ThrowIfNullOrEmpty<T>([ValidatedNotNull] this IEnumerable<T>? lst, string paramName)
         {
             if (lst == null || !lst.Any())
             {
@@ -225,7 +354,15 @@ namespace System
         }
 
 
-        [return:MaybeNull]
+        /// <summary>
+        /// ThrowIfNotEqual
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException"></exception>
+        [return: MaybeNull]
         public static string? ThrowIfNotEqual(this string? a, string? b, string paramName)
         {
             if (a == null && b != null || a != null && !a.Equals(b, GlobalSettings.Comparison))

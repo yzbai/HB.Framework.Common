@@ -1,10 +1,8 @@
 ﻿#nullable enable
 
 using MsgPack.Serialization;
-using System;
 using System.Buffers;
 using System.Buffers.Text;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -28,8 +26,6 @@ namespace System
 
         public static string ToJson(object entity)
         {
-            ThrowIf.Null(entity, nameof(entity));
-
             return JsonSerializer.Serialize(entity, _jsonSerializerOptions);
         }
 
@@ -46,6 +42,7 @@ namespace System
         /// <param name="responseStream"></param>
         /// <returns></returns>
         /// <exception cref="JsonException"></exception>
+        /// <exception cref="System.ArgumentNullException">Ignore.</exception>
         public static async Task<object> FromJsonAsync(Type dataType, Stream responseStream)
         {
             return await JsonSerializer.DeserializeAsync(responseStream, dataType, _jsonSerializerOptions).ConfigureAwait(false);
@@ -63,6 +60,7 @@ namespace System
         /// <param name="jsonString"></param>
         /// <returns></returns>
         /// <exception cref="JsonException"></exception>
+        /// <exception cref="System.ArgumentNullException">Ignore.</exception>
         public static object? FromJson(Type type, string jsonString)
         {
             if (jsonString.IsNullOrEmpty())
@@ -82,6 +80,7 @@ namespace System
         /// <exception cref="JsonException"></exception>
         /// <exception cref="System.InvalidOperationException"></exception>
         /// <exception cref="System.ObjectDisposedException"></exception>
+        /// <exception cref="System.ArgumentException">Ignore.</exception>
         public static string? FromJson(string jsonString, string name)
         {
             JsonDocument jsonDocument = JsonDocument.Parse(jsonString);
@@ -107,13 +106,12 @@ namespace System
         /// </summary>
         /// <param name="thing"></param>
         /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         /// <exception cref="System.Security.SecurityException"></exception>
         [Obsolete("Do not use BinaryFormatter, for reason https://blog.marcgravell.com/2020/03/why-do-i-rag-on-binaryformatter.html", true)]
         public static byte[] ToBytes(object thing)
         {
-            ThrowIf.Null(thing, nameof(thing));
-
             BinaryFormatter binaryFormatter = new BinaryFormatter();
 
             using MemoryStream memoryStream = new MemoryStream();
@@ -128,6 +126,9 @@ namespace System
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException"></exception>
+        /// <exception cref="System.ArgumentException"></exception>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         /// <exception cref="IOException"></exception>
         /// <exception cref="System.ObjectDisposedException"></exception>
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
@@ -155,19 +156,16 @@ namespace System
         #region MsgPack Serialize
 
         /// <summary>
-        /// Pack
+        /// PackAsync
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
-        public static byte[] Pack<T>([DisallowNull]T t)
+        public static async Task<byte[]> PackAsync<T>([DisallowNull] T t) where T : class
         {
             MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>();
-            using MemoryStream stream = new MemoryStream();
 
-            serializer.Pack(stream, t);
-
-            return stream.ToArray();
+            return await serializer.PackSingleObjectAsync(t).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -178,18 +176,17 @@ namespace System
         /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
         /// <exception cref="MsgPack.MessageTypeException"></exception>
         /// <exception cref="MsgPack.InvalidMessagePackStreamException"></exception>
-        [return: MaybeNull]
-        public static T UnPack<T>(byte[]? bytes)
+        /// <exception cref="System.ArgumentNullException">Ignore.</exception>
+        public static async Task<T?> UnPackAsync<T>(byte[]? bytes) where T : class
         {
             if (bytes.IsNullOrEmpty())
             {
-                return default;
+                return null;
             }
 
             MessagePackSerializer<T> serializer = MessagePackSerializer.Get<T>();
-            using MemoryStream stream = new MemoryStream(bytes);
 
-            return serializer.Unpack(stream);
+            return await serializer.UnpackSingleObjectAsync(bytes).ConfigureAwait(false);
         }
 
         #endregion
@@ -237,10 +234,9 @@ namespace System
         /// <param name="writer"></param>
         /// <param name="value"></param>
         /// <param name="options"></param>
+        /// <exception cref="System.ArgumentException">Ignore.</exception>
         public override void Write(Utf8JsonWriter writer, int value, JsonSerializerOptions options)
         {
-            ThrowIf.Null(writer, nameof(writer));
-
             try
             {
                 writer.WriteStringValue(value.ToString(GlobalSettings.Culture));
@@ -291,12 +287,11 @@ namespace System
         /// <param name="writer"></param>
         /// <param name="value"></param>
         /// <param name="options"></param>
+        /// <exception cref="System.ArgumentException">Ignore.</exception>
         public override void Write(Utf8JsonWriter writer, double value, JsonSerializerOptions options)
         {
             try
             {
-                ThrowIf.Null(writer, nameof(writer));
-
                 writer.WriteStringValue(value.ToString(GlobalSettings.Culture));
             }
             catch (InvalidOperationException) { }

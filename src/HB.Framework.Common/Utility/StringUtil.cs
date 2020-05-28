@@ -9,20 +9,40 @@ namespace System
     {
         #region String Encode to bytes
 
+        /// <summary>
+        /// GetUTF8Bytes
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">Ignore.</exception>
+        /// <exception cref="EncoderFallbackException">Ignore.</exception>
         public static byte[] GetUTF8Bytes(string item)
         {
             return Encoding.UTF8.GetBytes(item);
         }
 
+        /// <summary>
+        /// GetUTF8String
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentException">Ignore.</exception>
+        /// <exception cref="System.ArgumentNullException">Ignore.</exception>
+        /// <exception cref="DecoderFallbackException">Ignore.</exception>
         public static string GetUTF8String(byte[] item)
         {
             return Encoding.UTF8.GetString(item);
         }
 
+        /// <summary>
+        /// ToHexString
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">Ignore.</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">Ignore.</exception>
         public static string ToHexString(byte[] bytes)
         {
-            ThrowIf.Null(bytes, nameof(bytes));
-
             StringBuilder hex = new StringBuilder();
 
             foreach (byte b in bytes)
@@ -46,7 +66,7 @@ namespace System
             StringBuilder builder = new StringBuilder();
             bool added = false;
 
-            foreach (string str in ThrowIf.Null(list, nameof(list)))
+            foreach (string str in list)
             {
                 builder.Append(str);
                 builder.Append(_separator[0]);
@@ -159,7 +179,7 @@ namespace System
         /// <returns></returns>
         public static bool IsAllUpper(this string str)
         {
-            foreach (char c in str.ThrowIfNullOrEmpty(nameof(str)))
+            foreach (char c in str)
             {
                 if (!char.IsUpper(c))
                 {
@@ -177,7 +197,7 @@ namespace System
         /// <returns></returns>
         public static bool IsAllLower(this string str)
         {
-            foreach (char c in str.ThrowIfNullOrEmpty(nameof(str)))
+            foreach (char c in str)
             {
                 if (!char.IsLower(c))
                 {
@@ -188,12 +208,12 @@ namespace System
             return true;
         }
 
-        public static bool IsNullOrEmpty([ValidatedNotNull]this string? str)
+        public static bool IsNullOrEmpty([ValidatedNotNull] this string? str)
         {
             return string.IsNullOrEmpty(str);
         }
 
-        public static bool IsNotNullOrEmpty([ValidatedNotNull]this string? str)
+        public static bool IsNotNullOrEmpty([ValidatedNotNull] this string? str)
         {
             return !string.IsNullOrEmpty(str);
         }
@@ -206,9 +226,14 @@ namespace System
 
         public static string RemoveSuffix(this string str, string suffix)
         {
-            return str.ThrowIfNull(nameof(str)).EndsWith(suffix, GlobalSettings.Comparison) 
-                ? str.Substring(0, str.Length - suffix.ThrowIfNull(nameof(suffix)).Length) 
+            return str.EndsWith(suffix, GlobalSettings.Comparison)
+                ? str.Substring(0, str.Length - suffix.Length)
                 : str;
+        }
+
+        public static int ToInt32(this string str)
+        {
+            return Convert.ToInt32(str, GlobalSettings.Culture);
         }
 
         #endregion

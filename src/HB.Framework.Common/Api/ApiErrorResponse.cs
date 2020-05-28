@@ -1,7 +1,6 @@
 ﻿#nullable enable
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace HB.Framework.Common.Api
@@ -19,12 +18,15 @@ namespace HB.Framework.Common.Api
         public ApiErrorResponse(ApiError code, string? message = null)
         {
             Code = code;
-            Message = message??code.ToString();
+            Message = message ?? code.ToString();
         }
 
-        public ApiErrorResponse(ApiError code, IDictionary<string, IEnumerable<string>> modelStates) : this(code:code, message:null)
+        public ApiErrorResponse(ApiError code, IDictionary<string, IEnumerable<string>> modelStates) : this(code: code, message: null)
         {
-            ModelStates.Add(modelStates);
+            modelStates.ForEach(kv =>
+            {
+                ModelStates.Add(kv.Key, new List<string>(kv.Value));
+            });
         }
     }
 }

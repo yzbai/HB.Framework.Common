@@ -31,6 +31,7 @@ namespace System
         Identity = 8,
         Validation = 9,
         TCaptha = 10,
+        Cache = 11,
     }
 }
 

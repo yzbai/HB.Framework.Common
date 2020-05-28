@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -14,7 +13,7 @@ namespace System
     public class StringTagParser
     {
         private readonly string _matchPattern = @"(\[%\w+%\])";
-        private readonly Hashtable _tagCache = new Hashtable();       
+        private readonly Hashtable _tagCache = new Hashtable();
 
         public StringTagParser() { }
 
@@ -27,7 +26,7 @@ namespace System
 
         public void AddTags(IList<KeyValuePair<string, string>> tags)
         {
-            foreach (KeyValuePair<string, string> tag in tags.ThrowIfNull(nameof(tags)))
+            foreach (KeyValuePair<string, string> tag in tags)
             {
                 _tagCache.Add(tag.Key, tag.Value);
             }
@@ -60,6 +59,12 @@ namespace System
 
         #endregion
 
+        /// <summary>
+        /// Parse
+        /// </summary>
+        /// <param name="stringWithTag"></param>
+        /// <returns></returns>
+        /// <exception cref="RegexMatchTimeoutException"></exception>
         public string Parse(string stringWithTag)
         {
             MatchEvaluator replaceCallback = new MatchEvaluator(ReplaceTagHandler);

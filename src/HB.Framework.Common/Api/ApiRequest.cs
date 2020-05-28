@@ -27,11 +27,11 @@ namespace HB.Framework.Common.Api
 
         public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string? condition = null)
         {
-            _productType = productType.ThrowIfNullOrEmpty(nameof(productType));
-            _apiVersion = apiVersion.ThrowIfNullOrEmpty(nameof(apiVersion));
-            _httpMethod = httpMethod.ThrowIfNull(nameof(httpMethod));
+            _productType = productType;
+            _apiVersion = apiVersion;
+            _httpMethod = httpMethod;
             _needAuthenticate = needAuthenticate;
-            _resourceName = resourceName.ThrowIfNullOrEmpty(nameof(resourceName));
+            _resourceName = resourceName;
             _condition = condition;
         }
 
@@ -70,6 +70,12 @@ namespace HB.Framework.Common.Api
             return _parameters;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddParameter(string name, string value)
         {
             if (_parameters.ContainsKey(name))
@@ -85,6 +91,7 @@ namespace HB.Framework.Common.Api
             return _headers;
         }
 
+        /// <exception cref="System.ArgumentException"></exception>
         public void AddHeader(string name, string value)
         {
             if (_headers.ContainsKey(name))

@@ -12,6 +12,8 @@ namespace System
         /// <summary>
         /// ctor
         /// </summary>
+        /// <exception cref="System.InvalidCastException">Ignore.</exception>
+        /// <exception cref="System.Runtime.Serialization.SerializationException">Ignore.</exception>
         static ValueConverterUtil()
         {
             #region type to type
@@ -31,7 +33,7 @@ namespace System
             _convertFunDict[typeof(string)] = o => { return Convert.ToString(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(char)] = o => { return Convert.ToChar(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(Guid)] = o => { return Guid.Parse(o.ToString()); };
-            _convertFunDict[typeof(DateTime)] = o => { return DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat,GlobalSettings.Culture); };
+            _convertFunDict[typeof(DateTime)] = o => { return DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat, GlobalSettings.Culture); };
             _convertFunDict[typeof(DateTimeOffset)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat, GlobalSettings.Culture), DateTimeKind.Utc); };
             _convertFunDict[typeof(TimeSpan)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
 
@@ -53,7 +55,7 @@ namespace System
             _convertFunDict[typeof(DateTimeOffset?)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat, GlobalSettings.Culture), DateTimeKind.Utc); };
             _convertFunDict[typeof(TimeSpan?)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
 
-            _convertFunDict[typeof(byte[])] = o => { return SerializeUtil.Pack(o); };
+            _convertFunDict[typeof(byte[])] = o => { return SerializeUtil.PackAsync(o); };
             _convertFunDict[typeof(object)] = o => { return o ?? null; };
             _convertFunDict[typeof(DBNull)] = o => { return DBNull.Value; };
 
@@ -69,9 +71,6 @@ namespace System
         /// <param name="dbValue">Db value.</param>
         public static object? DbValueToTypeValue(object dbValue, Type targetType)
         {
-            ThrowIf.Null(dbValue, nameof(dbValue));
-            ThrowIf.Null(targetType, nameof(targetType));
-
             if (dbValue.GetType() == typeof(DBNull))
             {
                 //return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
@@ -102,7 +101,9 @@ namespace System
         /// </summary>
         /// <returns>The value to db value.</returns>
         /// <param name="value">Value.</param>
-        [return:NotNullIfNotNull("value")]
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
+        [return: NotNullIfNotNull("value")]
         public static string? TypeValueToStringValue(object? value)
         {
             if (value == null)
@@ -123,10 +124,10 @@ namespace System
                 Enum e => e.ToString(),
                 DBNull _ => null,
                 DateTime dt => dt.ToString(GlobalSettings.DateTimeFormat, GlobalSettings.Culture),
-                DateTimeOffset dt=>dt.ToString(GlobalSettings.DateTimeFormat, GlobalSettings.Culture),
-                bool b=> b?"1":"0",
-                IList<string> lst=> StringUtil.ListToString(lst),
-                IDictionary<string, string> dict=>StringUtil.DictionaryToString(dict),
+                DateTimeOffset dt => dt.ToString(GlobalSettings.DateTimeFormat, GlobalSettings.Culture),
+                bool b => b ? "1" : "0",
+                IList<string> lst => StringUtil.ListToString(lst),
+                IDictionary<string, string> dict => StringUtil.DictionaryToString(dict),
                 _ => value.ToString()
             };
         }

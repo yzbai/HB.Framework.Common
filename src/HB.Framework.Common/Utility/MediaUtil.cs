@@ -356,9 +356,15 @@ namespace System
             #endregion
         }
 
+        /// <summary>
+        /// GetFileTypeByMediaType
+        /// </summary>
+        /// <param name="mediaType"></param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">Ignore.</exception>
         public static string? GetFileTypeByMediaType(string mediaType)
         {
-            string mType = mediaType.ThrowIfNullOrEmpty(nameof(mediaType)).ToLower(GlobalSettings.Culture);
+            string mType = mediaType.ToLower(GlobalSettings.Culture);
 
             if (_mediaType2FileTypeDict.ContainsKey(mType))
             {
