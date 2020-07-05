@@ -33,8 +33,8 @@ namespace System
             _convertFunDict[typeof(string)] = o => { return Convert.ToString(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(char)] = o => { return Convert.ToChar(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(Guid)] = o => { return Guid.Parse(o.ToString()); };
-            _convertFunDict[typeof(DateTime)] = o => { return DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat, GlobalSettings.Culture); };
-            _convertFunDict[typeof(DateTimeOffset)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat, GlobalSettings.Culture), DateTimeKind.Utc); };
+            _convertFunDict[typeof(DateTime)] = o => { return DateTime.Parse(o.ToString(), GlobalSettings.Culture); };
+            _convertFunDict[typeof(DateTimeOffset)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(DateTime.Parse(o.ToString(), GlobalSettings.Culture), DateTimeKind.Utc); };
             _convertFunDict[typeof(TimeSpan)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
 
             _convertFunDict[typeof(byte?)] = o => { return Convert.ToByte(o, GlobalSettings.Culture); };
@@ -51,8 +51,8 @@ namespace System
             _convertFunDict[typeof(bool?)] = o => { return Convert.ToBoolean(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(char?)] = o => { return Convert.ToChar(o, GlobalSettings.Culture); };
             _convertFunDict[typeof(Guid?)] = o => { return Guid.Parse(o.ToString()); };
-            _convertFunDict[typeof(DateTime?)] = o => { return o == null ? null : new DateTime?(DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat, GlobalSettings.Culture)); };
-            _convertFunDict[typeof(DateTimeOffset?)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(DateTime.ParseExact(o.ToString(), GlobalSettings.DateTimeFormat, GlobalSettings.Culture), DateTimeKind.Utc); };
+            _convertFunDict[typeof(DateTime?)] = o => { return o == null ? null : new DateTime?(DateTime.Parse(o.ToString(), GlobalSettings.Culture)); };
+            _convertFunDict[typeof(DateTimeOffset?)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(DateTime.Parse(o.ToString(), GlobalSettings.Culture), DateTimeKind.Utc); };
             _convertFunDict[typeof(TimeSpan?)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
 
             _convertFunDict[typeof(byte[])] = o => { return SerializeUtil.PackAsync(o); };
