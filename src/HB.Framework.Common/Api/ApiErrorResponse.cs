@@ -13,7 +13,7 @@ namespace HB.Framework.Common.Api
 
         public IDictionary<string, IEnumerable<string>> ModelStates { get; private set; } = new Dictionary<string, IEnumerable<string>>();
 
-        private ApiErrorResponse() { }
+        public ApiErrorResponse() { }
 
         public ApiErrorResponse(ApiError code, string? message = null)
         {

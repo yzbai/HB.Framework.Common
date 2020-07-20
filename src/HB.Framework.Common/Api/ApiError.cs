@@ -29,6 +29,8 @@ namespace HB.Framework.Common.Api
         ApiInternalError = 30,
         APIFAILED = 31,
         EndpointNotFound = 32,
+        HTTPSREQUIRED = 33,
+        DEVELOPMENTONLY = 34,
     }
 
     public static class ErrorCodeExtensions

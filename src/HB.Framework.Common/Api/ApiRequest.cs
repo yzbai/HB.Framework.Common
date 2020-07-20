@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
 
 namespace HB.Framework.Common.Api
@@ -18,12 +19,33 @@ namespace HB.Framework.Common.Api
         private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
         private readonly IDictionary<string, string> _parameters = new Dictionary<string, string>();
 
-        //[Required]
-        //public string DeviceId
-        //{
-        //    get { return GetParameter(MobileInfoNames.DeviceId); }
-        //    set { SetParameter(MobileInfoNames.DeviceId, value); }
-        //}
+        [Required]
+        public string DeviceId
+        {
+            get { return GetParameter(nameof(DeviceId))!; }
+            set { SetParameter(nameof(DeviceId), value); }
+        }
+
+        [Required]
+        public string DeviceType
+        {
+            get { return GetParameter(nameof(DeviceType))!; }
+            set { SetParameter(nameof(DeviceType), value); }
+        }
+
+        [Required]
+        public string DeviceVersion
+        {
+            get { return GetParameter(nameof(DeviceVersion))!; }
+            set { SetParameter(nameof(DeviceVersion), value); }
+        }
+
+        [Required]
+        public string DeviceAddress
+        {
+            get { return GetParameter(nameof(DeviceAddress))!; }
+            set { SetParameter(nameof(DeviceAddress), value); }
+        }
 
         public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string? condition = null)
         {

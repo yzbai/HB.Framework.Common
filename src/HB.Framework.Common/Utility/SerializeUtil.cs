@@ -22,6 +22,7 @@ namespace System
         {
             _jsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
             _jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(null, false));
+            _jsonSerializerOptions.PropertyNameCaseInsensitive = true;
         }
 
         public static string ToJson(object entity)
