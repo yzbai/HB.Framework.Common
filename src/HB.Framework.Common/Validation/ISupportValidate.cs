@@ -18,8 +18,10 @@ namespace HB.Framework.Common
         /// <summary>
         /// 获取验证结果。用foeach
         /// </summary>
-        IList<ValidationResult> GetValidateResults();
+        IList<ValidationResult> GetValidateResults(bool rePerformValidate = false);
 
         string GetValidateErrorMessage();
+
+        bool PerformValidate(string? propertyName = null);
     }
 }

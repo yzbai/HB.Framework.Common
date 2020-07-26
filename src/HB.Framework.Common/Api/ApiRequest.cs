@@ -22,29 +22,43 @@ namespace HB.Framework.Common.Api
         [Required]
         public string DeviceId
         {
-            get { return GetParameter(nameof(DeviceId))!; }
-            set { SetParameter(nameof(DeviceId), value); }
+            get { return GetParameter(ClientNames.DeviceId)!; }
+            set { SetParameter(ClientNames.DeviceId, value); }
         }
 
         [Required]
         public string DeviceType
         {
-            get { return GetParameter(nameof(DeviceType))!; }
-            set { SetParameter(nameof(DeviceType), value); }
+            get { return GetParameter(ClientNames.DeviceType)!; }
+            set { SetParameter(ClientNames.DeviceType, value); }
         }
 
         [Required]
         public string DeviceVersion
         {
-            get { return GetParameter(nameof(DeviceVersion))!; }
-            set { SetParameter(nameof(DeviceVersion), value); }
+            get { return GetParameter(ClientNames.DeviceVersion)!; }
+            set { SetParameter(ClientNames.DeviceVersion, value); }
+        }
+
+        //[Required]
+        //public string DeviceAddress
+        //{
+        //    get { return GetParameter(ClientNames.DeviceAddress)!; }
+        //    set { SetParameter(ClientNames.DeviceAddress, value); }
+        //}
+
+        [Required]
+        public string RandomStr
+        {
+            get { return GetParameter(ClientNames.RandomStr)!; }
+            set { SetParameter(ClientNames.RandomStr, value); }
         }
 
         [Required]
-        public string DeviceAddress
+        public string Timestamp
         {
-            get { return GetParameter(nameof(DeviceAddress))!; }
-            set { SetParameter(nameof(DeviceAddress), value); }
+            get { return GetParameter(ClientNames.Timestamp)!; }
+            set { SetParameter(ClientNames.Timestamp, value); }
         }
 
         public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string? condition = null)
@@ -55,6 +69,9 @@ namespace HB.Framework.Common.Api
             _needAuthenticate = needAuthenticate;
             _resourceName = resourceName;
             _condition = condition;
+
+            RandomStr = SecurityUtil.CreateRandomString(6);
+            Timestamp = SecurityUtil.GetCurrentTimestamp().ToString(GlobalSettings.Culture);
         }
 
         public string GetProductType()

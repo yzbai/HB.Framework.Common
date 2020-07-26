@@ -4,13 +4,17 @@ namespace System
 {
     public static class ClientNames
     {
-        public const string AccessToken = "AccessToken";
-        public const string RefreshToken = "RefreshToken";
-        public const string CurrentUserGuid = "CurrentUserGuid";
+        public const string AccessToken = nameof(AccessToken);
+        public const string RefreshToken = nameof(RefreshToken);
+        public const string CurrentUserGuid = nameof(CurrentUserGuid);
 
-        public const string DeviceId = "DeviceId";
-        public const string DeviceVersion = "DeviceVersion";
-        public const string DeviceType = "DeviceType";
-        public const string DeviceAddress = "DeviceAddress";
+        public const string DeviceId = nameof(DeviceId);
+        public const string DeviceVersion = nameof(DeviceVersion);
+        public const string DeviceType = nameof(DeviceType);
+        public const string DeviceAddress = nameof(DeviceAddress);
+
+        public const string RandomStr = nameof(RandomStr);
+
+        public const string Timestamp = nameof(Timestamp);
     }
 }

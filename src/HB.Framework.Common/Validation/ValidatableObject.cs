@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -16,15 +17,16 @@ namespace HB.Framework.Common
         #region Validation
 
         private IList<ValidationResult>? _validateResults;
+        private ValidationContext? _validationContext;
 
         public bool IsValid()
         {
             return PerformValidate();
         }
 
-        public IList<ValidationResult> GetValidateResults()
+        public IList<ValidationResult> GetValidateResults(bool rePerformValidate = false)
         {
-            if (_validateResults == null)
+            if (_validateResults == null || rePerformValidate)
             {
                 PerformValidate();
             }
@@ -48,11 +50,45 @@ namespace HB.Framework.Common
             return builder.ToString();
         }
 
-        private bool PerformValidate()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
+        public bool PerformValidate(string? propertyName = null)
         {
-            _validateResults = new List<ValidationResult>();
-            ValidationContext vContext = new ValidationContext(this);
-            return Validator.TryValidateObject(this, vContext, _validateResults, true);
+            try
+            {
+                _validateResults = new List<ValidationResult>();
+
+                if (_validationContext == null)
+                {
+                    _validationContext = new ValidationContext(this);
+                }
+
+                if (!string.IsNullOrEmpty(propertyName))
+                {
+                    _validationContext.MemberName = propertyName;
+
+                    object propertyValue = this.GetType().GetProperty(propertyName).GetValue(this);
+
+                    return Validator.TryValidateProperty(propertyValue, _validationContext, _validateResults);
+                }
+                else
+                {
+                    bool result = Validator.TryValidateObject(this, _validationContext, _validateResults, true);
+
+                    return result;
+                }
+            }
+            catch (ArgumentNullException)
+            {
+                return false;
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         #endregion

@@ -20,7 +20,7 @@ namespace HB.Framework.Common.Api
 
         public string? Message { get; private set; }
 
-        public ApiError ErrCode { get; private set; } = ApiError.FAILED;
+        public ApiError ErrCode { get; private set; } = ApiError.OK;
 
         public T? Data { get; set; }
 
