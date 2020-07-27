@@ -1,23 +1,27 @@
 ﻿#nullable enable
 
+using HB.Framework.Client.Api;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace HB.Framework.Common.Api
 {
     public class ApiRequest : ValidatableObject
     {
-        //All use fields instead of Properties, for avoid mvc binding
+        //All use fields & Get Methods instead of Properties, for avoid mvc binding
         private readonly string _productType;
         private readonly string _apiVersion;
         private readonly HttpMethod _httpMethod;
-        private readonly bool _needAuthenticate;
+        //private readonly bool _needAuthenticate;
         private readonly string _resourceName;
         private readonly string? _condition;
         private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
         private readonly IDictionary<string, string> _parameters = new Dictionary<string, string>();
+
+        private bool _needHttpMethodOveride = true;
 
         [Required]
         public string DeviceId
@@ -61,12 +65,12 @@ namespace HB.Framework.Common.Api
             set { SetParameter(ClientNames.Timestamp, value); }
         }
 
-        public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, bool needAuthenticate, string resourceName, string? condition = null)
+        public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, string resourceName, string? condition = null)
         {
             _productType = productType;
             _apiVersion = apiVersion;
             _httpMethod = httpMethod;
-            _needAuthenticate = needAuthenticate;
+            //_needAuthenticate = needAuthenticate;
             _resourceName = resourceName;
             _condition = condition;
 
@@ -89,10 +93,10 @@ namespace HB.Framework.Common.Api
             return _httpMethod;
         }
 
-        public bool GetNeedAuthenticate()
-        {
-            return _needAuthenticate;
-        }
+        //public bool GetNeedAuthenticate()
+        //{
+        //    return _needAuthenticate;
+        //}
 
         public string GetResourceName()
         {
@@ -102,6 +106,15 @@ namespace HB.Framework.Common.Api
         public string? GetCondition()
         {
             return _condition;
+        }
+
+        public bool GetNeedHttpMethodOveride()
+        {
+            return _needHttpMethodOveride;
+        }
+        public void SetNeedHttpMethodOveride(bool isNeeded)
+        {
+            _needHttpMethodOveride = isNeeded;
         }
 
         public IDictionary<string, string> GetParameters()
@@ -130,15 +143,25 @@ namespace HB.Framework.Common.Api
             return _headers;
         }
 
-        /// <exception cref="System.ArgumentException"></exception>
-        public void AddHeader(string name, string value)
+        public string? GetHeader(string name)
         {
-            if (_headers.ContainsKey(name))
+            if (_headers.TryGetValue(name, out string value))
             {
-                throw new ArgumentException($"Request Already has a header named {name}");
+                return value;
             }
 
-            _headers.Add(name, value);
+            return null;
+        }
+
+        /// <exception cref="System.ArgumentException"></exception>
+        public void SetHeader(string name, string value)
+        {
+            //if (_headers.ContainsKey(name))
+            //{
+            //    throw new ArgumentException($"Request Already has a header named {name}");
+            //}
+
+            _headers[name] = value;
         }
 
         protected string? GetParameter(string name)
@@ -154,6 +177,16 @@ namespace HB.Framework.Common.Api
         protected void SetParameter(string name, string value)
         {
             _parameters[name] = value;
+        }
+
+        public virtual Task<ApiResponse<T>> GetResponseAsync<T>(HttpClient httpClient) where T : ApiResponseData
+        {
+            return ApiRequestUtils.GetResponse<T>(this, httpClient, _needHttpMethodOveride);
+        }
+
+        public async Task<ApiResponse> GetResponseAsync(HttpClient httpClient)
+        {
+            return await GetResponseAsync<ApiResponseData>(httpClient).ConfigureAwait(false);
         }
     }
 }

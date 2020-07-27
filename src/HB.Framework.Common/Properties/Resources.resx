@@ -126,6 +126,9 @@
   <data name="DictionaryNullOrEmptyErrorMessage" xml:space="preserve">
     <value>the dictionary is null or empty</value>
   </data>
+  <data name="InternalServerErrorMessage" xml:space="preserve">
+    <value>Internal Server Error.</value>
+  </data>
   <data name="NotEmailErrorMessage" xml:space="preserve">
     <value>string is not a valid email string</value>
   </data>

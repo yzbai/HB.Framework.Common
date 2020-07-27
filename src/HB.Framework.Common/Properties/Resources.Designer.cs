@@ -88,6 +88,15 @@ namespace HB.Framework.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Internal Server Error..
+        /// </summary>
+        internal static string InternalServerErrorMessage {
+            get {
+                return ResourceManager.GetString("InternalServerErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to string is not a valid email string.
         /// </summary>
         internal static string NotEmailErrorMessage {

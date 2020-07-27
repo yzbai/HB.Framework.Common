@@ -4,7 +4,6 @@ using HB.Framework.Common.Api;
 
 namespace HB.Framework.Common.Api
 {
-    public class ApiResponseData { }
 
     public class ApiResponse : ApiResponse<ApiResponseData>
     {

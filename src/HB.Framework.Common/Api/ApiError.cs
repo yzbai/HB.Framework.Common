@@ -31,6 +31,7 @@ namespace HB.Framework.Common.Api
         EndpointNotFound = 32,
         HTTPSREQUIRED = 33,
         DEVELOPMENTONLY = 34,
+        APIKEYUNAUTHENTICATED = 35,
     }
 
     public static class ErrorCodeExtensions

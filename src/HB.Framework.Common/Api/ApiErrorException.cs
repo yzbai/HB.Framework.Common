@@ -27,5 +27,10 @@ namespace System
         {
             ApiError = apiError;
         }
+
+        public ApiErrorException(Exception innnerException, ApiError apiError, string message) : this(message, innnerException)
+        {
+            ApiError = apiError;
+        }
     }
 }
