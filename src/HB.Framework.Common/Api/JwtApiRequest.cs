@@ -14,24 +14,9 @@ namespace HB.Framework.Common.Api
         {
         }
 
-        [DisallowNull]
-        public string? Jwt
+        public void SetJwt(string jwt)
         {
-            get
-            {
-                string? value = GetHeader("Authorization");
-
-                if (!string.IsNullOrEmpty(value))
-                {
-                    return value.Substring("Bearer ".Length);
-                }
-
-                return null;
-            }
-            set
-            {
-                SetHeader("Authorization", "Bearer " + value);
-            }
+            SetHeader("Authorization", "Bearer " + jwt);
         }
 
         public override Task<ApiResponse<T>> GetResponseAsync<T>(HttpClient httpClient)

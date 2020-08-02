@@ -17,17 +17,9 @@ namespace HB.Framework.Common.Api
             _apiKeyName = apiKeyName;
         }
 
-        [DisallowNull]
-        public string? ApiKey
+        public void SetApiKey(string apiKey)
         {
-            get
-            {
-                return GetHeader("X-Api-Key");
-            }
-            set
-            {
-                SetHeader("X-Api-Key", value);
-            }
+            SetHeader("X-Api-Key", apiKey);
         }
 
         public override Task<ApiResponse<T>> GetResponseAsync<T>(HttpClient httpClient)

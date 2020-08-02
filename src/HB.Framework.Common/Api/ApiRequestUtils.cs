@@ -42,7 +42,10 @@ namespace HB.Framework.Client.Api
 
             if (request.GetHttpMethod() != HttpMethod.Get)
             {
-                httpRequest.Content = new FormUrlEncodedContent(request.GetParameters());
+                //httpRequest.Content = new FormUrlEncodedContent(request.GetParameters());
+                //httpRequest.Content = new JsonContent()
+
+                httpRequest.Content = new StringContent(SerializeUtil.ToJson(request), Encoding.UTF8, "application/json");
             }
 
             request.GetHeaders().ForEach(kv => httpRequest.Headers.Add(kv.Key, kv.Value));
