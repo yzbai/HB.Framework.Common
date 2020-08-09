@@ -19,7 +19,7 @@ namespace HB.Framework.Common.Api
         private readonly string? _condition;
         private bool _needHttpMethodOveride = true;
         private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
-        private readonly IDictionary<string, string> _parameters = new Dictionary<string, string>();
+        private readonly IDictionary<string, string?> _parameters = new Dictionary<string, string?>();
 
 
         public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, string resourceName, string? condition = null)
@@ -91,7 +91,7 @@ namespace HB.Framework.Common.Api
 
         public string? GetParameter(string name)
         {
-            if (_parameters.TryGetValue(name, out string value))
+            if (_parameters.TryGetValue(name, out string? value))
             {
                 return value;
             }
@@ -99,12 +99,14 @@ namespace HB.Framework.Common.Api
             return null;
         }
 
-        public void SetParameter(string name, string value)
+        public void SetParameter(string name, string? value)
         {
+            ThrowIf.NullOrEmpty(name, nameof(name));
+
             _parameters[name] = value;
         }
 
-        public IDictionary<string, string> GetParameters()
+        public IDictionary<string, string?> GetParameters()
         {
             return _parameters;
         }
@@ -152,6 +154,12 @@ namespace HB.Framework.Common.Api
         {
             get { return GetParameter(ClientNames.Timestamp)!; }
             set { SetParameter(ClientNames.Timestamp, value); }
+        }
+
+        public string? PublicResourceToken
+        {
+            get => GetParameter(ClientNames.PublicResourceToken);
+            set => SetParameter(ClientNames.PublicResourceToken, value);
         }
     }
 }

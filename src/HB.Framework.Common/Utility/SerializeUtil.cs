@@ -21,7 +21,7 @@ namespace System
         static SerializeUtil()
         {
             _jsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-            _jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(null, false));
+            _jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             _jsonSerializerOptions.PropertyNameCaseInsensitive = true;
         }
 

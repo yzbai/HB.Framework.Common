@@ -24,7 +24,7 @@ namespace HB.Framework.Common.Api
         DATANOSUCH = 25,
         DATARELATIONERROR = 26,
         MODELVALIDATIONERROR = 27,
-        APINEEDPUBLICRESOURCETOKEN = 28,
+        PublicResourceTokenNeeded = 28,
         APICAPTHAERROR = 29,
         ApiInternalError = 30,
         APIFAILED = 31,
@@ -32,6 +32,7 @@ namespace HB.Framework.Common.Api
         HTTPSREQUIRED = 33,
         DEVELOPMENTONLY = 34,
         APIKEYUNAUTHENTICATED = 35,
+        PUBLICRESOURCETOKENERROR = 36,
     }
 
     public static class ErrorCodeExtensions

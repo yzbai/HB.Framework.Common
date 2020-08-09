@@ -137,7 +137,7 @@ namespace System
         /// <param name="dict"></param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">Ignore.</exception>
-        public static NameValueCollection ToHttpValueCollection(this IEnumerable<KeyValuePair<string, string>> dict)
+        public static NameValueCollection ToHttpValueCollection(this IEnumerable<KeyValuePair<string, string?>> dict)
         {
             NameValueCollection nameValueCollection = HttpUtility.ParseQueryString("");
 

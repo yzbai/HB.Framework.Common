@@ -16,5 +16,11 @@ namespace System
         public const string RandomStr = nameof(RandomStr);
 
         public const string Timestamp = nameof(Timestamp);
+
+        public const string PublicResourceToken = nameof(PublicResourceToken);
+
+        public const string Mobile = nameof(Mobile);
+
+        public const string SmsCode = nameof(SmsCode);
     }
 }

@@ -18,7 +18,7 @@ namespace System.ComponentModel.DataAnnotations
         {
             if (value == null)
             {
-                return true;
+                return CanBeNull;
             }
 
             return value is string text && ValidationMethods.IsMobilePhone(text);

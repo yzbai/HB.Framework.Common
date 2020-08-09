@@ -95,15 +95,19 @@ namespace HB.Framework.Client.Api
         {
             string? mediaType = httpResponse.Content.Headers.ContentType?.MediaType;
 
-            bool hasJsonData = typeof(T) != typeof(ApiResponseData);
+            //bool hasJsonData = typeof(T) != typeof(ApiResponseData);
 
             if (httpResponse.IsSuccessStatusCode)
             {
-                if ("application/json".Equals(mediaType, StringComparison.CurrentCulture) && hasJsonData)
+                if ("application/json".Equals(mediaType, StringComparison.CurrentCulture))
                 {
-                    Stream responseStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                    //Stream responseStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-                    T data = await SerializeUtil.FromJsonAsync<T>(responseStream).ConfigureAwait(false);
+                    //T data = await SerializeUtil.FromJsonAsync<T>(responseStream).ConfigureAwait(false);
+
+                    string content = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                    T? data = SerializeUtil.FromJson<T>(content);
 
                     return new ApiResponse<T>(data, (int)httpResponse.StatusCode);
                 }
@@ -114,13 +118,17 @@ namespace HB.Framework.Client.Api
             }
             else
             {
-                if (hasJsonData && ("application/problem+json".Equals(mediaType, StringComparison.CurrentCulture) || "application/json".Equals(mediaType, StringComparison.CurrentCulture)))
+                if (("application/problem+json".Equals(mediaType, StringComparison.CurrentCulture) || "application/json".Equals(mediaType, StringComparison.CurrentCulture)))
                 {
-                    Stream responseStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                    //Stream responseStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
 
-                    ApiErrorResponse errorResponse = await SerializeUtil.FromJsonAsync<ApiErrorResponse>(responseStream).ConfigureAwait(false);
+                    //ApiErrorResponse errorResponse = await SerializeUtil.FromJsonAsync<ApiErrorResponse>(responseStream).ConfigureAwait(false);
 
-                    return new ApiResponse<T>((int)httpResponse.StatusCode, errorResponse.Message, errorResponse.Code);
+                    string content = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+                    ApiErrorResponse? errorResponse = SerializeUtil.FromJson<ApiErrorResponse>(content);
+
+                    return new ApiResponse<T>((int)httpResponse.StatusCode, errorResponse?.Message, errorResponse == null ? ApiError.ApiInternalError : errorResponse.Code);
                 }
                 else
                 {

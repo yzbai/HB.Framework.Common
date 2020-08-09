@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System.Diagnostics.CodeAnalysis;
 using HB.Framework.Common.Api;
 
 namespace HB.Framework.Common.Api
