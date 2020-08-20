@@ -23,7 +23,7 @@ namespace HB.Framework.Client.Api
             }
             catch (Exception ex)
             {
-                throw new ApiErrorException(ex, ApiError.ApiInternalError, $"Request: {SerializeUtil.ToJson(request)}");
+                throw new ApiErrorException(ex, ApiError.ApiInternalError, $"ApiRequestUtils.GetResponse {request.GetResourceName()}");
             }
         }
 
@@ -45,7 +45,27 @@ namespace HB.Framework.Client.Api
                 //httpRequest.Content = new FormUrlEncodedContent(request.GetParameters());
                 //httpRequest.Content = new JsonContent()
 
-                httpRequest.Content = new StringContent(SerializeUtil.ToJson(request), Encoding.UTF8, "application/json");
+                if (request is BufferedFileApiRequest bufferedRequest)
+                {
+                    MultipartFormDataContent content = new MultipartFormDataContent();
+
+#pragma warning disable CA2000 // Dispose objects before losing scope httpclient会自动dispose这些
+                    ByteArrayContent byteArrayContent = new ByteArrayContent(bufferedRequest.GetBytes());
+#pragma warning restore CA2000 // Dispose objects before losing scope
+
+                    content.Add(byteArrayContent, bufferedRequest.GetBytesPropertyName(), bufferedRequest.GetFileName());
+
+                    request.GetParameters().ForEach(kv =>
+                    {
+                        content.Add(new StringContent(kv.Value), kv.Key);
+                    });
+
+                    httpRequest.Content = content;
+                }
+                else
+                {
+                    httpRequest.Content = new StringContent(SerializeUtil.ToJson(request.GetParameters()), Encoding.UTF8, "application/json");
+                }
             }
 
             request.GetHeaders().ForEach(kv => httpRequest.Headers.Add(kv.Key, kv.Value));
@@ -66,13 +86,13 @@ namespace HB.Framework.Client.Api
 
             if (!request.GetResourceName().IsNullOrEmpty())
             {
-                requestUrlBuilder.Append("/");
+                requestUrlBuilder.Append('/');
                 requestUrlBuilder.Append(request.GetResourceName());
             }
 
             if (!request.GetCondition().IsNullOrEmpty())
             {
-                requestUrlBuilder.Append("/");
+                requestUrlBuilder.Append('/');
                 requestUrlBuilder.Append(request.GetCondition());
             }
 
@@ -82,7 +102,7 @@ namespace HB.Framework.Client.Api
 
                 if (!query.IsNullOrEmpty())
                 {
-                    requestUrlBuilder.Append("?");
+                    requestUrlBuilder.Append('?');
                     requestUrlBuilder.Append(query);
                 }
             }

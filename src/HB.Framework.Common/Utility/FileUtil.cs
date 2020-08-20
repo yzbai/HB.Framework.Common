@@ -1,12 +1,105 @@
 ﻿#nullable enable
 
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Linq;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 namespace System
 {
     public static class FileUtil
     {
+        public static IDictionary<string, List<byte[]>> FileSignatures { get; private set; } = new Dictionary<string, List<byte[]>>
+        {
+            { ".gif", new List<byte[]> { new byte[] { 0x47, 0x49, 0x46, 0x38 } } },
+            { ".png", new List<byte[]> { new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A } } },
+            { ".jpeg", new List<byte[]>
+                {
+                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 },
+                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE2 },
+                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE3 },
+                }
+            },
+            { ".jpg", new List<byte[]>
+                {
+                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 },
+                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE1 },
+                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE8 },
+                }
+            },
+            { ".zip", new List<byte[]>
+                {
+                    new byte[] { 0x50, 0x4B, 0x03, 0x04 },
+                    new byte[] { 0x50, 0x4B, 0x4C, 0x49, 0x54, 0x45 },
+                    new byte[] { 0x50, 0x4B, 0x53, 0x70, 0x58 },
+                    new byte[] { 0x50, 0x4B, 0x05, 0x06 },
+                    new byte[] { 0x50, 0x4B, 0x07, 0x08 },
+                    new byte[] { 0x57, 0x69, 0x6E, 0x5A, 0x69, 0x70 },
+                }
+            },
+        };
+
+        public static bool IsFileExtensionMatched(string? fileName, string[] allowedExtensions)
+        {
+            if (fileName.IsNullOrEmpty() || allowedExtensions.IsNullOrEmpty())
+            {
+                return false;
+            }
+
+#pragma warning disable CA1308 // Normalize strings to uppercase
+            string fileExtension = Path.GetExtension(fileName).ToLowerInvariant();
+#pragma warning restore CA1308 // Normalize strings to uppercase
+
+            if (fileExtension.IsNullOrEmpty() || !allowedExtensions.Contains(fileExtension))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static async Task<bool> IsFileSignatureMatchedAsync(string extension, Stream? stream)
+        {
+            if (extension.IsNullOrEmpty() || stream == null)
+            {
+                return false;
+            }
+
+            if (!FileSignatures.ContainsKey(extension))
+            {
+                return false;
+            }
+
+            try
+            {
+                using MemoryStream memoryStream = new MemoryStream();
+
+                await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
+
+                if (memoryStream.Length == 0)
+                {
+                    return false;
+                }
+
+                using BinaryReader binaryReader = new BinaryReader(memoryStream);
+
+                List<byte[]> signatures = FileSignatures[extension];
+                byte[]? headerBytes = binaryReader.ReadBytes(signatures.Max(m => m.Length));
+
+                return signatures.Any(signature => headerBytes.Take(signature.Length).SequenceEqual(signature));
+
+            }
+#pragma warning disable CA1031 // Do not catch general exception types
+            catch (Exception ex)
+#pragma warning restore CA1031 // Do not catch general exception types
+            {
+                GlobalSettings.Logger?.LogError(ex, $"IsFileSignatureMatched Error.extension: {extension}");
+                return false;
+            }
+        }
+
         public static bool TrySaveToFile(byte[] buffer, string path)
         {
             try

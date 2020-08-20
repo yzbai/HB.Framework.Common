@@ -33,6 +33,12 @@ namespace HB.Framework.Common.Api
         DEVELOPMENTONLY = 34,
         APIKEYUNAUTHENTICATED = 35,
         PUBLICRESOURCETOKENERROR = 36,
+        FileUploadNeeded = 37,
+        FileUploadMultipartFormDataNeeded = 38,
+        FileUploadTypeNotMatch = 39,
+        FileUploadOverSize = 40,
+        FileUploadError = 41,
+        UserGuidAbsent = 42,
     }
 
     public static class ErrorCodeExtensions
