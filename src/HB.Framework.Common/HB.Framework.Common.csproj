@@ -21,6 +21,10 @@
     <LangVersion>Latest</LangVersion>
     <CodeAnalysisRuleSet></CodeAnalysisRuleSet>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\HB.Framework\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="4.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.0">

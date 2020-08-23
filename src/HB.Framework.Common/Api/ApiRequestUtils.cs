@@ -49,7 +49,7 @@ namespace HB.Framework.Client.Api
                 {
                     MultipartFormDataContent content = new MultipartFormDataContent();
 
-#pragma warning disable CA2000 // Dispose objects before losing scope httpclient会自动dispose这些
+#pragma warning disable CA2000 // Dispose objects before losing scope // using HttpRequestMessage 会自动dispose他的content
                     ByteArrayContent byteArrayContent = new ByteArrayContent(bufferedRequest.GetBytes());
 #pragma warning restore CA2000 // Dispose objects before losing scope
 
@@ -64,6 +64,7 @@ namespace HB.Framework.Client.Api
                 }
                 else
                 {
+                    //TODO: .net 5以后，使用JsonContent
                     httpRequest.Content = new StringContent(SerializeUtil.ToJson(request.GetParameters()), Encoding.UTF8, "application/json");
                 }
             }
@@ -111,7 +112,7 @@ namespace HB.Framework.Client.Api
         }
 
         /// <exception cref="System.Text.Json.JsonException">Ignore.</exception>
-        private static async Task<ApiResponse<T>> ToApiResponseAsync<T>(HttpResponseMessage httpResponse) where T : ApiResponseData
+        public static async Task<ApiResponse<T>> ToApiResponseAsync<T>(HttpResponseMessage httpResponse) where T : ApiResponseData
         {
             string? mediaType = httpResponse.Content.Headers.ContentType?.MediaType;
 

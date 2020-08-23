@@ -16,7 +16,7 @@ namespace HB.Framework.Common.Api
 
         }
 
-        public abstract byte[] GetBytes();
+        public abstract byte[]? GetBytes();
 
         public abstract string GetBytesPropertyName();
 
