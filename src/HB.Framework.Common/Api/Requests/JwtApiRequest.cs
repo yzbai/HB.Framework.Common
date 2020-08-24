@@ -18,10 +18,5 @@ namespace HB.Framework.Common.Api
         {
             SetHeader("Authorization", "Bearer " + jwt);
         }
-
-        public override Task<ApiResponse<T>> GetResponseAsync<T>(HttpClient httpClient)
-        {
-            return base.GetResponseAsync<T>(httpClient);
-        }
     }
 }

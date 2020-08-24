@@ -6,39 +6,42 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace HB.Framework.Client.Api
 {
-    public static class ApiRequestUtils
+    public static class ApiExtensions
     {
-        public static async Task<ApiResponse<T>> GetResponse<T>(ApiRequest request, HttpClient httpClient, bool needHttpMethodOveride) where T : ApiResponseData
+        private static readonly string[] _jsonContentTypes = new string[] { "application/json", "application/problem+json" };
+
+        public static async Task<ApiResponse<T>> GetResponseAsync<T>(this ApiRequest request, HttpClient httpClient) where T : class
         {
             try
             {
-                using HttpRequestMessage httpRequestMessage = ToHttpRequestMessage(request, needHttpMethodOveride);
+                using HttpRequestMessage requestMessage = request.ToHttpRequestMessage();
 
-                using HttpResponseMessage httpResponseMessage = await httpClient.SendAsync(httpRequestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+                using HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
 
-                return await ToApiResponseAsync<T>(httpResponseMessage).ConfigureAwait(false);
+                return await responseMessage.ToApiResponseAsync<T>().ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                throw new ApiErrorException(ex, ApiError.ApiInternalError, $"ApiRequestUtils.GetResponse {request.GetResourceName()}");
+                throw new ApiException(ex, ApiErrorCode.ApiUtilsError, $"ApiRequestUtils.GetResponse {request.GetResourceName()}");
             }
         }
 
         /// <exception cref="InvalidOperationException">Ignore.</exception>
-        private static HttpRequestMessage ToHttpRequestMessage(ApiRequest request, bool needHttpMethodOveride)
+        public static HttpRequestMessage ToHttpRequestMessage(this ApiRequest request)
         {
             HttpMethod httpMethod = request.GetHttpMethod();
 
-            if (needHttpMethodOveride && (httpMethod == HttpMethod.Put || httpMethod == HttpMethod.Delete))
+            if (request.GetNeedHttpMethodOveride() && (httpMethod == HttpMethod.Put || httpMethod == HttpMethod.Delete))
             {
                 request.SetHeader("X-HTTP-Method-Override", httpMethod.Method);
                 httpMethod = HttpMethod.Post;
             }
 
-            HttpRequestMessage httpRequest = new HttpRequestMessage(httpMethod, ToUrl(request));
+            HttpRequestMessage httpRequest = new HttpRequestMessage(httpMethod, BuildUrl(request));
 
             if (request.GetHttpMethod() != HttpMethod.Get)
             {
@@ -74,9 +77,7 @@ namespace HB.Framework.Client.Api
             return httpRequest;
         }
 
-#pragma warning disable CA1055 // Uri return values should not be strings
-        private static string ToUrl(ApiRequest request)
-#pragma warning restore CA1055 // Uri return values should not be strings
+        private static string BuildUrl(ApiRequest request)
         {
             StringBuilder requestUrlBuilder = new StringBuilder();
 
@@ -112,50 +113,43 @@ namespace HB.Framework.Client.Api
         }
 
         /// <exception cref="System.Text.Json.JsonException">Ignore.</exception>
-        public static async Task<ApiResponse<T>> ToApiResponseAsync<T>(HttpResponseMessage httpResponse) where T : ApiResponseData
+        public static async Task<ApiResponse<T>> ToApiResponseAsync<T>(this HttpResponseMessage httpResponse) where T : class
         {
-            string? mediaType = httpResponse.Content.Headers.ContentType?.MediaType;
-
-            //bool hasJsonData = typeof(T) != typeof(ApiResponseData);
-
             if (httpResponse.IsSuccessStatusCode)
             {
-                if ("application/json".Equals(mediaType, StringComparison.CurrentCulture))
-                {
-                    //Stream responseStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
-
-                    //T data = await SerializeUtil.FromJsonAsync<T>(responseStream).ConfigureAwait(false);
-
-                    string content = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                    T? data = SerializeUtil.FromJson<T>(content);
-
-                    return new ApiResponse<T>(data, (int)httpResponse.StatusCode);
-                }
-                else
-                {
-                    return new ApiResponse<T>(null, (int)httpResponse.StatusCode);
-                }
+                T? data = await httpResponse.DeSerializeJsonAsync<T>().ConfigureAwait(false);
+                return new ApiResponse<T>(data, (int)httpResponse.StatusCode);
             }
-            else
+
+            ApiError? apiError = await httpResponse.DeSerializeJsonAsync<ApiError>().ConfigureAwait(false);
+
+            if (apiError == null)
             {
-                if (("application/problem+json".Equals(mediaType, StringComparison.CurrentCulture) || "application/json".Equals(mediaType, StringComparison.CurrentCulture)))
-                {
-                    //Stream responseStream = await httpResponse.Content.ReadAsStreamAsync().ConfigureAwait(false);
-
-                    //ApiErrorResponse errorResponse = await SerializeUtil.FromJsonAsync<ApiErrorResponse>(responseStream).ConfigureAwait(false);
-
-                    string content = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-
-                    ApiErrorResponse? errorResponse = SerializeUtil.FromJson<ApiErrorResponse>(content);
-
-                    return new ApiResponse<T>((int)httpResponse.StatusCode, errorResponse?.Message, errorResponse == null ? ApiError.ApiInternalError : errorResponse.Code);
-                }
-                else
-                {
-                    return new ApiResponse<T>((int)httpResponse.StatusCode, Resources.InternalServerErrorMessage, ApiError.ApiInternalError);
-                }
+                return new ApiResponse<T>((int)httpResponse.StatusCode, Resources.InternalServerErrorMessage, ApiErrorCode.ApiUtilsError);
             }
+
+            return new ApiResponse<T>((int)httpResponse.StatusCode, apiError.Message, apiError.Code);
+        }
+
+        public static async Task<T?> DeSerializeJsonAsync<T>(this HttpResponseMessage responseMessage) where T : class
+        {
+            if (typeof(T) == typeof(object))
+            {
+                return null;
+            }
+
+            string? mediaType = responseMessage.Content.Headers.ContentType?.MediaType;
+
+            if (!_jsonContentTypes.Contains(mediaType))
+            {
+                return null;
+            }
+
+            Stream responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+
+            T? data = await SerializeUtil.FromJsonAsync<T>(responseStream).ConfigureAwait(false);
+
+            return data;
         }
     }
 }

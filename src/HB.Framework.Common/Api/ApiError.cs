@@ -1,51 +1,32 @@
 ﻿#nullable enable
 
+using System;
+using System.Collections.Generic;
+
 namespace HB.Framework.Common.Api
 {
-    public enum ApiError
+    public class ApiError
     {
-        FAILED = 0,
-        OK = 1,
-        NOAUTHORITY = 4,
-        NOTAFTERTODAY = 5,
-        TEXT = 6,
-        SmsCodeInvalid = 8,
-        TokenRefresherError = 10,
-        APITOKENVALIDATEERROR = 11,
-        TokenCreateError = 12,
-        DATAOPERATIONFAILED = 14,
-        DATANOTWRITEABLE = 15,
-        ARGUMENTERROR = 18,
-        EXCEPTIONTHROWN = 19,
-        ApiNotLoginYet = 21,
-        ApiTokenExpired = 22,
-        ApiRequestValidateError = 23,
-        APITOKENDELETEERROR = 24,
-        DATANOSUCH = 25,
-        DATARELATIONERROR = 26,
-        MODELVALIDATIONERROR = 27,
-        PublicResourceTokenNeeded = 28,
-        APICAPTHAERROR = 29,
-        ApiInternalError = 30,
-        APIFAILED = 31,
-        EndpointNotFound = 32,
-        HTTPSREQUIRED = 33,
-        DEVELOPMENTONLY = 34,
-        APIKEYUNAUTHENTICATED = 35,
-        PUBLICRESOURCETOKENERROR = 36,
-        FileUploadNeeded = 37,
-        FileUploadMultipartFormDataNeeded = 38,
-        FileUploadTypeNotMatch = 39,
-        FileUploadOverSize = 40,
-        FileUploadError = 41,
-        UserGuidAbsent = 42,
-    }
+        public ApiErrorCode Code { get; set; }
 
-    public static class ErrorCodeExtensions
-    {
-        public static bool IsSuccess(this ApiError errorCode)
+        public string? Message { get; set; }
+
+        public IDictionary<string, IEnumerable<string>> ModelStates { get; private set; } = new Dictionary<string, IEnumerable<string>>();
+
+        public ApiError() { }
+
+        public ApiError(ApiErrorCode code, string? message = null)
         {
-            return errorCode == ApiError.OK;
+            Code = code;
+            Message = message ?? code.ToString();
+        }
+
+        public ApiError(ApiErrorCode code, IDictionary<string, IEnumerable<string>> modelStates) : this(code: code, message: null)
+        {
+            modelStates.ForEach(kv =>
+            {
+                ModelStates.Add(kv.Key, new List<string>(kv.Value));
+            });
         }
     }
 }

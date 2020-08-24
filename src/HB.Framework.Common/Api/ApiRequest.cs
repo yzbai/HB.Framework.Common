@@ -11,6 +11,47 @@ namespace HB.Framework.Common.Api
 {
     public class ApiRequest : ValidatableObject
     {
+        [Required]
+        public string DeviceId
+        {
+            get { return GetParameter(ClientNames.DeviceId)!; }
+            set { SetParameter(ClientNames.DeviceId, value); }
+        }
+
+        [Required]
+        public string DeviceType
+        {
+            get { return GetParameter(ClientNames.DeviceType)!; }
+            set { SetParameter(ClientNames.DeviceType, value); }
+        }
+
+        [Required]
+        public string DeviceVersion
+        {
+            get { return GetParameter(ClientNames.DeviceVersion)!; }
+            set { SetParameter(ClientNames.DeviceVersion, value); }
+        }
+
+        [Required]
+        public string RandomStr
+        {
+            get { return GetParameter(ClientNames.RandomStr)!; }
+            set { SetParameter(ClientNames.RandomStr, value); }
+        }
+
+        [Required]
+        public string Timestamp
+        {
+            get { return GetParameter(ClientNames.Timestamp)!; }
+            set { SetParameter(ClientNames.Timestamp, value); }
+        }
+
+        public string? PublicResourceToken
+        {
+            get => GetParameter(ClientNames.PublicResourceToken);
+            set => SetParameter(ClientNames.PublicResourceToken, value);
+        }
+
         //All use fields & Get Methods instead of Properties, for avoid mvc binding
         private readonly string _productType;
         private readonly string _apiVersion;
@@ -109,57 +150,6 @@ namespace HB.Framework.Common.Api
         public IDictionary<string, string?> GetParameters()
         {
             return _parameters;
-        }
-
-        public virtual Task<ApiResponse<T>> GetResponseAsync<T>(HttpClient httpClient) where T : ApiResponseData
-        {
-            return ApiRequestUtils.GetResponse<T>(this, httpClient, _needHttpMethodOveride);
-        }
-
-        public async Task<ApiResponse> GetResponseAsync(HttpClient httpClient)
-        {
-            return await GetResponseAsync<ApiResponseData>(httpClient).ConfigureAwait(false);
-        }
-
-        [Required]
-        public string DeviceId
-        {
-            get { return GetParameter(ClientNames.DeviceId)!; }
-            set { SetParameter(ClientNames.DeviceId, value); }
-        }
-
-        [Required]
-        public string DeviceType
-        {
-            get { return GetParameter(ClientNames.DeviceType)!; }
-            set { SetParameter(ClientNames.DeviceType, value); }
-        }
-
-        [Required]
-        public string DeviceVersion
-        {
-            get { return GetParameter(ClientNames.DeviceVersion)!; }
-            set { SetParameter(ClientNames.DeviceVersion, value); }
-        }
-
-        [Required]
-        public string RandomStr
-        {
-            get { return GetParameter(ClientNames.RandomStr)!; }
-            set { SetParameter(ClientNames.RandomStr, value); }
-        }
-
-        [Required]
-        public string Timestamp
-        {
-            get { return GetParameter(ClientNames.Timestamp)!; }
-            set { SetParameter(ClientNames.Timestamp, value); }
-        }
-
-        public string? PublicResourceToken
-        {
-            get => GetParameter(ClientNames.PublicResourceToken);
-            set => SetParameter(ClientNames.PublicResourceToken, value);
         }
     }
 }

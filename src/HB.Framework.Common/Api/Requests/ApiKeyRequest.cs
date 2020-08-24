@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace HB.Framework.Common.Api
 {
-    public class ApiKeyApiRequest : ApiRequest
+    public class ApiKeyRequest : ApiRequest
     {
         private readonly string _apiKeyName;
 
-        public ApiKeyApiRequest(string apiKeyName, string productType, string apiVersion, HttpMethod httpMethod, string resourceName, string? condition = null)
+        public ApiKeyRequest(string apiKeyName, string productType, string apiVersion, HttpMethod httpMethod, string resourceName, string? condition = null)
             : base(productType, apiVersion, httpMethod, resourceName, condition)
         {
             _apiKeyName = apiKeyName;
@@ -20,11 +20,6 @@ namespace HB.Framework.Common.Api
         public void SetApiKey(string apiKey)
         {
             SetHeader("X-Api-Key", apiKey);
-        }
-
-        public override Task<ApiResponse<T>> GetResponseAsync<T>(HttpClient httpClient)
-        {
-            return base.GetResponseAsync<T>(httpClient);
         }
 
         public string GetApiKeyName()
