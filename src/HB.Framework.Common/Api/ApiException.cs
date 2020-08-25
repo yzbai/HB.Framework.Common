@@ -4,7 +4,7 @@ namespace System
 {
     public class ApiException : ClientException
     {
-        public ApiErrorCode ApiError { get; set; }
+        public ApiErrorCode ErrorCode { get; set; }
         public int HttpCode { get; set; }
 
         public ApiException(string? message) : base(message)
@@ -21,17 +21,17 @@ namespace System
 
         public ApiException(ApiErrorCode apiError) : this()
         {
-            ApiError = apiError;
+            ErrorCode = apiError;
         }
 
         public ApiException(ApiErrorCode apiError, string? message) : this(message)
         {
-            ApiError = apiError;
+            ErrorCode = apiError;
         }
 
         public ApiException(Exception innnerException, ApiErrorCode apiError, string message) : this(message, innnerException)
         {
-            ApiError = apiError;
+            ErrorCode = apiError;
         }
 
         public ApiException(ApiErrorCode apiError, string? message, int httpCode) : this(apiError, message)

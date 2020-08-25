@@ -17,7 +17,7 @@ namespace HB.Framework.Common.Api
         DATANOTWRITEABLE = 15,
         ARGUMENTERROR = 18,
         EXCEPTIONTHROWN = 19,
-        ApiNotLoginYet = 21,
+        //ApiNotLoginYet = 21,
         ApiTokenExpired = 22,
         ApiRequestValidateError = 23,
         APITOKENDELETEERROR = 24,
@@ -40,6 +40,7 @@ namespace HB.Framework.Common.Api
         FileUploadError = 41,
         UserGuidAbsent = 42,
         UnKownError = 43,
+        NullResponseDataReturn = 44,
     }
 
     public static class ErrorCodeExtensions
