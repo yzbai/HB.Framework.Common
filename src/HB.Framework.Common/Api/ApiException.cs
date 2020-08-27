@@ -11,7 +11,7 @@ namespace System
         {
         }
 
-        public ApiException(string message, Exception innerException) : base(message, innerException)
+        public ApiException(string? message, Exception? innerException) : base(message, innerException)
         {
         }
 
@@ -19,24 +19,14 @@ namespace System
         {
         }
 
-        public ApiException(ApiErrorCode apiError) : this()
+        public ApiException(Exception? innnerException, ApiErrorCode apiError, int httpCode, string? message = null) : this(message, innnerException)
         {
             ErrorCode = apiError;
-        }
-
-        public ApiException(ApiErrorCode apiError, string? message) : this(message)
-        {
-            ErrorCode = apiError;
-        }
-
-        public ApiException(Exception innnerException, ApiErrorCode apiError, string message) : this(message, innnerException)
-        {
-            ErrorCode = apiError;
-        }
-
-        public ApiException(ApiErrorCode apiError, string? message, int httpCode) : this(apiError, message)
-        {
             HttpCode = httpCode;
+        }
+
+        public ApiException(ApiErrorCode apiError, int httpCode, string? message = null) : this(null, apiError, httpCode, message)
+        {
         }
     }
 }

@@ -2,6 +2,7 @@
 
 using HB.Framework.Common;
 using HB.Framework.Common.Validate;
+using Microsoft;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;

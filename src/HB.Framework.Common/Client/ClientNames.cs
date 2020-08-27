@@ -4,6 +4,7 @@ namespace System
 {
     public static class ClientNames
     {
+        public const string CurrentUserName = nameof(CurrentUserName);
         public const string AccessToken = nameof(AccessToken);
         public const string RefreshToken = nameof(RefreshToken);
         public const string CurrentUserGuid = nameof(CurrentUserGuid);
@@ -22,5 +23,7 @@ namespace System
         public const string Mobile = nameof(Mobile);
 
         public const string SmsCode = nameof(SmsCode);
+
+        public const string Email = nameof(Email);
     }
 }

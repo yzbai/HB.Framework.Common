@@ -26,7 +26,7 @@ namespace HB.Framework.Client.Api
             }
             catch (Exception ex)
             {
-                throw new ApiException(ex, ApiErrorCode.ApiUtilsError, $"ApiRequestUtils.GetResponse {request.GetResourceName()}");
+                throw new ApiException(ex, ApiErrorCode.ApiUtilsError, 400, $"ApiRequestUtils.GetResponse {request.GetResourceName()}");
             }
         }
 

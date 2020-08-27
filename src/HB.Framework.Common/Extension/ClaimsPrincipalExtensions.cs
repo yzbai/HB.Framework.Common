@@ -47,10 +47,10 @@ namespace System
         //    return principal.GetClaimValue(ClaimExtensionTypes.Authtoken);
         //}
 
-        //public static string GetUserName(this ClaimsPrincipal principal)
-        //{
-        //    return principal.GetClaimValue(ClaimExtensionTypes.UserName);
-        //}
+        public static string? GetUserName(this ClaimsPrincipal principal)
+        {
+            return principal.GetClaimValue(ClaimExtensionTypes.UserName);
+        }
 
         //public static string GetMobile(this ClaimsPrincipal principal)
         //{

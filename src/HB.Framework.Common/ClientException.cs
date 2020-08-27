@@ -10,7 +10,7 @@ namespace System
         {
         }
 
-        public ClientException(string? message, Exception innerException) : base(message, innerException)
+        public ClientException(string? message, Exception? innerException) : base(message, innerException)
         {
         }
 

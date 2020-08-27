@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Microsoft;
 
 namespace System
 {
@@ -105,12 +106,12 @@ namespace System
         }
 
         /// <summary>
-        /// IsNullOrEmpty
+        /// IsNullOrEmpty 
         /// </summary>
         /// <param name="ts"></param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">Ignore.</exception>
-        public static bool IsNullOrEmpty<T>(this IEnumerable<T>? ts)
+        public static bool IsNullOrEmpty<T>([ValidatedNotNull] this IEnumerable<T>? ts)
         {
             return ts == null || !ts.Any();
         }
@@ -121,12 +122,12 @@ namespace System
         /// <param name="ts"></param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">Ignore.</exception>
-        public static bool IsNotNullOrEmpty<T>(this IEnumerable<T>? ts)
+        public static bool IsNotNullOrEmpty<T>([ValidatedNotNull] this IEnumerable<T>? ts)
         {
             return ts != null && ts.Any();
         }
 
-        public static bool IsNotNullOrEmpty(this Array? array)
+        public static bool IsNotNullOrEmpty([ValidatedNotNull] this Array? array)
         {
             return array != null && array.Length != 0;
         }
