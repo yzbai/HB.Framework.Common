@@ -13,6 +13,8 @@ namespace HB.Framework.Common.Api
 
         public ApiErrorCode ErrCode { get; private set; } = ApiErrorCode.OK;
 
+        public bool IsSuccessful { get => HttpCode >= 200 && HttpCode <= 299; }
+
         public ApiResponse(int httpCode)
         {
             HttpCode = httpCode;
@@ -36,7 +38,5 @@ namespace HB.Framework.Common.Api
         }
 
         public ApiResponse(int httpCode, string? message, ApiErrorCode errorCode) : base(httpCode, message, errorCode) { }
-
-        public bool IsSuccessful { get => HttpCode >= 200 && HttpCode <= 299; }
     }
 }

@@ -108,7 +108,7 @@ namespace HB.Framework.Common.Validate
             return Regex.IsMatch(str, RegExpressions.LoginName);
         }
 
-        public static bool IsUserName([NotNullWhen(true)] string? str)
+        public static bool IsNickName([NotNullWhen(true)] string? str)
         {
             if (string.IsNullOrEmpty(str))
             {

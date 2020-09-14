@@ -47,9 +47,9 @@ namespace System
         //    return principal.GetClaimValue(ClaimExtensionTypes.Authtoken);
         //}
 
-        public static string? GetUserName(this ClaimsPrincipal principal)
+        public static string? GetLoginName(this ClaimsPrincipal principal)
         {
-            return principal.GetClaimValue(ClaimExtensionTypes.UserName);
+            return principal.GetClaimValue(ClaimExtensionTypes.LoginName);
         }
 
         //public static string GetMobile(this ClaimsPrincipal principal)

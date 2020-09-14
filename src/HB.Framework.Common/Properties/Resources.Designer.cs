@@ -106,6 +106,15 @@ namespace HB.Framework.Common.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to string is not a valid loginName string.
+        /// </summary>
+        internal static string NotLoginNameErrorMessage {
+            get {
+                return ResourceManager.GetString("NotLoginNameErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to string is not a valid mobile number string.
         /// </summary>
         internal static string NotMobileErrorMessage {
@@ -120,15 +129,6 @@ namespace HB.Framework.Common.Properties {
         internal static string NotPasswordErrorMessage {
             get {
                 return ResourceManager.GetString("NotPasswordErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to string is not a valid userName string.
-        /// </summary>
-        internal static string NotUserNameErrorMessage {
-            get {
-                return ResourceManager.GetString("NotUserNameErrorMessage", resourceCulture);
             }
         }
         

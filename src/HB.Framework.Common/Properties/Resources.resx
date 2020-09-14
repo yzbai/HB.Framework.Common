@@ -132,14 +132,14 @@
   <data name="NotEmailErrorMessage" xml:space="preserve">
     <value>string is not a valid email string</value>
   </data>
+  <data name="NotLoginNameErrorMessage" xml:space="preserve">
+    <value>string is not a valid loginName string</value>
+  </data>
   <data name="NotMobileErrorMessage" xml:space="preserve">
     <value>string is not a valid mobile number string</value>
   </data>
   <data name="NotPasswordErrorMessage" xml:space="preserve">
     <value>string is not a valid passoword string</value>
-  </data>
-  <data name="NotUserNameErrorMessage" xml:space="preserve">
-    <value>string is not a valid userName string</value>
   </data>
   <data name="ParameterNullOrEmptyErrorMessage" xml:space="preserve">
     <value>the parameter is null or empty</value>

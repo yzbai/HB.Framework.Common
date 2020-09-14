@@ -30,6 +30,22 @@ namespace HB.Framework.Client.Api
             }
         }
 
+        public static async Task<ApiResponse> GetResponseAsync(this ApiRequest request, HttpClient httpClient)
+        {
+            try
+            {
+                using HttpRequestMessage requestMessage = request.ToHttpRequestMessage();
+
+                using HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+
+                return await responseMessage.ToApiResponseAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                throw new ApiException(ex, ApiErrorCode.ApiUtilsError, 400, $"ApiRequestUtils.GetResponse {request.GetResourceName()}");
+            }
+        }
+
         /// <exception cref="InvalidOperationException">Ignore.</exception>
         public static HttpRequestMessage ToHttpRequestMessage(this ApiRequest request)
         {
@@ -131,6 +147,23 @@ namespace HB.Framework.Client.Api
             return new ApiResponse<T>((int)httpResponse.StatusCode, apiError.Message, apiError.Code);
         }
 
+        public static async Task<ApiResponse> ToApiResponseAsync(this HttpResponseMessage httpResponse)
+        {
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                return new ApiResponse((int)httpResponse.StatusCode);
+            }
+
+            ApiError? apiError = await httpResponse.DeSerializeJsonAsync<ApiError>().ConfigureAwait(false);
+
+            if (apiError == null)
+            {
+                return new ApiResponse((int)httpResponse.StatusCode, Resources.InternalServerErrorMessage, ApiErrorCode.ApiUtilsError);
+            }
+
+            return new ApiResponse((int)httpResponse.StatusCode, apiError.Message, apiError.Code);
+        }
+
         public static async Task<T?> DeSerializeJsonAsync<T>(this HttpResponseMessage responseMessage) where T : class
         {
             if (typeof(T) == typeof(object))
@@ -145,9 +178,16 @@ namespace HB.Framework.Client.Api
                 return null;
             }
 
-            Stream responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+            //using MemoryStream memoryStream = new MemoryStream();
+            //await responseMessage.Content.CopyToAsync(memoryStream).ConfigureAwait(false);
 
-            T? data = await SerializeUtil.FromJsonAsync<T>(responseStream).ConfigureAwait(false);
+            ////Stream responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
+
+            //T? data = await SerializeUtil.FromJsonAsync<T>(memoryStream).ConfigureAwait(false);
+
+            string jsonString = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            T? data = SerializeUtil.FromJson<T>(jsonString);
 
             return data;
         }

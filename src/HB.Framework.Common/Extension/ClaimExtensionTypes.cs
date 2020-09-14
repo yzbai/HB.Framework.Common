@@ -30,7 +30,7 @@ namespace System.Security.Claims
 
         //public const string IconUrl = "HB.Identity.IconUrl";
 
-        public const string UserName = "HB.Identity.UserName";
+        public const string LoginName = "HB.Identity.LoginName";
 
 
         //public const string MobilePhone = "HB.Identity.MobilePhone";

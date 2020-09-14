@@ -219,21 +219,21 @@ namespace System
         }
 
         /// <summary>
-        /// NullOrNotUserName
+        /// NullOrNotLoginName
         /// </summary>
-        /// <param name="userName"></param>
+        /// <param name="loginName"></param>
         /// <param name="paramName"></param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentException"></exception>
         [return: NotNull]
-        public static string NullOrNotUserName([ValidatedNotNull] string? userName, string paramName)
+        public static string NullOrNotLoginName([ValidatedNotNull] string? loginName, string paramName)
         {
-            if (!ValidationMethods.IsUserName(userName))
+            if (!ValidationMethods.IsLoginName(loginName))
             {
-                throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotUserNameErrorMessage, paramName);
+                throw new ArgumentException(HB.Framework.Common.Properties.Resources.NotLoginNameErrorMessage, paramName);
             }
 
-            return userName;
+            return loginName;
         }
 
         /// <summary>
