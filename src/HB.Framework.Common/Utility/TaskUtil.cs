@@ -1,7 +1,9 @@
 ﻿#nullable enable
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.VisualStudio.Threading;
 
 namespace System.Threading.Tasks
 {
@@ -20,16 +22,21 @@ namespace System.Threading.Tasks
         /// <param name="convertor2"></param>
         /// <param name="continueOnCapturedContext"></param>
         /// <returns></returns>
-        public static async Task<IEnumerable<TResult>> Concurrence<TResult, T1, T2>(
-           Task<IEnumerable<T1>> task1,
-           Task<IEnumerable<T2>> task2,
+        public static async Task<IEnumerable<TResult>> ConcurrenceAsync<TResult, T1, T2>(
+           Func<Task<IEnumerable<T1>>> task1Func,
+           Func<Task<IEnumerable<T2>>> task2Func,
            Func<IEnumerable<T1>, IEnumerable<TResult>> convertor1,
            Func<IEnumerable<T2>, IEnumerable<TResult>> convertor2,
            bool continueOnCapturedContext = false)
         {
             IList<TResult> results = new List<TResult>();
+            Task<IEnumerable<T1>> task1 = task1Func();
+            Task<IEnumerable<T2>> task2 = task2Func();
 
             IList<Task> tasks = new List<Task> { task1, task2 };
+
+            //using JoinableTaskContext joinableTaskContext = new JoinableTaskContext();
+            //JoinableTaskFactory joinableTaskFactory = new JoinableTaskFactory(joinableTaskContext);
 
             while (tasks.Any())
             {
@@ -38,14 +45,23 @@ namespace System.Threading.Tasks
 
                 if (finished == task1)
                 {
-                    IEnumerable<T1> t1s = await task1.ConfigureAwait(continueOnCapturedContext);
+                    //#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
+                    //                    JoinableTask<IEnumerable<T1>> t1s = joinableTaskFactory.RunAsync(() => task1);
+                    //#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
+
+
+                    IEnumerable<T1> t1s = await task1.ConfigureAwait(false); //await task1.ConfigureAwait(false);
 
                     results.Add(convertor1(t1s));
                 }
 
                 if (finished == task2)
                 {
-                    IEnumerable<T2> t2s = await task2.ConfigureAwait(continueOnCapturedContext);
+                    //#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
+                    //                    JoinableTask<IEnumerable<T2>> t2s = joinableTaskFactory.RunAsync(() => task2);
+                    //#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
+
+                    IEnumerable<T2> t2s = await task2.ConfigureAwait(false);
 
                     results.Add(convertor2(t2s));
                 }
@@ -58,10 +74,10 @@ namespace System.Threading.Tasks
         /// 使用MySqlConnector的数据库操作，不能使用并行
         /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
         /// </summary>
-        public static async Task<IEnumerable<TResult>> Concurrence<TResult, T1, T2, T3>(
-           Task<IEnumerable<T1>> task1,
-           Task<IEnumerable<T2>> task2,
-           Task<IEnumerable<T3>> task3,
+        public static async Task<IEnumerable<TResult>> ConcurrenceAsync<TResult, T1, T2, T3>(
+           Func<Task<IEnumerable<T1>>> task1Func,
+           Func<Task<IEnumerable<T2>>> task2Func,
+           Func<Task<IEnumerable<T3>>> task3Func,
            Func<IEnumerable<T1>, IEnumerable<TResult>> convertor1,
            Func<IEnumerable<T2>, IEnumerable<TResult>> convertor2,
            Func<IEnumerable<T3>, IEnumerable<TResult>> convertor3,
@@ -69,7 +85,14 @@ namespace System.Threading.Tasks
         {
             IList<TResult> results = new List<TResult>();
 
+            Task<IEnumerable<T1>> task1 = task1Func();
+            Task<IEnumerable<T2>> task2 = task2Func();
+            Task<IEnumerable<T3>> task3 = task3Func();
+
             IList<Task> tasks = new List<Task> { task1, task2, task3 };
+
+            //using JoinableTaskContext joinableTaskContext = new JoinableTaskContext();
+            //JoinableTaskFactory joinableTaskFactory = new JoinableTaskFactory(joinableTaskContext);
 
             while (tasks.Any())
             {
@@ -78,6 +101,10 @@ namespace System.Threading.Tasks
 
                 if (finished == task1)
                 {
+                    //#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
+                    //                    JoinableTask<IEnumerable<T1>> t1s = joinableTaskFactory.RunAsync(() => task1);
+                    //#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
+
                     IEnumerable<T1> t1s = await task1.ConfigureAwait(continueOnCapturedContext);
 
                     results.Add(convertor1(t1s));
@@ -85,6 +112,11 @@ namespace System.Threading.Tasks
 
                 if (finished == task2)
                 {
+
+                    //#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
+                    //                    JoinableTask<IEnumerable<T2>> t2s = joinableTaskFactory.RunAsync(() => task2);
+                    //#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
+
                     IEnumerable<T2> t2s = await task2.ConfigureAwait(continueOnCapturedContext);
 
                     results.Add(convertor2(t2s));
@@ -92,6 +124,11 @@ namespace System.Threading.Tasks
 
                 if (finished == task3)
                 {
+
+                    //#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
+                    //                    JoinableTask<IEnumerable<T3>> t3s = joinableTaskFactory.RunAsync(() => task3);
+                    //#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
+
                     IEnumerable<T3> t3s = await task3.ConfigureAwait(continueOnCapturedContext);
 
                     results.Add(convertor3(t3s));
@@ -105,7 +142,7 @@ namespace System.Threading.Tasks
         /// 使用MySqlConnector的数据库操作，不能使用并行
         /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
         /// </summary>
-        public static Task Concurrence(IEnumerable<Task> tasks)
+        public static Task ConcurrenceAsync(IEnumerable<Task> tasks)
         {
             return Task.WhenAll(tasks);
         }
@@ -114,7 +151,7 @@ namespace System.Threading.Tasks
         /// 使用MySqlConnector的数据库操作，不能使用并行
         /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
         /// </summary>
-        public static Task<TResult[]> Concurrence<TResult>(IEnumerable<Task<TResult>> tasks)
+        public static Task<TResult[]> ConcurrenceAsync<TResult>(IEnumerable<Task<TResult>> tasks)
         {
             return Task.WhenAll(tasks);
         }
@@ -123,7 +160,7 @@ namespace System.Threading.Tasks
         /// 使用MySqlConnector的数据库操作，不能使用并行
         /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
         /// </summary>
-        public static async Task<IEnumerable<TResult>> Concurrence<TResult, T>(IEnumerable<Task<T>> tasks, Func<T, TResult> convertor, bool continueOnCapturedContext = false)
+        public static async Task<IEnumerable<TResult>> ConcurrenceAsync<TResult, T>(IEnumerable<Task<T>> tasks, Func<T, TResult> convertor, bool continueOnCapturedContext = false)
         {
             List<TResult> results = new List<TResult>();
 
@@ -143,7 +180,7 @@ namespace System.Threading.Tasks
         /// 使用MySqlConnector的数据库操作，不能使用并行
         /// 详情请见 https://mysqlconnector.net/troubleshooting/connection-reuse/
         /// </summary>
-        public static async Task<IEnumerable<TResult>> Concurrence<TResult, T>(IEnumerable<Task<IEnumerable<T>>> tasks, Func<T, TResult> convertor, bool continueOnCapturedContext = false)
+        public static async Task<IEnumerable<TResult>> ConcurrenceAsync<TResult, T>(IEnumerable<Task<IEnumerable<T>>> tasks, Func<T, TResult> convertor, bool continueOnCapturedContext = false)
         {
             List<TResult> results = new List<TResult>();
 
@@ -183,7 +220,7 @@ namespace System.Threading.Tasks
 
             foreach (Task<T> inputTask in inputTasks)
             {
-                inputTask.ContinueWith(continuation, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
+                _ = inputTask.ContinueWith(continuation, CancellationToken.None, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default);
             }
 
             return results;

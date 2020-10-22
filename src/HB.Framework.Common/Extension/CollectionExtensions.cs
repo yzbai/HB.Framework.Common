@@ -14,16 +14,26 @@ namespace System
 {
     public static class CollectionExtensions
     {
-        public static void ForEach<T>(this IEnumerable<T> enumerable, Action<T> action)
+        public static void ForEach<T>(this IEnumerable<T>? enumerable, Action<T> action)
         {
+            if (enumerable == null)
+            {
+                return;
+            }
+
             foreach (T t in enumerable)
             {
                 action(t);
             }
         }
 
-        public static async Task ForEachAsync<T>(this IEnumerable<T> enumerable, Func<T, Task> action)
+        public static async Task ForEachAsync<T>(this IEnumerable<T>? enumerable, Func<T, Task> action)
         {
+            if (enumerable == null)
+            {
+                return;
+            }
+
             foreach (T t in enumerable)
             {
                 await action(t).ConfigureAwait(false);
@@ -125,11 +135,6 @@ namespace System
         public static bool IsNotNullOrEmpty<T>([ValidatedNotNull] this IEnumerable<T>? ts)
         {
             return ts != null && ts.Any();
-        }
-
-        public static bool IsNotNullOrEmpty([ValidatedNotNull] this Array? array)
-        {
-            return array != null && array.Length != 0;
         }
 
         /// <summary>
