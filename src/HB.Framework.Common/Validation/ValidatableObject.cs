@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace HB.Framework.Common
@@ -50,7 +51,7 @@ namespace HB.Framework.Common
             return builder.ToString();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
+        [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
         public bool PerformValidate(string? propertyName = null)
         {
             try
