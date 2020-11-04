@@ -2,7 +2,7 @@
 
 namespace HB.Framework.Common.Cache
 {
-    public class CacheException : ServerException
+    public class CacheException : FrameworkException
     {
 
         public CacheException(string? message) : base(message)
@@ -17,15 +17,15 @@ namespace HB.Framework.Common.Cache
         {
         }
 
-        public CacheException(ServerErrorCode errorCode, string? message) : base(errorCode, message)
+        public CacheException(ErrorCode errorCode, string? message) : base(errorCode, message)
         {
         }
 
-        public CacheException(ServerErrorCode errorCode, string? message, Exception? innerException) : base(errorCode, message, innerException)
+        public CacheException(ErrorCode errorCode, string? message, Exception? innerException) : base(errorCode, message, innerException)
         {
         }
 
-        public CacheException(ServerErrorCode errorCode) : base(errorCode)
+        public CacheException(ErrorCode errorCode) : base(errorCode)
         {
         }
     }

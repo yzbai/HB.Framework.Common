@@ -12,7 +12,7 @@ namespace HB.Framework.Common.Api
 
         public string? Message { get; private set; }
 
-        public ServerErrorCode ErrCode { get; private set; } = ServerErrorCode.OK;
+        public ErrorCode ErrCode { get; private set; } = ErrorCode.OK;
 
         public bool IsSuccessful { get => HttpCode >= 200 && HttpCode <= 299; }
 
@@ -21,7 +21,7 @@ namespace HB.Framework.Common.Api
             HttpCode = httpCode;
         }
 
-        public ApiResponse(int httpCode, string? message, ServerErrorCode errorCode) : this(httpCode)
+        public ApiResponse(int httpCode, string? message, ErrorCode errorCode) : this(httpCode)
         {
             Message = message;
             ErrCode = errorCode;
@@ -38,6 +38,6 @@ namespace HB.Framework.Common.Api
             Data = data;
         }
 
-        public ApiResponse(int httpCode, string? message, ServerErrorCode errorCode) : base(httpCode, message, errorCode) { }
+        public ApiResponse(int httpCode, string? message, ErrorCode errorCode) : base(httpCode, message, errorCode) { }
     }
 }

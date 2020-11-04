@@ -7,7 +7,7 @@ namespace HB.Framework.Common.Api
 {
     public class ApiError
     {
-        public ServerErrorCode Code { get; set; }
+        public ErrorCode Code { get; set; }
 
         public string? Message { get; set; }
 
@@ -15,13 +15,13 @@ namespace HB.Framework.Common.Api
 
         public ApiError() { }
 
-        public ApiError(ServerErrorCode code, string? message = null)
+        public ApiError(ErrorCode code, string? message = null)
         {
             Code = code;
             Message = message ?? code.ToString();
         }
 
-        public ApiError(ServerErrorCode code, IDictionary<string, IEnumerable<string>> modelStates) : this(code: code, message: null)
+        public ApiError(ErrorCode code, IDictionary<string, IEnumerable<string>> modelStates) : this(code: code, message: null)
         {
             modelStates.ForEach(kv =>
             {

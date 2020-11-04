@@ -4,10 +4,11 @@ using System.Text;
 
 namespace System
 {
-    public enum ServerErrorCode
+    public enum ErrorCode
     {
         //200
         OK = 1,
+        ArgumentValidationError = 2,
 
         #region API
 
@@ -119,15 +120,17 @@ namespace System
         AuthorizationUpdateSignInTokenError = 523,
         AuthorizationInvalideDeviceId = 524,
         AuthorizationRefreshTokenExpired = 525,
+        ApiNullReturn = 526,
+
 
         #endregion
     }
 
     public static class ErrorCodeExtensions
     {
-        public static bool IsSuccessful(this ServerErrorCode errorCode)
+        public static bool IsSuccessful(this ErrorCode errorCode)
         {
-            return errorCode == ServerErrorCode.OK;
+            return errorCode == ErrorCode.OK;
         }
     }
 }

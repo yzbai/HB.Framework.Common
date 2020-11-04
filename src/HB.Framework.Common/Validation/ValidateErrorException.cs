@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 
 namespace HB.Framework.Common
 {
-    public class ValidateErrorException : ServerException
+    public class ValidateErrorException : FrameworkException
     {
 
         public ValidateErrorException()
@@ -20,7 +20,7 @@ namespace HB.Framework.Common
         {
         }
 
-        public ValidateErrorException(ServerErrorCode errorCode) : base(errorCode)
+        public ValidateErrorException(ErrorCode errorCode) : base(errorCode)
         {
         }
 
@@ -28,11 +28,11 @@ namespace HB.Framework.Common
         {
         }
 
-        public ValidateErrorException(ServerErrorCode errorCode, string? message) : base(errorCode, message)
+        public ValidateErrorException(ErrorCode errorCode, string? message) : base(errorCode, message)
         {
         }
 
-        public ValidateErrorException(ServerErrorCode errorCode, string? message, Exception? innerException) : base(errorCode, message, innerException)
+        public ValidateErrorException(ErrorCode errorCode, string? message, Exception? innerException) : base(errorCode, message, innerException)
         {
         }
     }

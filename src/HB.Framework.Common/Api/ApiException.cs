@@ -2,7 +2,7 @@
 
 namespace System
 {
-    public class ApiException : ServerException
+    public class ApiException : FrameworkException
     {
         public ApiException(string? message) : base(message)
         {
@@ -16,15 +16,15 @@ namespace System
         {
         }
 
-        public ApiException(ServerErrorCode errorCode, string? message) : base(errorCode, message)
+        public ApiException(ErrorCode errorCode, string? message) : base(errorCode, message)
         {
         }
 
-        public ApiException(ServerErrorCode errorCode, string? message, Exception? innerException) : base(errorCode, message, innerException)
+        public ApiException(ErrorCode errorCode, string? message, Exception? innerException) : base(errorCode, message, innerException)
         {
         }
 
-        public ApiException(ServerErrorCode errorCode) : base(errorCode)
+        public ApiException(ErrorCode errorCode) : base(errorCode)
         {
         }
     }
