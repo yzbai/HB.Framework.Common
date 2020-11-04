@@ -26,7 +26,7 @@ namespace HB.Framework.Client.Api
             }
             catch (Exception ex)
             {
-                throw new ApiException(ex, ApiErrorCode.ApiUtilsError, 400, $"ApiRequestUtils.GetResponse {request.GetResourceName()}");
+                throw new ApiException(ServerErrorCode.ApiError, $"ApiRequestUtils.GetResponse {request.GetResourceName()}", ex);
             }
         }
 
@@ -42,7 +42,7 @@ namespace HB.Framework.Client.Api
             }
             catch (Exception ex)
             {
-                throw new ApiException(ex, ApiErrorCode.ApiUtilsError, 400, $"ApiRequestUtils.GetResponse {request.GetResourceName()}");
+                throw new ApiException(ServerErrorCode.ApiError, $"ApiRequestUtils.GetResponse {request.GetResourceName()}", ex);
             }
         }
 
@@ -141,7 +141,7 @@ namespace HB.Framework.Client.Api
 
             if (apiError == null)
             {
-                return new ApiResponse<T>((int)httpResponse.StatusCode, Resources.InternalServerErrorMessage, ApiErrorCode.ApiUtilsError);
+                return new ApiResponse<T>((int)httpResponse.StatusCode, Resources.InternalServerErrorMessage, ServerErrorCode.ApiError);
             }
 
             return new ApiResponse<T>((int)httpResponse.StatusCode, apiError.Message, apiError.Code);
@@ -158,7 +158,7 @@ namespace HB.Framework.Client.Api
 
             if (apiError == null)
             {
-                return new ApiResponse((int)httpResponse.StatusCode, Resources.InternalServerErrorMessage, ApiErrorCode.ApiUtilsError);
+                return new ApiResponse((int)httpResponse.StatusCode, Resources.InternalServerErrorMessage, ServerErrorCode.ApiError);
             }
 
             return new ApiResponse((int)httpResponse.StatusCode, apiError.Message, apiError.Code);

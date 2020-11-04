@@ -1,5 +1,6 @@
 ﻿#nullable enable
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using HB.Framework.Common.Api;
 
@@ -11,7 +12,7 @@ namespace HB.Framework.Common.Api
 
         public string? Message { get; private set; }
 
-        public ApiErrorCode ErrCode { get; private set; } = ApiErrorCode.OK;
+        public ServerErrorCode ErrCode { get; private set; } = ServerErrorCode.OK;
 
         public bool IsSuccessful { get => HttpCode >= 200 && HttpCode <= 299; }
 
@@ -20,7 +21,7 @@ namespace HB.Framework.Common.Api
             HttpCode = httpCode;
         }
 
-        public ApiResponse(int httpCode, string? message, ApiErrorCode errorCode) : this(httpCode)
+        public ApiResponse(int httpCode, string? message, ServerErrorCode errorCode) : this(httpCode)
         {
             Message = message;
             ErrCode = errorCode;
@@ -37,6 +38,6 @@ namespace HB.Framework.Common.Api
             Data = data;
         }
 
-        public ApiResponse(int httpCode, string? message, ApiErrorCode errorCode) : base(httpCode, message, errorCode) { }
+        public ApiResponse(int httpCode, string? message, ServerErrorCode errorCode) : base(httpCode, message, errorCode) { }
     }
 }

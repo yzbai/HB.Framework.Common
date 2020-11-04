@@ -5,9 +5,8 @@ using System.Runtime.Serialization;
 
 namespace HB.Framework.Common
 {
-    public class ValidateErrorException : FrameworkException
+    public class ValidateErrorException : ServerException
     {
-        public override FrameworkExceptionType ExceptionType { get => FrameworkExceptionType.Validation; }
 
         public ValidateErrorException()
         {
@@ -21,7 +20,19 @@ namespace HB.Framework.Common
         {
         }
 
+        public ValidateErrorException(ServerErrorCode errorCode) : base(errorCode)
+        {
+        }
+
         public ValidateErrorException(string? message, Exception? innerException) : base(message, innerException)
+        {
+        }
+
+        public ValidateErrorException(ServerErrorCode errorCode, string? message) : base(errorCode, message)
+        {
+        }
+
+        public ValidateErrorException(ServerErrorCode errorCode, string? message, Exception? innerException) : base(errorCode, message, innerException)
         {
         }
     }
