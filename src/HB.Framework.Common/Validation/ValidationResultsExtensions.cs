@@ -25,6 +25,13 @@ namespace System
             return false;
         }
 
+        public static bool ExistError(this IEnumerable<ValidationResult> valiationResults)
+        {
+            ThrowIf.Null(valiationResults, nameof(valiationResults));
+
+            return valiationResults.Any();
+        }
+
         public static string? ErrorMessageOf(this IEnumerable<ValidationResult> validationResults, string propertyName)
         {
             ThrowIf.Null(validationResults, nameof(validationResults));

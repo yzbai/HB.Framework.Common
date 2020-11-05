@@ -122,6 +122,11 @@ namespace System
         AuthorizationRefreshTokenExpired = 525,
         ApiNullReturn = 526,
 
+        #endregion
+
+        #region Client
+
+        ClientLogicError = 62,
 
         #endregion
     }
