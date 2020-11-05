@@ -63,6 +63,14 @@ namespace HB.Framework.Common.Api
         private readonly IDictionary<string, string?> _parameters = new Dictionary<string, string?>();
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="productType"></param>
+        /// <param name="apiVersion"></param>
+        /// <param name="httpMethod"></param>
+        /// <param name="resourceName"></param>
+        /// <param name="condition">同一Verb下的条件分支，比如在ApiController上标注的[HttpGet("BySms")],BySms就是condition</param>
         public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, string resourceName, string? condition = null)
         {
             _productType = productType;
