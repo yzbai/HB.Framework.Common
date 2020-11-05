@@ -1,19 +1,19 @@
-﻿using HB.Framework.Common.Validate;
-using System;
-using System.Collections.Generic;
+﻿#nullable enable
+
+using HB.Framework.Common.Validate;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HB.Framework.Common.Validation.Attributes
 {
     public sealed class MonthAttribute : ValidationAttribute
     {
+        public bool CanBeNull { get; set; } = true;
+
         public MonthAttribute()
         {
             if (string.IsNullOrEmpty(ErrorMessage))
             {
-                ErrorMessage = "xxxxx";
+                ErrorMessage = "Not a Valid Month.";
             }
         }
 
@@ -21,7 +21,7 @@ namespace HB.Framework.Common.Validation.Attributes
         {
             if (value == null)
             {
-                return true;
+                return CanBeNull;
             }
 
             return value is string text && ValidationMethods.IsMonth(text);

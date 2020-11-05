@@ -1,27 +1,27 @@
-﻿namespace System.ComponentModel.DataAnnotations
+﻿#nullable enable
+
+using HB.Framework.Common.Validate;
+
+namespace System.ComponentModel.DataAnnotations
 {
     public sealed class PasswordAttribute : ValidationAttribute
     {
+        public bool CanBeNull { get; set; } = true;
+
         public PasswordAttribute()
         {
             if (string.IsNullOrEmpty(ErrorMessage))
-                ErrorMessage = "xxxx";
+                ErrorMessage = "Not a valid Password.";
         }
 
         public override bool IsValid(object value)
         {
             if (value == null)
             {
-                return true;
-            }
-            string str = value.ToString();
-
-            if (string.IsNullOrEmpty(str))
-            {
-                return false;
+                return CanBeNull;
             }
 
-            return HB.Framework.Common.Validate.ValidationMethods.IsPassword(str);
+            return value is string text && ValidationMethods.IsPassword(text);
         }
     }
 }

@@ -1,12 +1,18 @@
-﻿namespace System.ComponentModel.DataAnnotations
+﻿#nullable enable
+
+using HB.Framework.Common.Validate;
+
+namespace System.ComponentModel.DataAnnotations
 {
     public sealed class LoginNameAttribute : ValidationAttribute
     {
+        public bool CanBeNull { get; set; } = true;
+
         public LoginNameAttribute()
         {
             if (string.IsNullOrEmpty(ErrorMessage))
             {
-                ErrorMessage = "xxxx";
+                ErrorMessage = "Not a valid LoginName";
             }
         }
 
@@ -14,17 +20,11 @@
         {
             if (value == null)
             {
-                return true;
+                return CanBeNull;
             }
 
-            string str = value as string;
+            return value is string text && text.Length < ValidationSettings. LoginNameMaxLength && ValidationMethods.IsLoginName(text);
 
-            if (string.IsNullOrEmpty(str) || str.Length > 50)
-            {
-                return false;
-            }
-
-            return HB.Framework.Common.Validate.ValidationMethods.IsLoginName(str);
         }
     }
 }

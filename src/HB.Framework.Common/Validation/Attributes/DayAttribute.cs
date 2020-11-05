@@ -1,20 +1,19 @@
-﻿using HB.Framework.Common.Validate;
-using System;
-using System.Collections.Generic;
+﻿#nullable enable
+
+using HB.Framework.Common.Validate;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace HB.Framework.Common.Validation.Attributes
 {
     public sealed class DayAttribute : ValidationAttribute
     {
+        public bool CanBeNull { get; set; } = true;
+
         public DayAttribute()
         {
             if (string.IsNullOrEmpty(ErrorMessage))
             {
-                //TODO: 修改项目中所有ValidationAttribute的ErrorMessage
-                ErrorMessage = "xxxxx";
+                ErrorMessage = "Not a valid Day.";
             }
         }
 
@@ -22,7 +21,7 @@ namespace HB.Framework.Common.Validation.Attributes
         {
             if (value == null)
             {
-                return true;
+                return CanBeNull;
             }
 
             return value is string text && ValidationMethods.IsDay(text);

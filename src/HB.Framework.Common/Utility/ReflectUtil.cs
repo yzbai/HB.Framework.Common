@@ -1,12 +1,13 @@
-﻿using System;
+﻿#nullable enable
+
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Linq;
+using System.Reflection;
 
-namespace HB.Framework.Common.Utility
+namespace System
 {
+    //TODO:[Obsolete("请使用AssemblyLoadContext来实现", true)]
     public static class ReflectUtil
     {
         public static IEnumerable<Assembly> GetAllAssemblies()
@@ -20,6 +21,7 @@ namespace HB.Framework.Common.Utility
 
         public static IEnumerable<Type> GetAllTypeByCondition(Func<Type, bool> condition)
         {
+
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             return Directory
@@ -28,9 +30,11 @@ namespace HB.Framework.Common.Utility
                 .Where(t => condition(t));
         }
 
-        //public static string GetTypeSimpleName(this Type type)
-        //{
-        //    type.Name
-        //}
+        public static IEnumerable<Type> GetAllTypeByCondition(IList<string> assembliesToCheck, Func<Type, bool> condition)
+        {
+            return assembliesToCheck
+                .SelectMany(assemblyName => Assembly.Load(assemblyName).GetTypes())
+                .Where(t => condition(t));
+        }
     }
 }

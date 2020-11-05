@@ -1,0 +1,10 @@
+﻿[*.cs]
+
+# CA1812: Avoid uninstantiated internal classes
+dotnet_diagnostic.CA1812.severity = none
+
+# CA1720: Identifier contains type name
+dotnet_diagnostic.CA1720.severity = none
+
+# CA1062: Validate arguments of public methods. 需要所有的Caller 都使用nrt，所以禁用了CA1062
+dotnet_diagnostic.CA1062.severity = none

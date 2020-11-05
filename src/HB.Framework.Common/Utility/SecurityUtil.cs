@@ -1,9 +1,10 @@
-﻿using System;
-using System.IO;
+﻿#nullable enable
+
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
-using System.Linq;
-using System.Globalization;
+using System.Threading.Tasks;
 
 namespace System
 {
@@ -30,25 +31,49 @@ namespace System
         //    //return Convert.ToBase64String(md5Bytes);
         //}
 
-        public static string GetHashCode<T>(T item)
+        /// <summary>
+        /// GetHash
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Reflection.TargetInvocationException"></exception>
+        /// <exception cref="System.ObjectDisposedException"></exception>
+        public static string GetHash(string item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            using SHA256 sha256Obj = SHA256.Create();
+            byte[] hashBytes = sha256Obj.ComputeHash(Encoding.UTF8.GetBytes(item));
 
-            byte[] result = HashAlgorithm.Create().ComputeHash(JsonUtil.Serialize(item));
+            return Convert.ToBase64String(hashBytes);
+        }
 
+        /// <summary>
+        /// GetHash
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Reflection.TargetInvocationException"></exception>
+        /// <exception cref="System.ObjectDisposedException"></exception>
+        /// <exception cref="System.Runtime.Serialization.SerializationException"></exception>
+        /// <exception cref="System.Security.SecurityException"></exception>
+        public static async Task<string> GetHashAsync<T>([DisallowNull] T item) where T : class
+        {
+            using SHA256 sha256Obj = SHA256.Create();
+            byte[] result = sha256Obj.ComputeHash(await SerializeUtil.PackAsync(item).ConfigureAwait(false));
 
             return Convert.ToBase64String(result);
         }
 
+        /// <summary>
+        /// EncryptPwdWithSalt
+        /// </summary>
+        /// <param name="pwd"></param>
+        /// <param name="salt"></param>
+        /// <returns></returns>
+        /// <exception cref="System.Reflection.TargetInvocationException">Ignore.</exception>
+        /// <exception cref="System.ObjectDisposedException">Ignore.</exception>
         public static string EncryptPwdWithSalt(string pwd, string salt)
         {
-            byte[] pwdAndSaltBytes = Encoding.UTF8.GetBytes(pwd + salt);
-            byte[] hashBytes = SHA256.Create().ComputeHash(pwdAndSaltBytes);
-
-            return Convert.ToBase64String(hashBytes);
+            return GetHash(pwd + salt);
         }
         public static string CreateUniqueToken()
         {
@@ -57,18 +82,18 @@ namespace System
 
         #region Random String
 
-        private const string charCollection = "0,1,2,3,4,5,6,7,8,9,a,s,d,f,g,h,z,c,v,b,n,m,k,q,w,e,r,t,y,u,p,A,S,D,F,G,H,Z,C,V,B,N,M,K,Q,W,E,R,T,Y,U,P"; //定义验证码字符及出现频次 ,避免出现0 o j i l 1 x;
-        private static readonly string[] charArray = charCollection.Split(',');
-        private static readonly string[] numbericCharArray = charCollection.Substring(0, 20).Split(',');
+        private const string _charCollection = "0,1,2,3,4,5,6,7,8,9,a,s,d,f,g,h,z,c,v,b,n,m,k,q,w,e,r,t,y,u,p,A,S,D,F,G,H,Z,C,V,B,N,M,K,Q,W,E,R,T,Y,U,P"; //定义验证码字符及出现频次 ,避免出现0 o j i l 1 x;
+        private static readonly string[] _charArray = _charCollection.Split(',');
+        private static readonly string[] _numbericCharArray = _charCollection.Substring(0, 20).Split(',');
 
         public static string CreateRandomString(int length)
         {
-            return CreateRandomString(length, charArray);
+            return CreateRandomString(length, _charArray);
         }
 
         public static string CreateRandomNumbericString(int length)
         {
-            return CreateRandomString(length, numbericCharArray);
+            return CreateRandomString(length, _numbericCharArray);
         }
 
         private static string CreateRandomString(int length, string[] charArray)
