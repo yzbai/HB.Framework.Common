@@ -19,10 +19,10 @@ namespace HB.Framework.Common.Api
         }
 
         [Required]
-        public string DeviceType
+        public DeviceInfos DeviceInfos
         {
-            get { return GetParameter(ClientNames.DeviceType)!; }
-            set { SetParameter(ClientNames.DeviceType, value); }
+            get { return DeviceInfos.FromString(GetParameter(ClientNames.DeviceInfos)!); }
+            set { SetParameter(ClientNames.DeviceInfos, value.ToString()); }
         }
 
         [Required]
@@ -53,7 +53,7 @@ namespace HB.Framework.Common.Api
         }
 
         //All use fields & Get Methods instead of Properties, for avoid mvc binding
-        private readonly string _productType;
+        private readonly string _productName;
         private readonly string _apiVersion;
         private readonly HttpMethod _httpMethod;
         private readonly string _resourceName;
@@ -66,14 +66,14 @@ namespace HB.Framework.Common.Api
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="productType"></param>
+        /// <param name="productName"></param>
         /// <param name="apiVersion"></param>
         /// <param name="httpMethod"></param>
         /// <param name="resourceName"></param>
         /// <param name="condition">同一Verb下的条件分支，比如在ApiController上标注的[HttpGet("BySms")],BySms就是condition</param>
-        public ApiRequest(string productType, string apiVersion, HttpMethod httpMethod, string resourceName, string? condition = null)
+        public ApiRequest(string productName, string apiVersion, HttpMethod httpMethod, string resourceName, string? condition = null)
         {
-            _productType = productType;
+            _productName = productName;
             _apiVersion = apiVersion;
             _httpMethod = httpMethod;
             _resourceName = resourceName;
@@ -83,9 +83,9 @@ namespace HB.Framework.Common.Api
             Timestamp = SecurityUtil.GetCurrentTimestamp().ToString(GlobalSettings.Culture);
         }
 
-        public string GetProductType()
+        public string GetProductName()
         {
-            return _productType;
+            return _productName;
         }
 
         public string GetApiVersion()

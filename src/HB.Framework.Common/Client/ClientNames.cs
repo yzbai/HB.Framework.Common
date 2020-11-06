@@ -11,7 +11,7 @@ namespace System
 
         public const string DeviceId = nameof(DeviceId);
         public const string DeviceVersion = nameof(DeviceVersion);
-        public const string DeviceType = nameof(DeviceType);
+        public const string DeviceInfos = nameof(DeviceInfos);
         public const string DeviceAddress = nameof(DeviceAddress);
 
         public const string RandomStr = nameof(RandomStr);

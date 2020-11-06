@@ -9,8 +9,8 @@ namespace HB.Framework.Common.Api
 {
     public class JwtApiRequest : ApiRequest
     {
-        public JwtApiRequest(string productType, string apiVersion, HttpMethod httpMethod, string resourceName, string? condition = null)
-            : base(productType, apiVersion, httpMethod, resourceName, condition)
+        public JwtApiRequest(string productName, string apiVersion, HttpMethod httpMethod, string resourceName, string? condition = null)
+            : base(productName, apiVersion, httpMethod, resourceName, condition)
         {
         }
 
