@@ -22,10 +22,15 @@ namespace System
 
         static SerializeUtil()
         {
-            _jsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-            _jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            _jsonSerializerOptions.Converters.Add(new DictionaryTKeyEnumTValueConverter());
-            _jsonSerializerOptions.PropertyNameCaseInsensitive = true;
+            Configure(_jsonSerializerOptions);
+        }
+
+        public static void Configure(JsonSerializerOptions jsonSerializerOptions)
+        {
+            jsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+            jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            jsonSerializerOptions.Converters.Add(new DictionaryTKeyEnumTValueConverter());
+            jsonSerializerOptions.PropertyNameCaseInsensitive = true;
         }
 
         public static string ToJson(object entity)
@@ -192,6 +197,8 @@ namespace System
 
             return await serializer.UnpackSingleObjectAsync(bytes).ConfigureAwait(false);
         }
+
+
 
         #endregion
     }

@@ -6,60 +6,31 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace HB.Framework.Common.Api
 {
-    public class ApiRequest : ValidatableObject
+    public abstract class ApiRequest : ValidatableObject
     {
-        [Required]
-        public string DeviceId
-        {
-            get { return GetParameter(ClientNames.DeviceId)!; }
-            set { SetParameter(ClientNames.DeviceId, value); }
-        }
+        #region Common Parameters
 
         [Required]
-        public DeviceInfos? DeviceInfos
-        {
-            get
-            {
-                return DeviceInfos.FromString(GetParameter(ClientNames.DeviceInfos)!);
-            }
-            set
-            {
-                SetParameter(ClientNames.DeviceInfos, value?.ToString());
-            }
-        }
+        public string DeviceId { get; set; } = null!;
 
         [Required]
-        public string DeviceVersion
-        {
-            get { return GetParameter(ClientNames.DeviceVersion)!; }
-            set { SetParameter(ClientNames.DeviceVersion, value); }
-        }
+        public DeviceInfos DeviceInfos { get; set; } = null!;
 
         [Required]
-        public string RandomStr
-        {
-            get { return GetParameter(ClientNames.RandomStr)!; }
-            set { SetParameter(ClientNames.RandomStr, value); }
-        }
+        public string DeviceVersion { get; set; } = null!;
 
-        [Required]
-        public string Timestamp
-        {
-            get { return GetParameter(ClientNames.Timestamp)!; }
-            set { SetParameter(ClientNames.Timestamp, value); }
-        }
+        public string? PublicResourceToken { get; set; }
 
-        public string? PublicResourceToken
-        {
-            get => GetParameter(ClientNames.PublicResourceToken);
-            set => SetParameter(ClientNames.PublicResourceToken, value);
-        }
+        #endregion
 
-        //All use fields & Get Methods instead of Properties, for avoid mvc binding
+        #region Settings
+
+        //All use fields & Get Methods instead of Properties, for avoid mvc binding & json searilize
         private readonly string _productName;
         private readonly string _apiVersion;
         private readonly HttpMethod _httpMethod;
@@ -67,11 +38,10 @@ namespace HB.Framework.Common.Api
         private readonly string? _condition;
         private bool _needHttpMethodOveride = true;
         private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
-        private readonly IDictionary<string, string?> _parameters = new Dictionary<string, string?>();
 
 
         /// <summary>
-        /// 
+        /// 因为不会直接使用ApiRequest作为Api的请求参数，所以不用提供无参构造函数，而具体的子类需要提供
         /// </summary>
         /// <param name="productName"></param>
         /// <param name="apiVersion"></param>
@@ -85,9 +55,6 @@ namespace HB.Framework.Common.Api
             _httpMethod = httpMethod;
             _resourceName = resourceName;
             _condition = condition;
-
-            RandomStr = SecurityUtil.CreateRandomString(6);
-            Timestamp = SecurityUtil.GetCurrentTimestamp().ToString(GlobalSettings.Culture);
         }
 
         public string GetProductName()
@@ -124,6 +91,16 @@ namespace HB.Framework.Common.Api
             _needHttpMethodOveride = isNeeded;
         }
 
+        public static string GetRandomStr()
+        {
+            return SecurityUtil.CreateRandomString(6);
+        }
+
+        public static string GetTimestamp()
+        {
+            return SecurityUtil.GetCurrentTimestamp().ToString(GlobalSettings.Culture);
+        }
+
         public string? GetHeader(string name)
         {
             if (_headers.TryGetValue(name, out string value))
@@ -145,26 +122,6 @@ namespace HB.Framework.Common.Api
             return _headers;
         }
 
-        public string? GetParameter(string name)
-        {
-            if (_parameters.TryGetValue(name, out string? value))
-            {
-                return value;
-            }
-
-            return null;
-        }
-
-        public void SetParameter(string name, string? value)
-        {
-            ThrowIf.NullOrEmpty(name, nameof(name));
-
-            _parameters[name] = value;
-        }
-
-        public IDictionary<string, string?> GetParameters()
-        {
-            return _parameters;
-        }
+        #endregion
     }
 }

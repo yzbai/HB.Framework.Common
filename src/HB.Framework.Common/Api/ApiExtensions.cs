@@ -59,34 +59,36 @@ namespace HB.Framework.Client.Api
 
             HttpRequestMessage httpRequest = new HttpRequestMessage(httpMethod, BuildUrl(request));
 
-            if (request.GetHttpMethod() != HttpMethod.Get)
+            //Get的参数也放到body中去
+            //if (request.GetHttpMethod() != HttpMethod.Get)
+            //{
+            if (request is BufferedFileApiRequest bufferedRequest)
             {
-                //httpRequest.Content = new FormUrlEncodedContent(request.GetParameters());
-                //httpRequest.Content = new JsonContent()
-
-                if (request is BufferedFileApiRequest bufferedRequest)
-                {
-                    MultipartFormDataContent content = new MultipartFormDataContent();
+                MultipartFormDataContent content = new MultipartFormDataContent();
 
 #pragma warning disable CA2000 // Dispose objects before losing scope // using HttpRequestMessage 会自动dispose他的content
-                    ByteArrayContent byteArrayContent = new ByteArrayContent(bufferedRequest.GetBytes());
+                ByteArrayContent byteArrayContent = new ByteArrayContent(bufferedRequest.GetBytes());
 #pragma warning restore CA2000 // Dispose objects before losing scope
 
-                    content.Add(byteArrayContent, bufferedRequest.GetBytesPropertyName(), bufferedRequest.GetFileName());
+                content.Add(byteArrayContent, bufferedRequest.GetBytesPropertyName(), bufferedRequest.GetFileName());
 
-                    request.GetParameters().ForEach(kv =>
-                    {
-                        content.Add(new StringContent(kv.Value), kv.Key);
-                    });
+                //request.GetParameters().ForEach(kv =>
+                //{
+                //    content.Add(new StringContent(kv.Value), kv.Key);
+                //});
 
-                    httpRequest.Content = content;
-                }
-                else
-                {
-                    //TODO: .net 5以后，使用JsonContent
-                    httpRequest.Content = new StringContent(SerializeUtil.ToJson(request.GetParameters()), Encoding.UTF8, "application/json");
-                }
+#pragma warning disable CA2000 // Dispose objects before losing scope // HttpRequestMessage dispose时候，会dispose他的content
+                content.Add(new StringContent(SerializeUtil.ToJson(request), Encoding.UTF8, "application/json"));
+#pragma warning restore CA2000 // Dispose objects before losing scope
+
+                httpRequest.Content = content;
             }
+            else
+            {
+                //TODO: .net 5以后，使用JsonContent
+                httpRequest.Content = new StringContent(SerializeUtil.ToJson(request), Encoding.UTF8, "application/json");
+            }
+            //}
 
             request.GetHeaders().ForEach(kv => httpRequest.Headers.Add(kv.Key, kv.Value));
 
@@ -114,16 +116,28 @@ namespace HB.Framework.Client.Api
                 requestUrlBuilder.Append(request.GetCondition());
             }
 
-            if (request.GetHttpMethod() == HttpMethod.Get)
-            {
-                string query = request.GetParameters().ToHttpValueCollection().ToString();
 
-                if (!query.IsNullOrEmpty())
-                {
-                    requestUrlBuilder.Append('?');
-                    requestUrlBuilder.Append(query);
-                }
-            }
+            //添加噪音
+            IDictionary<string, string?> parameters = new Dictionary<string, string?>();
+            parameters.Add(ClientNames.RandomStr, ApiRequest.GetRandomStr());
+            parameters.Add(ClientNames.Timestamp, ApiRequest.GetTimestamp());
+
+            string query = parameters.ToHttpValueCollection().ToString();
+
+            requestUrlBuilder.Append('?');
+            requestUrlBuilder.Append(query);
+
+            //放到Body中去
+            //if (request.GetHttpMethod() == HttpMethod.Get)
+            //{
+            //    string query = request.GetParameters().ToHttpValueCollection().ToString();
+
+            //    if (!query.IsNullOrEmpty())
+            //    {
+            //        requestUrlBuilder.Append('?');
+            //        requestUrlBuilder.Append(query);
+            //    }
+            //}
 
             return requestUrlBuilder.ToString();
         }
