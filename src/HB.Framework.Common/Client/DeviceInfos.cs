@@ -26,8 +26,13 @@ namespace System
             return $"{Name}{_seprator}{Model}{_seprator}{OSVersion}{_seprator}{Platform}{_seprator}{Idiom}{_seprator}{Type}";
         }
 
-        public static DeviceInfos FromString(string infoString)
+        public static DeviceInfos? FromString(string? infoString)
         {
+            if (string.IsNullOrEmpty(infoString))
+            {
+                return null;
+            }
+
             string[] splits = infoString.Split(_seprator, StringSplitOptions.RemoveEmptyEntries);
 
             if (splits.Length != 6)

@@ -4,6 +4,7 @@ using HB.Framework.Client.Api;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -19,10 +20,16 @@ namespace HB.Framework.Common.Api
         }
 
         [Required]
-        public DeviceInfos DeviceInfos
+        public DeviceInfos? DeviceInfos
         {
-            get { return DeviceInfos.FromString(GetParameter(ClientNames.DeviceInfos)!); }
-            set { SetParameter(ClientNames.DeviceInfos, value.ToString()); }
+            get
+            {
+                return DeviceInfos.FromString(GetParameter(ClientNames.DeviceInfos)!);
+            }
+            set
+            {
+                SetParameter(ClientNames.DeviceInfos, value?.ToString());
+            }
         }
 
         [Required]
