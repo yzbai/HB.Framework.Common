@@ -9,6 +9,7 @@ namespace System
         //200
         OK = 1,
         ArgumentValidationError = 2,
+        
 
         #region API
 
@@ -127,6 +128,16 @@ namespace System
         #region Client
 
         ClientLogicError = 62,
+
+
+
+        #endregion
+
+        #region Cert
+
+        JwtEncryptionCertNotFound = 73,
+        JwtSigningCertNotFound = 74,
+        DataProtectionCertNotFound = 727
 
         #endregion
     }
