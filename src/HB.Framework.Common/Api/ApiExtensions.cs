@@ -116,14 +116,15 @@ namespace HB.Framework.Client.Api
                 requestUrlBuilder.Append(request.GetCondition());
             }
 
-
             //添加噪音
             IDictionary<string, string?> parameters = new Dictionary<string, string?>();
             parameters.Add(ClientNames.RandomStr, ApiRequest.GetRandomStr());
             parameters.Add(ClientNames.Timestamp, ApiRequest.GetTimestamp());
 
-            string query = parameters.ToHttpValueCollection().ToString();
+            //额外添加DeviceId，为了验证jwt中的DeviceId与本次请求deviceiId一致
+            parameters.Add(ClientNames.DeviceId, request.DeviceId);
 
+            string query = parameters.ToHttpValueCollection().ToString();
             requestUrlBuilder.Append('?');
             requestUrlBuilder.Append(query);
 
