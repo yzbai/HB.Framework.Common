@@ -10,6 +10,7 @@ namespace System
         OK = 1,
         ArgumentValidationError = 2,
         OutOfRange = 3,
+        InvalidEntity = 4,
 
 
         #region API
@@ -139,6 +140,7 @@ namespace System
         JwtEncryptionCertNotFound = 73,
         JwtSigningCertNotFound = 74,
         DataProtectionCertNotFound = 727,
+
 
 
         #endregion
