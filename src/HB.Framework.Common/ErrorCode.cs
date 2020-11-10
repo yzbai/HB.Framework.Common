@@ -69,6 +69,7 @@ namespace System
         DatabaseNotATableModel = 210,
         DatabaseTransactionConnectionIsNull = 211,
         DatabaseExecuterError = 241,
+        DatabaseAffectedRowCountNotValid = 228,
 
         #endregion
 
@@ -140,6 +141,7 @@ namespace System
         JwtEncryptionCertNotFound = 73,
         JwtSigningCertNotFound = 74,
         DataProtectionCertNotFound = 727,
+
 
 
 
