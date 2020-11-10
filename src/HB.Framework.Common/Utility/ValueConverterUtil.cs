@@ -103,7 +103,6 @@ namespace System
         /// <param name="value">Value.</param>
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
-        [return: NotNullIfNotNull("value")]
         public static string? TypeValueToStringValue(object? value)
         {
             if (value == null)

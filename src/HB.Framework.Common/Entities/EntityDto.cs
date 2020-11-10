@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace HB.Framework.Common
+namespace HB.Framework.Common.Entities
 {
     public class EntityDto : ValidatableObject
     {
