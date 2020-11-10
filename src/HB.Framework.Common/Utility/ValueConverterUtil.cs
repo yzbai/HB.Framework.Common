@@ -97,7 +97,7 @@ namespace System
         }
 
         /// <summary>
-        /// 将C#值转换为字符串，便于拼接SQL字符串
+        /// 将C#值转换为字符串，便于拼接SQL字符串. 如果value不为null且不为DBNull，则返回不为null
         /// </summary>
         /// <returns>The value to db value.</returns>
         /// <param name="value">Value.</param>

@@ -26,10 +26,11 @@ namespace HB.Framework.Common.Entities
         /// </summary>
         [Required]
         [UniqueGuidEntityProperty]
+        [KVStoreKey]
         public string Guid { get; set; } = SecurityUtil.CreateUniqueToken();
 
         [EntityProperty("Version")]
-        public long Version { get; set; } = 0;
+        public int Version { get; set; } = 0;
 
         [EntityProperty("上一次更改者", Length = LastUserMaxLength)]
         public string LastUser { get; set; } = string.Empty;
