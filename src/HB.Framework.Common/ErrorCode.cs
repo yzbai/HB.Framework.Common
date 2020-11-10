@@ -9,6 +9,9 @@ namespace System
         //200
         OK = 1,
         ArgumentValidationError = 2,
+        OutOfRange = 3,
+        InvalidEntity = 4,
+
 
         #region API
 
@@ -66,6 +69,7 @@ namespace System
         DatabaseNotATableModel = 210,
         DatabaseTransactionConnectionIsNull = 211,
         DatabaseExecuterError = 241,
+        DatabaseAffectedRowCountNotValid = 228,
 
         #endregion
 
@@ -127,6 +131,19 @@ namespace System
         #region Client
 
         ClientLogicError = 62,
+
+
+
+        #endregion
+
+        #region Cert
+
+        JwtEncryptionCertNotFound = 73,
+        JwtSigningCertNotFound = 74,
+        DataProtectionCertNotFound = 727,
+
+
+
 
         #endregion
     }

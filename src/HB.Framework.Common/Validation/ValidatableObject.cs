@@ -8,6 +8,8 @@ using System.Text;
 
 namespace HB.Framework.Common
 {
+    //TODO: 考虑验证嵌套类， 和 集合类
+    //asp.net core model binding 可以验证嵌套类，但无法验证集合类
     /// <summary>
     /// 基础领域模型
     /// 内建验证机制。
