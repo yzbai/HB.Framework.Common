@@ -40,7 +40,7 @@ namespace System
         }
 
         [return: MaybeNull]
-        public static T FromJson<T>(string jsonString)
+        public static T FromJson<T>(string? jsonString)
         {
             return jsonString.IsNullOrEmpty() ? default : JsonSerializer.Deserialize<T>(jsonString, _jsonSerializerOptions);
         }
