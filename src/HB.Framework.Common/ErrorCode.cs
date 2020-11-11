@@ -81,6 +81,7 @@
         KVStoreNoEntitySchemaFound = 37,
         KVStoreRedisTimeout = 38,
         KVStoreRedisConnectionFailed = 390,
+        KVStoreEntityAddOrUpdateError = 328,
 
         #endregion KVStore
 
@@ -136,6 +137,7 @@
         JwtEncryptionCertNotFound = 73,
         JwtSigningCertNotFound = 74,
         DataProtectionCertNotFound = 727,
+
 
         #endregion Cert
     }
