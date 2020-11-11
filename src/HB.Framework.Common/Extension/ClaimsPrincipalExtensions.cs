@@ -75,6 +75,5 @@ namespace System
 
         //    return string.IsNullOrEmpty(value) ? false : Convert.ToBoolean(value, GlobalSettings.Culture);
         //}
-
     }
 }

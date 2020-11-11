@@ -80,5 +80,4 @@ namespace HB.Framework.Common.Validate
     }
 }
 
-
 #nullable restore

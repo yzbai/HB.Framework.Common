@@ -2,10 +2,10 @@
 
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Linq;
-using Microsoft.Extensions.Logging;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace System
 {
@@ -89,7 +89,6 @@ namespace System
                 byte[]? headerBytes = binaryReader.ReadBytes(signatures.Max(m => m.Length));
 
                 return signatures.Any(signature => headerBytes.Take(signature.Length).SequenceEqual(signature));
-
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception ex)

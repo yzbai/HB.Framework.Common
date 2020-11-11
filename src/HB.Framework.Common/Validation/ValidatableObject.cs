@@ -94,7 +94,7 @@ namespace HB.Framework.Common
             }
         }
 
-        #endregion
+        #endregion Validation
     }
 }
 

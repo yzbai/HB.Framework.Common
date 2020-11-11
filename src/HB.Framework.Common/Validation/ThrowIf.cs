@@ -1,11 +1,11 @@
 ﻿#nullable enable
 
-using HB.Framework.Common;
-using HB.Framework.Common.Validate;
-using Microsoft;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using HB.Framework.Common;
+using HB.Framework.Common.Validate;
+using Microsoft;
 
 namespace System
 {
@@ -58,12 +58,10 @@ namespace System
             {
                 ts.ForEach(t =>
                 {
-
                     if (!t.IsValid())
                     {
                         throw new ValidateErrorException(t);
                     }
-
                 });
             }
 
@@ -124,7 +122,7 @@ namespace System
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="str"></param>
         /// <param name="paramName"></param>
@@ -157,7 +155,6 @@ namespace System
 
             return lst;
         }
-
 
         /// <summary>
         /// NullOrEmpty
@@ -254,7 +251,6 @@ namespace System
             return email;
         }
 
-
         /// <summary>
         /// NotEqual
         /// </summary>
@@ -274,6 +270,7 @@ namespace System
             return a;
         }
     }
+
     public static class ThrowIfExtensions
     {
         /// <summary>
@@ -365,7 +362,6 @@ namespace System
 
             return lst;
         }
-
 
         /// <summary>
         /// ThrowIfNotEqual

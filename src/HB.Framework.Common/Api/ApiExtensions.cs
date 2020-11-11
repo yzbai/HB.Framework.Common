@@ -1,12 +1,11 @@
-﻿using HB.Framework.Common.Api;
-using HB.Framework.Common.Properties;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
+using HB.Framework.Common.Api;
+using HB.Framework.Common.Properties;
 
 namespace HB.Framework.Client.Api
 {

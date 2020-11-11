@@ -12,7 +12,6 @@ namespace HB.Framework.Common.Entities
     {
         public AutoIncrementPrimaryKeyAttribute()
         {
-
         }
     }
 }

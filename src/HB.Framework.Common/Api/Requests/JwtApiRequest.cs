@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Http;
 
 namespace HB.Framework.Common.Api
 {

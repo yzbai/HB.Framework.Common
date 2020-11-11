@@ -1,7 +1,6 @@
 ﻿#nullable enable
 
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System
 {
@@ -59,7 +58,7 @@ namespace System
             _convertFunDict[typeof(object)] = o => { return o ?? null; };
             _convertFunDict[typeof(DBNull)] = o => { return DBNull.Value; };
 
-            #endregion
+            #endregion type to type
         }
 
         /// <summary>

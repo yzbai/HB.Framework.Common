@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace HB.Framework.Common
 {
     public static class DelegateUtility
@@ -11,6 +10,7 @@ namespace HB.Framework.Common
 
             return rt.ThrowIfNull(nameof(rt));
         }
+
         /// <summary>
         /// Cast
         /// </summary>

@@ -1,8 +1,4 @@
-﻿
-
-using System.Security.Claims;
-
-namespace System.Security.Claims
+﻿namespace System.Security.Claims
 {
     public static class ClaimExtensionTypes
     {
@@ -31,7 +27,6 @@ namespace System.Security.Claims
         //public const string IconUrl = "HB.Identity.IconUrl";
 
         public const string LoginName = "HB.Identity.LoginName";
-
 
         //public const string MobilePhone = "HB.Identity.MobilePhone";
         //public const string Email = "HB.Identity.Email";

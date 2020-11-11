@@ -1,13 +1,11 @@
 ﻿#nullable enable
 
 using System;
-using System.Runtime.Serialization;
 
 namespace HB.Framework.Common
 {
     public class ValidateErrorException : FrameworkException
     {
-
         public ValidateErrorException()
         {
         }

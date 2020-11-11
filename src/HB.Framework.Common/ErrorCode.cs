@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System
+﻿namespace System
 {
     public enum ErrorCode
     {
         //200
         OK = 1,
+
         ArgumentValidationError = 2,
         OutOfRange = 3,
         InvalidEntity = 4,
-
 
         #region API
 
@@ -19,12 +15,14 @@ namespace System
 
         //401
         ApiNoAuthority = 14,
+
         ApiTokenRefresherError = 10,
         ApiTokenExpired = 122,
         ApiKeyUnAuthenticated = 146,
 
         //400
         ApiModelValidationError = 127,
+
         ApiPublicResourceTokenNeeded = 128,
         ApiPublicResourceTokenError = 151,
         ApiCapthaError = 129,
@@ -38,12 +36,11 @@ namespace System
         //502
         ApiNoInternet = 145,
 
-        #endregion
+        #endregion API
 
         #region Database
 
         DatabaseError = 233,
-
 
         /// <summary>
         /// 错误：没有找到
@@ -71,7 +68,7 @@ namespace System
         DatabaseExecuterError = 241,
         DatabaseAffectedRowCountNotValid = 228,
 
-        #endregion
+        #endregion Database
 
         #region KVStore
 
@@ -85,7 +82,7 @@ namespace System
         KVStoreRedisTimeout = 38,
         KVStoreRedisConnectionFailed = 390,
 
-        #endregion
+        #endregion KVStore
 
         #region Identity
 
@@ -97,7 +94,7 @@ namespace System
         IdentityLoginNameAlreadyTaken = 46,
         IdentityEmailAlreadyTaken = 47,
 
-        #endregion
+        #endregion Identity
 
         #region Authorization
 
@@ -126,15 +123,13 @@ namespace System
         AuthorizationRefreshTokenExpired = 525,
         ApiNullReturn = 526,
 
-        #endregion
+        #endregion Authorization
 
         #region Client
 
         ClientLogicError = 62,
 
-
-
-        #endregion
+        #endregion Client
 
         #region Cert
 
@@ -142,10 +137,7 @@ namespace System
         JwtSigningCertNotFound = 74,
         DataProtectionCertNotFound = 727,
 
-
-
-
-        #endregion
+        #endregion Cert
     }
 
     public static class ErrorCodeExtensions

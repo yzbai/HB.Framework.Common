@@ -60,7 +60,6 @@ namespace System
             {
                 ICloneable cloneable = entry.Value;
                 ret.Add(entry.Key!, (TValue)cloneable.Clone());
-
             }
             return ret;
         }
@@ -116,7 +115,7 @@ namespace System
         }
 
         /// <summary>
-        /// IsNullOrEmpty 
+        /// IsNullOrEmpty
         /// </summary>
         /// <param name="ts"></param>
         /// <returns></returns>

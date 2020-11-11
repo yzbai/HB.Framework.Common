@@ -16,7 +16,6 @@ namespace System
             return GetBySubject(subjectName, StoreLocation.CurrentUser) ?? GetBySubject(subjectName, StoreLocation.LocalMachine);
         }
 
-
         public static X509Certificate2? GetBySubject(string subjectName, StoreLocation storeLocation)
         {
             using X509Store store = new X509Store(storeLocation);
@@ -38,7 +37,7 @@ namespace System
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="thumbprint"></param>
         /// <param name="storeLocation"></param>

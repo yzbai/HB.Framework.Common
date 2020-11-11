@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-
 namespace System
 {
     public class FrameworkException : Exception

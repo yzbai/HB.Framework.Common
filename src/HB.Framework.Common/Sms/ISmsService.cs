@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace HB.Framework.Common.Sms
+﻿namespace HB.Framework.Common.Sms
 {
     public interface ISmsService
     {
@@ -17,6 +12,5 @@ namespace HB.Framework.Common.Sms
         void SendValidationCode(string mobile/*, out string code*/);
 
         bool Validate(string mobile, string code);
-
     }
 }

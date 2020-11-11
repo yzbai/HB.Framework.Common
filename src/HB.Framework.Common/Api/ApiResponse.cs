@@ -1,8 +1,6 @@
 ﻿#nullable enable
 
 using System;
-using System.Diagnostics.CodeAnalysis;
-using HB.Framework.Common.Api;
 
 namespace HB.Framework.Common.Api
 {
@@ -26,7 +24,6 @@ namespace HB.Framework.Common.Api
             Message = message;
             ErrCode = errorCode;
         }
-
     }
 
     public class ApiResponse<T> : ApiResponse where T : class
@@ -38,6 +35,8 @@ namespace HB.Framework.Common.Api
             Data = data;
         }
 
-        public ApiResponse(int httpCode, string? message, ErrorCode errorCode) : base(httpCode, message, errorCode) { }
+        public ApiResponse(int httpCode, string? message, ErrorCode errorCode) : base(httpCode, message, errorCode)
+        {
+        }
     }
 }

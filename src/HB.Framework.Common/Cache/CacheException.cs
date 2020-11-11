@@ -4,7 +4,6 @@ namespace HB.Framework.Common.Cache
 {
     public class CacheException : FrameworkException
     {
-
         public CacheException(string? message) : base(message)
         {
         }

@@ -1,13 +1,9 @@
 ﻿#nullable enable
 
-using HB.Framework.Client.Api;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace HB.Framework.Common.Api
 {
@@ -26,19 +22,19 @@ namespace HB.Framework.Common.Api
 
         public string? PublicResourceToken { get; set; }
 
-        #endregion
+        #endregion Common Parameters
 
         #region Settings
 
         //All use fields & Get Methods instead of Properties, for avoid mvc binding & json searilize
         private readonly string _productName;
+
         private readonly string _apiVersion;
         private readonly HttpMethod _httpMethod;
         private readonly string _resourceName;
         private readonly string? _condition;
         private bool _needHttpMethodOveride = true;
         private readonly IDictionary<string, string> _headers = new Dictionary<string, string>();
-
 
         /// <summary>
         /// 因为不会直接使用ApiRequest作为Api的请求参数，所以不用提供无参构造函数，而具体的子类需要提供
@@ -86,6 +82,7 @@ namespace HB.Framework.Common.Api
         {
             return _needHttpMethodOveride;
         }
+
         public void SetNeedHttpMethodOveride(bool isNeeded)
         {
             _needHttpMethodOveride = isNeeded;
@@ -122,6 +119,6 @@ namespace HB.Framework.Common.Api
             return _headers;
         }
 
-        #endregion
+        #endregion Settings
     }
 }

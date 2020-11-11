@@ -75,6 +75,7 @@ namespace System
         {
             return GetHash(pwd + salt);
         }
+
         public static string CreateUniqueToken()
         {
             return Guid.NewGuid().ToString("N", GlobalSettings.Culture);
@@ -110,7 +111,7 @@ namespace System
             return randomString;
         }
 
-        #endregion
+        #endregion Random String
 
         public static long GetCurrentTimestamp()
         {

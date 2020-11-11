@@ -1,8 +1,8 @@
 ﻿#nullable enable
 
-using Microsoft.Extensions.Logging;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using Microsoft.Extensions.Logging;
 
 namespace System
 {
@@ -19,7 +19,6 @@ namespace System
         public static readonly string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
         public static readonly string LogTag = "=HB_HB_HB=";
-
     }
 }
 

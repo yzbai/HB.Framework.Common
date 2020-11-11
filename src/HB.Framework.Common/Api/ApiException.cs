@@ -1,6 +1,4 @@
-﻿using HB.Framework.Common.Api;
-
-namespace System
+﻿namespace System
 {
     public class ApiException : FrameworkException
     {

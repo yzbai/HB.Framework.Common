@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.Threading;
@@ -48,7 +47,6 @@ namespace System.Threading.Tasks
                     //#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
                     //                    JoinableTask<IEnumerable<T1>> t1s = joinableTaskFactory.RunAsync(() => task1);
                     //#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
-
 
                     IEnumerable<T1> t1s = await task1.ConfigureAwait(false); //await task1.ConfigureAwait(false);
 
@@ -112,7 +110,6 @@ namespace System.Threading.Tasks
 
                 if (finished == task2)
                 {
-
                     //#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
                     //                    JoinableTask<IEnumerable<T2>> t2s = joinableTaskFactory.RunAsync(() => task2);
                     //#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks
@@ -124,7 +121,6 @@ namespace System.Threading.Tasks
 
                 if (finished == task3)
                 {
-
                     //#pragma warning disable VSTHRD003 // Avoid awaiting foreign Tasks
                     //                    JoinableTask<IEnumerable<T3>> t3s = joinableTaskFactory.RunAsync(() => task3);
                     //#pragma warning restore VSTHRD003 // Avoid awaiting foreign Tasks

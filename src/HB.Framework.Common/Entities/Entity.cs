@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using HB.Framework.Common;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -42,4 +41,3 @@ namespace HB.Framework.Common.Entities
         public bool Deleted { get; set; } = false;
     }
 }
-

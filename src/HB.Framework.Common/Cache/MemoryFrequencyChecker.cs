@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,7 @@ namespace System
         private const int _maxItems = 100;
 
         private static readonly TimeSpan _maxAliveTimeSpan = TimeSpan.FromHours(1);
+
         /// <summary>
         /// key : timstamp in seconds
         /// </summary>
@@ -78,7 +78,5 @@ namespace System
         {
             return resourceType + resource;
         }
-
-
     }
 }

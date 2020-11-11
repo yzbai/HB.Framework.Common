@@ -21,7 +21,6 @@ namespace System
 
         public static IEnumerable<Type> GetAllTypeByCondition(Func<Type, bool> condition)
         {
-
             string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
             return Directory

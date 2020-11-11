@@ -15,7 +15,9 @@ namespace System
         private readonly string _matchPattern = @"(\[%\w+%\])";
         private readonly Hashtable _tagCache = new Hashtable();
 
-        public StringTagParser() { }
+        public StringTagParser()
+        {
+        }
 
         public StringTagParser(string matchPattern)
         {
@@ -57,7 +59,7 @@ namespace System
             _tagCache.Clear();
         }
 
-        #endregion
+        #endregion 操作标签
 
         /// <summary>
         /// Parse

@@ -23,8 +23,7 @@ namespace System.ComponentModel.DataAnnotations
                 return CanBeNull;
             }
 
-            return value is string text && text.Length < ValidationSettings. LoginNameMaxLength && ValidationMethods.IsLoginName(text);
-
+            return value is string text && text.Length < ValidationSettings.LoginNameMaxLength && ValidationMethods.IsLoginName(text);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿#nullable enable
 
-using HB.Framework.Common.Validate;
 using System.ComponentModel.DataAnnotations;
+using HB.Framework.Common.Validate;
 
 namespace HB.Framework.Common.Validation.Attributes
 {

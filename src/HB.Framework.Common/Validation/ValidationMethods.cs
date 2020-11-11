@@ -97,7 +97,6 @@ namespace HB.Framework.Common.Validate
             return Regex.IsMatch(str, RegExpressions.Password);
         }
 
-
         public static bool IsLoginName([NotNullWhen(true)] string? str)
         {
             if (string.IsNullOrEmpty(str))

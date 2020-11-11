@@ -1,8 +1,8 @@
 ﻿#nullable enable
 
-using HB.Framework.Common.Cache;
 using System;
 using System.Threading.Tasks;
+using HB.Framework.Common.Cache;
 
 namespace Microsoft.Extensions.Caching.Distributed
 {
@@ -122,7 +122,10 @@ namespace Microsoft.Extensions.Caching.Distributed
             }
         }
 
-        #endregion
+        #endregion Generic
 
+        #region Entity
+        //TODO: 添加存取Entity的操作
+        #endregion
     }
 }

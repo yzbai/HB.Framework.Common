@@ -353,7 +353,7 @@ namespace System
             _mediaType2FileTypeDict["application/vnd.iphone"] = ".ipa";
             _mediaType2FileTypeDict["application/x-silverlight-app"] = ".xap";
 
-            #endregion
+            #endregion media to file
         }
 
         /// <summary>

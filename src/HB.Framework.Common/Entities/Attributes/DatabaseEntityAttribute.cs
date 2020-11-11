@@ -5,9 +5,9 @@ using System;
 namespace HB.Framework.Common.Entities
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class EntitySchemaAttribute : Attribute
+    public class DatabaseEntityAttribute : Attribute
     {
-        public string DatabaseName { get; set; }
+        public string? DatabaseName { get; set; }
 
         public string? TableName { get; set; }
 
@@ -17,7 +17,12 @@ namespace HB.Framework.Common.Entities
 
         public string SuffixToRemove { get; set; } = "Entity";
 
-        public EntitySchemaAttribute(string databaseName)
+        public DatabaseEntityAttribute()
+        {
+
+        }
+
+        public DatabaseEntityAttribute(string databaseName)
         {
             DatabaseName = databaseName;
         }

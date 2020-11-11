@@ -54,7 +54,7 @@ namespace System
             return hex.ToString();
         }
 
-        #endregion
+        #endregion String Encode to bytes
 
         #region Collection to String
 
@@ -154,7 +154,7 @@ namespace System
             return dict;
         }
 
-        #endregion
+        #endregion Collection to String
 
         #region Extensions
 
@@ -237,6 +237,6 @@ namespace System
             return Convert.ToInt32(str, GlobalSettings.Culture);
         }
 
-        #endregion
+        #endregion Extensions
     }
 }

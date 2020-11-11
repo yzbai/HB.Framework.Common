@@ -10,9 +10,8 @@ namespace HB.Framework.Common.Entities
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class ForeignKeyAttribute : Attribute
     {
-
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="desc"></param>
         /// <param name="baseType">引用表的类类型</param>

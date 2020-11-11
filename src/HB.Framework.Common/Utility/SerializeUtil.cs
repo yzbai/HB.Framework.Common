@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using MsgPack.Serialization;
 using System.Buffers;
 using System.Buffers.Text;
 using System.Collections.Generic;
@@ -12,12 +11,14 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using MsgPack.Serialization;
 
 namespace System
 {
     public static class SerializeUtil
     {
         #region Json
+
         private static readonly JsonSerializerOptions _jsonSerializerOptions = new JsonSerializerOptions();
 
         static SerializeUtil()
@@ -104,7 +105,7 @@ namespace System
             return null;
         }
 
-        #endregion
+        #endregion Json
 
         #region BinaryFormatter Serialize
 
@@ -159,8 +160,7 @@ namespace System
             return binaryFormatter.Deserialize(memoryStream);
         }
 
-        #endregion
-
+        #endregion BinaryFormatter Serialize
 
         #region MsgPack Serialize
 
@@ -198,9 +198,7 @@ namespace System
             return await serializer.UnpackSingleObjectAsync(bytes).ConfigureAwait(false);
         }
 
-
-
-        #endregion
+        #endregion MsgPack Serialize
     }
 
     public class DictionaryTKeyEnumTValueConverter : JsonConverterFactory

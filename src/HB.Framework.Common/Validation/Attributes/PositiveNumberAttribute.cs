@@ -1,7 +1,7 @@
 ﻿#nullable enable
 
-using HB.Framework.Common.Validate;
 using System.ComponentModel.DataAnnotations;
+using HB.Framework.Common.Validate;
 
 namespace HB.Framework.Common.Validation.Attributes
 {
@@ -20,7 +20,6 @@ namespace HB.Framework.Common.Validation.Attributes
         public override bool IsValid(object value)
         {
             if (value == null) { return CanBeNull; }
-
 
             return value is string text && ValidationMethods.IsPositiveNumber(text);
         }
