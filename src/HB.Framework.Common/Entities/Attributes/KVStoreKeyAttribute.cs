@@ -8,8 +8,11 @@ namespace HB.Framework.Common.Entities
     [AttributeUsage(AttributeTargets.Property)]
     public sealed class KVStoreKeyAttribute : System.Attribute
     {
-        public KVStoreKeyAttribute()
+        public int Order { get; set; }
+
+        public KVStoreKeyAttribute(int order = 0)
         {
+            Order = order;
         }
     }
 }
