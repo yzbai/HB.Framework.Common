@@ -34,8 +34,11 @@ namespace HB.Framework.Common.Entities
         [EntityProperty("上一次更改者", Length = LastUserMaxLength)]
         public string LastUser { get; set; } = string.Empty;
 
+        /// <summary>
+        /// UTC 时间
+        /// </summary>
         [EntityProperty("上一次更改时间")]
-        public DateTimeOffset? LastTime { get; set; }
+        public DateTimeOffset LastTime { get; set; } //= DateTimeOffset.UtcNow;
 
         [EntityProperty("逻辑删除标志")]
         public bool Deleted { get; set; } = false;

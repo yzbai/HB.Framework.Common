@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace System
 {
@@ -17,42 +18,70 @@ namespace System
         {
             #region type to type
 
-            _convertFunDict[typeof(byte)] = o => { return Convert.ToByte(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(sbyte)] = o => { return Convert.ToSByte(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(short)] = o => { return Convert.ToInt16(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(ushort)] = o => { return Convert.ToUInt16(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(int)] = o => { return Convert.ToInt32(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(uint)] = o => { return Convert.ToUInt32(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(long)] = o => { return Convert.ToInt64(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(ulong)] = o => { return Convert.ToUInt64(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(float)] = o => { return Convert.ToSingle(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(double)] = o => { return Convert.ToDouble(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(decimal)] = o => { return Convert.ToDecimal(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(bool)] = o => { return Convert.ToBoolean(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(string)] = o => { return Convert.ToString(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(char)] = o => { return Convert.ToChar(o, GlobalSettings.Culture); };
+            _convertFunDict[typeof(byte)] = o => { return Convert.ToByte(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(sbyte)] = o => { return Convert.ToSByte(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(short)] = o => { return Convert.ToInt16(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(ushort)] = o => { return Convert.ToUInt16(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(int)] = o => { return Convert.ToInt32(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(uint)] = o => { return Convert.ToUInt32(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(long)] = o => { return Convert.ToInt64(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(ulong)] = o => { return Convert.ToUInt64(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(float)] = o => { return Convert.ToSingle(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(double)] = o => { return Convert.ToDouble(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(decimal)] = o => { return Convert.ToDecimal(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(bool)] = o => { return Convert.ToBoolean(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(string)] = o => { return Convert.ToString(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(char)] = o => { return Convert.ToChar(o, CultureInfo.InvariantCulture); };
             _convertFunDict[typeof(Guid)] = o => { return Guid.Parse(o.ToString()); };
-            _convertFunDict[typeof(DateTime)] = o => { return DateTime.Parse(o.ToString(), GlobalSettings.Culture); };
-            _convertFunDict[typeof(DateTimeOffset)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(DateTime.Parse(o.ToString(), GlobalSettings.Culture), DateTimeKind.Utc); };
-            _convertFunDict[typeof(TimeSpan)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
+            //_convertFunDict[typeof(DateTime)] = o => { return DateTime.Parse(o.ToString(), CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(DateTimeOffset)] = o =>
+            {
+                long ticks = Convert.ToInt64(o, CultureInfo.InvariantCulture);
+                return new DateTimeOffset(ticks, TimeSpan.Zero);
+            };
+            _convertFunDict[typeof(TimeSpan)] = o =>
+            {
+                long ticks = Convert.ToInt64(o, CultureInfo.InvariantCulture);
 
-            _convertFunDict[typeof(byte?)] = o => { return Convert.ToByte(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(sbyte?)] = o => { return Convert.ToSByte(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(short?)] = o => { return Convert.ToInt16(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(ushort?)] = o => { return Convert.ToUInt16(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(int?)] = o => { return Convert.ToInt32(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(uint?)] = o => { return Convert.ToUInt32(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(long?)] = o => { return Convert.ToInt64(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(ulong?)] = o => { return Convert.ToUInt64(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(float?)] = o => { return Convert.ToSingle(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(double?)] = o => { return Convert.ToDouble(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(decimal?)] = o => { return Convert.ToDecimal(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(bool?)] = o => { return Convert.ToBoolean(o, GlobalSettings.Culture); };
-            _convertFunDict[typeof(char?)] = o => { return Convert.ToChar(o, GlobalSettings.Culture); };
+                return TimeSpan.FromTicks(ticks);
+            };
+
+            _convertFunDict[typeof(byte?)] = o => { return Convert.ToByte(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(sbyte?)] = o => { return Convert.ToSByte(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(short?)] = o => { return Convert.ToInt16(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(ushort?)] = o => { return Convert.ToUInt16(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(int?)] = o => { return Convert.ToInt32(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(uint?)] = o => { return Convert.ToUInt32(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(long?)] = o => { return Convert.ToInt64(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(ulong?)] = o => { return Convert.ToUInt64(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(float?)] = o => { return Convert.ToSingle(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(double?)] = o => { return Convert.ToDouble(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(decimal?)] = o => { return Convert.ToDecimal(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(bool?)] = o => { return Convert.ToBoolean(o, CultureInfo.InvariantCulture); };
+            _convertFunDict[typeof(char?)] = o => { return Convert.ToChar(o, CultureInfo.InvariantCulture); };
             _convertFunDict[typeof(Guid?)] = o => { return Guid.Parse(o.ToString()); };
-            _convertFunDict[typeof(DateTime?)] = o => { return o == null ? null : new DateTime?(DateTime.Parse(o.ToString(), GlobalSettings.Culture)); };
-            _convertFunDict[typeof(DateTimeOffset?)] = o => { return (DateTimeOffset)DateTime.SpecifyKind(DateTime.Parse(o.ToString(), GlobalSettings.Culture), DateTimeKind.Utc); };
-            _convertFunDict[typeof(TimeSpan?)] = o => { return Convert.ToDateTime(o, GlobalSettings.Culture); };
+            //_convertFunDict[typeof(DateTime?)] = o => { return o == null ? null : new DateTime?(DateTime.Parse(o.ToString(), CultureInfo.InvariantCulture)); };
+            _convertFunDict[typeof(DateTimeOffset?)] = o =>
+            {
+                if (o == null)
+                {
+                    return null;
+                }
+
+                long ticks = Convert.ToInt64(o, CultureInfo.InvariantCulture);
+                return new DateTimeOffset(ticks, TimeSpan.Zero);
+            };
+            _convertFunDict[typeof(TimeSpan?)] = o =>
+            {
+                if (o == null)
+                {
+                    return null;
+                }
+
+                long ticks = Convert.ToInt64(o, CultureInfo.InvariantCulture);
+
+                return TimeSpan.FromTicks(ticks);
+            };
 
             _convertFunDict[typeof(byte[])] = o => { return SerializeUtil.PackAsync(o); };
             _convertFunDict[typeof(object)] = o => { return o ?? null; };
@@ -98,10 +127,6 @@ namespace System
         /// <summary>
         /// 将C#值转换为字符串，便于拼接SQL字符串. 如果value不为null且不为DBNull，则返回不为null
         /// </summary>
-        /// <returns>The value to db value.</returns>
-        /// <param name="value">Value.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
-        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public static string? TypeValueToStringValue(object? value)
         {
             if (value == null)
@@ -121,8 +146,9 @@ namespace System
                 string str => str,
                 Enum e => e.ToString(),
                 DBNull _ => null,
-                DateTime dt => dt.ToString(GlobalSettings.DateTimeFormat, GlobalSettings.Culture),
-                DateTimeOffset dt => dt.ToString(GlobalSettings.DateTimeFormat, GlobalSettings.Culture),
+                DateTime => throw new FrameworkException(ErrorCode.UseDateTime),
+                //DateTimeOffset dt => dt.ToString(GlobalSettings.DateTimeFormat, CultureInfo.InvariantCulture),
+                DateTimeOffset dt => dt.UtcTicks.ToString(CultureInfo.InvariantCulture),
                 bool b => b ? "1" : "0",
                 IList<string> lst => StringUtil.ListToString(lst),
                 IDictionary<string, string> dict => StringUtil.DictionaryToString(dict),
